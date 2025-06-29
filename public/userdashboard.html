@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DELICUTE - User Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-image: url('https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'); 
+            background-size: cover; 
+            background-attachment: fixed; 
+            margin: 0;
+        }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
+        p, input, button, a { font-family: 'Inter', sans-serif; font-weight: 400; }
+        .animate-bounce-slow { animation: bounce 2s ease-in-out infinite; }
+        @keyframes bounce { 
+            0%, 100% { transform: translateY(0); } 
+            50% { transform: translateY(-5px); } 
+        }
+        .welcome-animation {
+            animation: fadeIn 1s ease-out;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .toast { 
+            transition: opacity 0.5s ease, transform 0.5s ease; 
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+        }
+        .toast-hidden { opacity: 0; transform: translateY(-20px); }
+        .toast-visible { opacity: 1; transform: translateY(0); }
+        .modal-slide-in { 
+            animation: slideIn 0.3s ease-out forwards;
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        .modal-slide-out {
+            animation: slideOut 0.3s ease-in forwards;
+        }
+        @keyframes slideIn {
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            to { transform: translateY(-50px); opacity: 0; }
+        }
+        .input-container { position: relative; }
+        .eye-icon { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; }
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+        }
+        .profile-dropdown { 
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            width: 240px;
+            overflow: hidden;
+        }
+        .profile-dropdown-hidden { max-height: 0; opacity: 0; }
+        .profile-dropdown-visible { max-height: 500px; opacity: 1; }
+        .small-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .profile-img {
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .profile-img:hover {
+            transform: scale(1.05);
+        }
+        .coupon-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 1rem;
+            transition: transform 0.3s ease;
+        }
+        .coupon-card:hover {
+            transform: translateY(-3px);
+        }
+        .menu-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            padding: 1rem;
+            transition: transform 0.3s ease;
+        }
+        .menu-card:hover {
+            transform: translateY(-3px);
+        }
+        .menu-card img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        @media (max-width: 640px) {
+            .profile-img-nav {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+            .profile-img-profile {
+                width: 5rem;
+                height: 5rem;
+            }
+            .address-input {
+                padding: 0.75rem;
+                font-size: 1rem;
+                border-radius: 8px;
+            }
+            .coupon-card img {
+                width: 60px;
+                height: 60px;
+            }
+            .menu-card img {
+                width: 60px;
+                height: 60px;
+            }
+        }
+        @media (min-width: 641px) {
+            .profile-img-nav {
+                width: 3rem;
+                height: 3rem;
+            }
+            .profile-img-profile {
+                width: 6rem;
+                height: 6rem;
+            }
+            .address-input {
+                padding: 0.75rem;
+                font-size: 0.875rem;
+                border-radius: 8px;
+            }
+            .coupon-card img {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <img src="https://imgur.com/ZbhzFqT.jpg" alt="Delicute Logo" class="h-12 w-auto rounded-full shadow-md">
+                    <div class="ml-3">
+                        <h1 class="text-2xl font-bold text-gray-800">DELICUTE</h1>
+                        <p class="text-xs text-gray-600">"Every Bite Tells a Story"</p>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="relative">
+                        <img id="profileImage" src="https://via.placeholder.com/40?text=User" alt="Profile" class="profile-img profile-img-nav rounded-full cursor-pointer" onclick="toggleProfileDropdown()">
+                        <div id="profileDropdown" class="absolute right-0 mt-2 profile-dropdown profile-dropdown-hidden">
+                            <div class="p-4 border-b bg-gray-50 rounded-t-lg">
+                                <p id="userName" class="text-gray-800 font-semibold text-sm"></p>
+                                <p id="userEmail" class="text-gray-600 text-xs truncate"></p>
+                            </div>
+                            <div class="py-2">
+                                <a href="#home" class="flex items-center px-4 py-2 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition duration-200" onclick="showSection('home')">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                                    Home
+                                </a>
+                                <a href="#menu" class="flex items-center px-4 py-2 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition duration-200" onclick="showSection('menu')">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                                    Menu
+                                </a>
+                                <a href="#cart" class="flex items-center px-4 py-2 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition duration-200" onclick="showSection('cart')">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                    Cart
+                                </a>
+                                <a href="#addresses" class="flex items-center px-4 py-2 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition duration-200" onclick="showSection('addresses')">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                    Addresses
+                                </a>
+                                <a href="#favourites" class="flex items-center px-4 py-2 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transitionNST duration-200" onclick="showSection('favourites')">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                    Favourites
+                                </a>
+                                <a href="#profile" class="flex items-center px-4 py-2 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition duration-200" onclick="showSection('profile')">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    Profile
+                                </a>
+                                <a href="#orders" class="flex items-center px-4 py-2 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition duration-200" onclick="showSection('orders')">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                                    My Orders
+                                </a>
+                                <a href="#order-history" class="flex items-center px-4 py-2 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition duration-200" onclick="showSection('order-history')">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    Order History
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-2 text-red-600 hover:bg-red-50 hover:text-red-700 transition duration-200" onclick="logout()">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h3a3 3 0 013 3v1"></path></svg>
+                                    Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="fixed top-4 right-4 z-50 toast-hidden bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-lg max-w-xs">
+            <p id="toastMessage"></p>
+        </div>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+            <!-- Home Section -->
+            <section id="home" class="section">
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6 glass-morphism">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800 welcome-animation">Welcome, <span id="welcomeName"></span>!</h2>
+                    <p class="text-gray-600 mb-4">Total Orders: <span id="totalOrders">0</span></p>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Available Coupons</h3>
+                        <div id="couponsList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Menu</h3>
+                        <div class="flex items-center mb-4 gap-2">
+                            <input type="text" id="searchMenu" placeholder="Search menu..." class="flex-1 p-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm">
+                            <select id="categoryFilter" class="p-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm">
+                                <option value="">All Categories</option>
+                                <option value="MOCKTAILS">Mocktails</option>
+                                <option value="JUICES">Juices</option>
+                                <option value="MAGGIE">Maggie</option>
+                                <option value="PASTA">Pasta</option>
+                                <option value="SHAKES">Shakes</option>
+                                <option value="WAFFLES">Waffles</option>
+                                <option value="EXTRA TOPPINGS">Extra Toppings</option>
+                                <option value="FRENCH FRIES">French Fries</option>
+                                <option value="DESSERTS">Desserts</option>
+                                <option value="VEG PIZZA">Veg Pizza</option>
+                                <option value="NON-VEG PIZZA">Non-Veg Pizza</option>
+                            </select>
+                        </div>
+                        <div id="menuItems" class="space-y-6"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Menu Section -->
+            <section id="menu" class="section hidden">
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6 glass-morphism">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">Menu</h2>
+                    <div class="flex items-center mb-4 gap-2">
+                        <input type="text" id="searchMenuSection" placeholder="Search menu..." class="flex-1 p-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm">
+                        <select id="categoryFilterSection" class="p-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm">
+                            <option value="">All Categories</option>
+                            <option value="MOCKTAILS">Mocktails</option>
+                            <option value="JUICES">Juices</option>
+                            <option value="MAGGIE">Maggie</option>
+                            <option value="PASTA">Pasta</option>
+                            <option value="SHAKES">Shakes</option>
+                            <option value="WAFFLES">Waffles</option>
+                            <option value="EXTRA TOPPINGS">Extra Toppings</option>
+                            <option value="FRENCH FRIES">French Fries</option>
+                            <option value="DESSERTS">Desserts</option>
+                            <option value="VEG PIZZA">Veg Pizza</option>
+                            <option value="NON-VEG PIZZA">Non-Veg Pizza</option>
+                        </select>
+                    </div>
+                    <div id="menuItemsSection" class="space-y-6"></div>
+                </div>
+            </section>
+
+            <!-- Cart Section -->
+            <section id="cart" class="section hidden">
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6 glass-morphism max-w-2xl mx-auto">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800 text-center">Your Cart</h2>
+                    <div id="cartItems" class="space-y-4 mb-6"></div>
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2 text-center">Select Address</h3>
+                            <select id="cartAddress" class="w-full p-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm"></select>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2 text-center">Apply Coupon</h3>
+                            <div class="flex items-center gap-2">
+                                <select id="cartCoupon" class="flex-1 p-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm">
+                                    <option value="">Select Coupon</option>
+                                </select>
+                                <button onclick="applyCoupon(document.getElementById('cartCoupon').value)" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Apply</button>
+                            </div>
+                        </div>
+                        <div class="text-center space-y-2">
+                            <p class="text-sm text-gray-600">Subtotal: ₹<span id="cartSubtotal">0.00</span></p>
+                            <p class="text-sm text-green-600 font-semibold">Discount: ₹<span id="cartDiscount">0.00</span></p>
+                            <p class="text-sm text-green-600 font-semibold">Delivery: <span class="bg-green-100 px-2 py-1 rounded">Free</span></p>
+                            <p class="text-lg font-semibold text-gray-800">Total: ₹<span id="cartTotal">0.00</span></p>
+                        </div>
+                        <p class="text-red-500 text-sm mt-2 text-center">Note: All UPI payments will be available soon. Thank you!</p>
+                        <div class="mt-4 flex gap-2">
+                            <button onclick="placeOrder()" class="flex-1 bg-yellow-500 text-white small-btn rounded-lg hover:bg-yellow-600 transition duration-300">Place Order (COD)</button>
+                            <button onclick="clearCart()" class="flex-1 bg-red-500 text-white small-btn rounded-lg hover:bg-red-600 transition duration-300">Clear Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Addresses Section -->
+            <section id="addresses" class="section hidden">
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6 glass-morphism max-w-2xl mx-auto">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800 text-center">Your Addresses</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-lg font-semibold mb-2 text-center">Add New Address</h3>
+                            <div class="space-y-2">
+                                <input type="text" id="addressName" placeholder="Full Name" class="w-full address-input bg-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                                <input type="tel" id="addressPhone" placeholder="Mobile Number" class="w-full address-input bg-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                                <input type="text" id="addressFlat" placeholder="Flat No" class="w-full address-input bg-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                                <input type="text" id="addressStreet" placeholder="Street" class="w-full address-input bg-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                                <input type="text" id="addressLandmark" placeholder="Landmark" class="w-full address-input bg-gray-100 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                                <button onclick="saveAddress()" class="w-full bg-yellow-500 text-white small-btn rounded-lg hover:bg-yellow-600 transition duration-300">Save Address</button>
+                            </div>
+                        </div>
+                        <div id="addressList" class="space-y-4"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Favourites Section -->
+            <section id="favourites" class="section hidden">
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6 glass-morphism">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">Your Favourites</h2>
+                    <div id="favouritesList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile" class="section hidden">
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6 glass-morphism max-w-2xl mx-auto">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800 text-center">Your Profile</h2>
+                    <div class="space-y-4">
+                        <div class="flex justify-center items-center flex-col sm:flex-row gap-4">
+                            <img id="profilePicture" src="https://via.placeholder.com/100?text=User" alt="Profile Picture" class="profile-img profile-img-profile rounded-full">
+                            <input type="file" id="profileImageInput" accept="image/*" class="hidden" onchange="uploadProfileImage()">
+                            <button onclick="document.getElementById('profileImageInput').click()" class="bg-yellow-500 text-white small-btn rounded-lg hover:bg-yellow-600 transition duration-300">Change Picture</button>
+                        </div>
+                        <input type="text" id="profileName" placeholder="Full Name" class="w-full p-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm">
+                        <input type="tel" id="profilePhone" placeholder="Mobile Number" class="w-full p-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm" disabled>
+                        <input type="email" id="profileEmail" placeholder="Email" class="w-full p-2 bg-gray-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm" disabled>
+                        <button onclick="saveProfile()" class="w-full bg-yellow-500 text-white small-btn rounded-lg hover:bg-yellow-600 transition duration-300">Save Profile</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- My Orders Section -->
+            <section id="orders" class="section hidden">
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6 glass-morphism">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">My Orders</h2>
+                    <div id="activeOrders" class="space-y-4"></div>
+                </div>
+            </section>
+
+            <!-- Order History Section -->
+            <section id="order-history" class="section hidden">
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-6 glass-morphism">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">Order History</h2>
+                    <button onclick="clearOrderHistory()" class="mb-4 bg-red-500 text-white small-btn rounded-lg hover:bg-red-600 transition duration-300">Clear History</button>
+                    <div id="orderHistory" class="space-y-4"></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Cancel Order Modal -->
+        <div id="cancelOrderModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-20">
+            <div class="glass-morphism p-6 sm:p-8 rounded-xl w-full max-w-sm mx-4 modal-slide-in shadow-2xl">
+                <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Cancel Order</h2>
+                <div class="space-y-4">
+                    <textarea id="cancelReason" placeholder="Reason for cancellation" class="w-full p-2 bg-white bg-opacity-20 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-gray-800 placeholder-gray-400"></textarea>
+                    <button onclick="submitCancelOrder()" class="w-full bg-yellow-500 text-white small-btn rounded-lg hover:bg-yellow-600 transition duration-300">Submit</button>
+                </div>
+                <button onclick="closeModal('cancelOrderModal')" class="mt-4 text-gray-600 hover:text-yellow-500 w-full text-center text-sm">Close</button>
+            </div>
+        </div>
+
+        <script>
+            let cart = [];
+            let addresses = [];
+            let favourites = [];
+            let cartDiscount = 0;
+            let appliedCouponId = null;
+
+            // Show toast notification
+            function showToast(message, type = 'info') {
+                const toast = document.getElementById('toast');
+                const toastMessage = document.getElementById('toastMessage');
+                toastMessage.textContent = message;
+                toast.classList.remove('toast-hidden', 'bg-yellow-500', 'bg-red-500', 'bg-green-500');
+                toast.classList.add('toast-visible', type === 'error' ? 'bg-red-500' : type === 'success' ? 'bg-green-500' : 'bg-yellow-500');
+                setTimeout(() => {
+                    toast.classList.remove('toast-visible');
+                    toast.classList.add('toast-hidden');
+                }, 3000);
+            }
+
+            // Toggle profile dropdown
+            function toggleProfileDropdown() {
+                const dropdown = document.getElementById('profileDropdown');
+                dropdown.classList.toggle('profile-dropdown-hidden');
+                dropdown.classList.toggle('profile-dropdown-visible');
+            }
+
+            // Show section
+            function showSection(sectionId) {
+                document.querySelectorAll('.section').forEach(section => section.classList.add('hidden'));
+                document.getElementById(sectionId).classList.remove('hidden');
+                toggleProfileDropdown();
+            }
+
+            // Close modal
+            function closeModal(modalId) {
+                const modal = document.getElementById(modalId);
+                modal.classList.add('modal-slide-out');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('modal-slide-out');
+                }, 300);
+            }
+
+            // Fetch user data
+            async function fetchUserData() {
+                try {
+                    const response = await fetch('/api/user', {
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        document.getElementById('userName').textContent = data.name;
+                        document.getElementById('userEmail').textContent = data.email;
+                        document.getElementById('welcomeName').textContent = data.name;
+                        document.getElementById('profileName').value = data.name;
+                        document.getElementById('profileEmail').value = data.email;
+                        document.getElementById('profilePhone').value = data.phone || '';
+                        document.getElementById('profileImage').src = data.profileImage || 'https://via.placeholder.com/40?text=User';
+                        document.getElementById('profilePicture').src = data.profileImage || 'https://via.placeholder.com/100?text=User';
+                        if (data.googleUser) {
+                            document.getElementById('profileEmail').disabled = true;
+                        } else {
+                            document.getElementById('profilePhone').disabled = true;
+                        }
+                    } else {
+                        showToast(data.message, 'error');
+                        setTimeout(() => window.location.href = 'index.html', 1000);
+                    }
+                } catch (error) {
+                    showToast('Failed to fetch user data.', 'error');
+                }
+            }
+
+            // Fetch total orders
+            async function fetchTotalOrders() {
+                try {
+                    const response = await fetch('/api/orders/count', {
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        document.getElementById('totalOrders').textContent = data.count;
+                    }
+                } catch (error) {
+                    showToast('Failed to fetch orders.', 'error');
+                }
+            }
+
+            // Fetch coupons
+            async function fetchCoupons() {
+                try {
+                    const response = await fetch('/api/coupons', {
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        const couponsList = document.getElementById('couponsList');
+                        const cartCoupon = document.getElementById('cartCoupon');
+                        couponsList.innerHTML = '';
+                        cartCoupon.innerHTML = '<option value="">Select Coupon</option>';
+                        data.coupons.forEach(coupon => {
+                            couponsList.innerHTML += `
+                                <div class="coupon-card">
+                                    <img src="${coupon.image || 'https://via.placeholder.com/80?text=Coupon'}" alt="${coupon.code}" class="rounded-lg object-cover">
+                                    <div>
+                                        <p class="font-semibold text-gray-800">${coupon.code}</p>
+                                        <p class="text-sm text-gray-600">${coupon.description}</p>
+                                        <button onclick="applyCoupon('${coupon.code}')" class="mt-2 bg-yellow-500 text-white small-btn rounded-lg hover:bg-yellow-600">Apply to Cart</button>
+                                    </div>
+                                </div>`;
+                            cartCoupon.innerHTML += `<option value="${coupon.code}" data-coupon-id="${coupon.id}">${coupon.code} - ${coupon.description}</option>`;
+                        });
+                        if (appliedCouponId) {
+                            const selectedCoupon = data.coupons.find(coupon => coupon.id === appliedCouponId);
+                            if (selectedCoupon) cartCoupon.value = selectedCoupon.code;
+                        }
+                    }
+                } catch (error) {
+                    showToast('Failed to fetch coupons.', 'error');
+                }
+            }
+
+            // Apply coupon
+            async function applyCoupon(code) {
+                if (!code) {
+                    showToast('Please select a coupon.', 'error');
+                    return;
+                }
+                try {
+                    const response = await fetch('/api/cart/apply-coupon', {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify({ couponCode: code })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        showToast('Coupon applied successfully!', 'success');
+                        cartDiscount = data.discount || 0;
+                        appliedCouponId = data.couponId || null;
+                        fetchCart();
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                } catch (error) {
+                    showToast('Failed to apply coupon.', 'error');
+                }
+            }
+
+            // Fetch menu items
+            async function fetchMenuItems() {
+                try {
+                    const response = await fetch('/api/menu', {
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        const menuItems = document.getElementById('menuItems');
+                        const menuItemsSection = document.getElementById('menuItemsSection');
+                        menuItems.innerHTML = '';
+                        menuItemsSection.innerHTML = '';
+                        const categories = ['MOCKTAILS', 'JUICES', 'MAGGIE', 'PASTA', 'SHAKES', 'WAFFLES', 'EXTRA TOPPINGS', 'FRENCH FRIES', 'DESSERTS', 'VEG PIZZA', 'NON-VEG PIZZA'];
+                        categories.forEach(category => {
+                            const items = data.items.filter(item => item.category === category);
+                            if (items.length > 0) {
+                                const categoryHTML = `
+                                    <div>
+                                        <h3 class="text-lg font-semibold mb-3 text-gray-800">${category}</h3>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                                    </div>`;
+                                menuItems.innerHTML += categoryHTML;
+                                menuItemsSection.innerHTML += categoryHTML;
+                                const categoryDiv = menuItems.lastElementChild.querySelector('div');
+                                const categoryDivSection = menuItemsSection.lastElementChild.querySelector('div');
+                                items.forEach(item => {
+                                    const itemHTML = `
+                                        <div class="menu-card">
+                                            <img src="${item.image || 'https://via.placeholder.com/80'}" alt="${item.name}" class="rounded-lg object-cover">
+                                            <div>
+                                                <p class="font-semibold text-gray-800 text-sm">${item.name}</p>
+                                                <p class="text-xs text-gray-600">₹${item.price}</p>
+                                                <div class="flex justify-between mt-2">
+                                                    <button onclick="toggleFavourite('${item.id}')" class="text-red-500 hover:text-red-600">
+                                                        <svg class="w-5 h-5 ${favourites.includes(item.id) ? 'fill-current' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                                    </button>
+                                                    <button onclick="addToCart('${item.id}')" class="bg-yellow-500 text-white small-btn rounded-lg hover:bg-yellow-600">Add to Cart</button>
+                                                </div>
+                                            </div>
+                                        </div>`;
+                                    categoryDiv.innerHTML += itemHTML;
+                                    categoryDivSection.innerHTML += itemHTML;
+                                });
+                            }
+                        });
+                    }
+                } catch (error) {
+                    showToast('Failed to fetch menu.', 'error');
+                }
+            }
+
+            // Search and filter menu
+            function setupMenuFilters() {
+                document.getElementById('searchMenu').addEventListener('input', () => filterMenu('menuItems', 'searchMenu', 'categoryFilter'));
+                document.getElementById('categoryFilter').addEventListener('change', () => filterMenu('menuItems', 'searchMenu', 'categoryFilter'));
+                document.getElementById('searchMenuSection').addEventListener('input', () => filterMenu('menuItemsSection', 'searchMenuSection', 'categoryFilterSection'));
+                document.getElementById('categoryFilterSection').addEventListener('change', () => filterMenu('menuItemsSection', 'searchMenuSection', 'categoryFilterSection'));
+            }
+
+            async function filterMenu(menuContainerId, searchInputId, categoryFilterId) {
+                const search = document.getElementById(searchInputId).value.toLowerCase();
+                const category = document.getElementById(categoryFilterId).value;
+                try {
+                    const response = await fetch('/api/menu', {
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        const menuItems = document.getElementById(menuContainerId);
+                        menuItems.innerHTML = '';
+                        const categories = ['MOCKTAILS', 'JUICES', 'MAGGIE', 'PASTA', 'SHAKES', 'WAFFLES', 'EXTRA TOPPINGS', 'FRENCH FRIES', 'DESSERTS', 'VEG PIZZA', 'NON-VEG PIZZA'];
+                        categories.forEach(cat => {
+                            const items = data.items.filter(item => 
+                                item.category === cat && 
+                                (!category || item.category === category) &&
+                                item.name.toLowerCase().includes(search)
+                            );
+                            if (items.length > 0) {
+                                menuItems.innerHTML += `
+                                    <div>
+                                        <h3 class="text-lg font-semibold mb-3 text-gray-800">${cat}</h3>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                                    </div>`;
+                                const categoryDiv = menuItems.lastElementChild.querySelector('div');
+                                items.forEach(item => {
+                                    categoryDiv.innerHTML += `
+                                        <div class="menu-card">
+                                            <img src="${item.image || 'https://via.placeholder.com/80'}" alt="${item.name}" class="rounded-lg object-cover">
+                                            <div>
+                                                <p class="font-semibold text-gray-800 text-sm">${item.name}</p>
+                                                <p class="text-xs text-gray-600">₹${item.price}</p>
+                                                <div class="flex justify-between mt-2">
+                                                    <button onclick="toggleFavourite('${item.id}')" class="text-red-500 hover:text-red-600">
+                                                        <svg class="w-5 h-5 ${favourites.includes(item.id) ? 'fill-current' : ''}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                                    </button>
+                                                    <button onclick="addToCart('${item.id}')" class="bg-yellow-500 text-white small-btn rounded-lg hover:bg-yellow-600">Add to Cart</button>
+                                                </div>
+                                            </div>
+                                        </div>`;
+                                });
+                            }
+                        });
+                    }
+                } catch (error) {
+                    showToast('Failed to filter menu.', 'error');
+                }
+            }
+
+            // Add to cart
+            async function addToCart(itemId) {
+                try {
+                    const response = await fetch('/api/cart/add', {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify({ itemId })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        showToast('Item added to cart!', 'success');
+                        fetchCart();
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                } catch (error) {
+                    showToast('Failed to add item to cart.', 'error');
+                }
+            }
+
+            // Fetch cart
+            async function fetchCart() {
+                try {
+                    const response = await fetch('/api/cart', {
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        cart = data.items;
+                        cartDiscount = data.discount || 0;
+                        appliedCouponId = data.couponId || null;
+                        const cartItems = document.getElementById('cartItems');
+                        cartItems.innerHTML = '';
+                        let subtotal = 0;
+                        cart.forEach(item => {
+                            subtotal += item.price * item.quantity;
+                            cartItems.innerHTML += `
+                                <div class="flex items-center bg-gray-100 p-3 rounded-lg transform hover:scale-101 transition duration-200">
+                                    <img src="${item.image || 'https://via.placeholder.com/50'}" alt="${item.name}" class="h-12 w-12 object-cover rounded-lg mr-3">
+                                    <div class="flex-1">
+                                        <p class="font-semibold text-sm text-gray-800">${item.name}</p>
+                                        <p class="text-xs text-gray-600">₹${item.price} x ${item.quantity}</p>
+                                        <div class="flex items-center mt-1 gap-1">
+                                            <button onclick="updateQuantity('${item.itemId}', ${item.quantity - 1})" class="bg-gray-300 text-gray-800 small-btn rounded-l-lg">-</button>
+                                            <span class="px-2 text-sm">${item.quantity}</span>
+                                            <button onclick="updateQuantity('${item.itemId}', ${item.quantity + 1})" class="bg-gray-300 text-gray-800 small-btn rounded-r-lg">+</button>
+                                            <button onclick="removeFromCart('${item.itemId}')" class="ml-2 text-red-500 text-xs hover:text-red-600">Remove</button>
+                                        </div>
+                                    </div>
+                                </div>`;
+                        });
+                        document.getElementById('cartSubtotal').textContent = subtotal.toFixed(2);
+                        document.getElementById('cartDiscount').textContent = cartDiscount.toFixed(2);
+                        document.getElementById('cartTotal').textContent = (subtotal - cartDiscount).toFixed(2);
+                        fetchCoupons(); // Refresh coupon dropdown to reflect applied coupon
+                    }
+                } catch (error) {
+                    showToast('Failed to fetch cart.', 'error');
+                }
+            }
+
+            // Update quantity
+            async function updateQuantity(itemId, quantity) {
+                try {
+                    const response = await fetch('/api/cart/update', {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify({ itemId, quantity })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        showToast(data.message, 'success');
+                        fetchCart();
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                } catch (error) {
+                    showToast('Failed to update quantity.', 'error');
+                }
+            }
+
+            // Remove from cart
+            async function removeFromCart(itemId) {
+                try {
+                    const response = await fetch('/api/cart/remove', {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify({ itemId })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        showToast('Item removed from cart!', 'success');
+                        fetchCart();
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                } catch (error) {
+                    showToast('Failed to remove item.', 'error');
+                }
+            }
+
+            // Clear cart
+            async function clearCart() {
+                try {
+                    const response = await fetch('/api/cart/clear', {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        showToast('Cart cleared!', 'success');
+                        cartDiscount = 0;
+                        appliedCouponId = null;
+                        document.getElementById('cartCoupon').value = '';
+                        fetchCart();
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                } catch (error) {
+                    showToast('Failed to clear cart.', 'error');
+                }
+            }
+
+            // Fetch addresses
+            async function fetchAddresses() {
+                try {
+                    const response = await fetch('/api/addresses', {
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        addresses = data.addresses;
+                        const addressList = document.getElementById('addressList');
+                        const cartAddress = document.getElementById('cartAddress');
+                        addressList.innerHTML = '';
+                        cartAddress.innerHTML = '<option value="">Select Address</option>';
+                        data.addresses.forEach(address => {
+                            addressList.innerHTML += `
+                                <div class="bg-gray-100 p-3 rounded-lg transform hover:scale-101 transition duration-200">
+                                    <p class="font-semibold text-sm text-gray-800">${address.name}</p>
+                                    <p class="text-xs text-gray-600">${address.flat}, ${address.street}${address.landmark ? `, ${address.landmark}` : ''}</p>
+                                    <p class="text-xs text-gray-600">${address.phone}</p>
+                                    <div class="flex gap-2 mt-2">
+                                        <button onclick="editAddress('${address.id}', '${address.name}', '${address.phone}', '${address.flat}', '${address.street}', '${address.landmark || ''}')" class="bg-yellow-500 text-white small-btn rounded-lg hover:bg-yellow-600">Edit</button>
+                                        <button onclick="deleteAddress('${address.id}')" class="bg-red-500 text-white small-btn rounded-lg hover:bg-red-600">Delete</button>
+                                    </div>
+                                </div>`;
+                            cartAddress.innerHTML += `<option value="${address.id}">${address.name} - ${address.flat}, ${address.street}</option>`;
+                        });
+                    }
+                } catch (error) {
+                    showToast('Failed to fetch addresses.', 'error');
+                }
+            }
+
+            // Save address
+            async function saveAddress() {
+                const name = document.getElementById('addressName').value;
+                const phone = document.getElementById('addressPhone').value;
+                const flat = document.getElementById('addressFlat').value;
+                const street = document.getElementById('addressStreet').value;
+                const landmark = document.getElementById('addressLandmark').value;
+                const addressId = document.getElementById('addressName').dataset.id;
+
+                if (!name || !phone || !flat || !street) {
+                    showToast('Please fill all required fields.', 'error');
+                    return;
+                }
+
+                try {
+                    const response = await fetch(addressId ? '/api/addresses/update' : '/api/addresses/add', {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify({ id: addressId, name, phone, flat, street, landmark })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        showToast(addressId ? 'Address updated!' : 'Address added!', 'success');
+                        document.getElementById('addressName').value = '';
+                        document.getElementById('addressPhone').value = '';
+                        document.getElementById('addressFlat').value = '';
+                        document.getElementById('addressStreet').value = '';
+                        document.getElementById('addressLandmark').value = '';
+                        document.getElementById('addressName').dataset.id = '';
+                        fetchAddresses();
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                } catch (error) {
+                    showToast('Failed to save address.', 'error');
+                }
+            }
+
+            // Edit address
+            function editAddress(id, name, phone, flat, street, landmark) {
+                document.getElementById('addressName').value = name;
+                document.getElementById('addressPhone').value = phone;
+                document.getElementById('addressFlat').value = flat;
+                document.getElementById('addressStreet').value = street;
+                document.getElementById('addressLandmark').value = landmark;
+                document.getElementById('addressName').dataset.id = id;
+            }
+
+            // Delete address
+            async function deleteAddress(id) {
+                try {
+                    const response = await fetch('/api/addresses/delete', {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify({ id })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        showToast('Address deleted!', 'success');
+                        fetchAddresses();
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                } catch (error) {
+                    showToast('Failed to delete address.', 'error');
+                }
+            }
+
+            // Toggle favourite
+            async function toggleFavourite(itemId) {
+                try {
+                    const response = await fetch('/api/favourites/toggle', {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify({ itemId })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        showToast(data.message, 'success');
+                        fetchFavourites();
+                        fetchMenuItems();
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                } catch (error) {
+                    showToast('Failed to update favourites.', 'error');
+                }
+            }
+
+            // Fetch favourites
+            async function fetchFavourites() {
+                try {
+                    const response = await fetch('/api/favourites', {
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        favourites = data.items.map(item => item.id);
+                        const favouritesList = document.getElementById('favouritesList');
+                        favouritesList.innerHTML = '';
+                        data.items.forEach(item => {
+                            favouritesList.innerHTML += `
+                                <div class="menu-card">
+                                    <img src="${item.image || 'https://via.placeholder.com/80'}" alt="${item.name}" class="rounded-lg object-cover">
+                                    <div>
+                                        <p class="font-semibold text-gray-800 text-sm">${item.name}</p>
+                                        <p class="text-xs text-gray-600">₹${item.price}</p>
+                                        <div class="flex justify-between mt-2">
+                                            <button onclick="toggleFavourite('${item.id}')" class="text-red-500 hover:text-red-600">
+                                                <svg class="w-5 h-5 fill-current" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                            </button>
+                                            <button onclick="addToCart('${item.id}')" class="bg-yellow-500 text-white small-btn rounded-lg hover:bg-yellow-600">Add to Cart</button>
+                                        </div>
+                                    </div>
+                                </div>`;
+                        });
+                    }
+                } catch (error) {
+                    showToast('Failed to fetch favourites.', 'error');
+                }
+            }
+
+            // Upload profile image
+            async function uploadProfileImage() {
+                const fileInput = document.getElementById('profileImageInput');
+                if (!fileInput.files[0]) {
+                    showToast('No file selected.', 'error');
+                    return;
+                }
+                const formData = new FormData();
+                formData.append('image', fileInput.files[0]);
+                try {
+                    const response = await fetch('/api/profile/image', {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+                        body: formData
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        showToast('Profile image updated!', 'success');
+                        document.getElementById('profileImage').src = data.profileImage;
+                        document.getElementById('profilePicture').src = data.profileImage;
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                } catch (error) {
+                    showToast('Failed to upload image.', 'error');
+                }
+            }
+
+            // Save profile
+            async function saveProfile() {
+                const name = document.getElementById('profileName').value;
+                if (!name) {
+                    showToast('Name is required.', 'error');
+                    return;
+                }
+                try {
+                    const response = await fetch('/api/profile/update', {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify({ name, phone: document.getElementById('profilePhone').value })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        showToast('Profile updated!', 'success');
+                        fetchUserData();
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                } catch (error) {
+                    showToast('Failed to update profile.', 'error');
+                }
+            }
+
+            // Place order
+            async function placeOrder() {
+                const addressId = document.getElementById('cartAddress').value;
+                const couponCode = document.getElementById('cartCoupon').value;
+                if (!addressId) {
+                    showToast('Please select an address.', 'error');
+                    return;
+                }
+                try {
+                    const response = await fetch('/api/orders/place', {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify({ addressId, couponCode })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        showToast(`Order placed successfully! Total: ₹${data.total}`, 'success');
+                        cartDiscount = 0;
+                        appliedCouponId = null;
+                        document.getElementById('cartCoupon').value = '';
+                        fetchCart();
+                        fetchTotalOrders();
+                        fetchActiveOrders();
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                } catch (error) {
+                    showToast('Failed to place order.', 'error');
+                }
+            }
+
+            // Fetch active orders
+            async function fetchActiveOrders() {
+                try {
+                    const response = await fetch('/api/orders/active', {
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        const activeOrders = document.getElementById('activeOrders');
+                        activeOrders.innerHTML = '';
+                        data.orders.forEach(order => {
+                            activeOrders.innerHTML += `
+                                <div class="bg-gray-100 p-3 rounded-lg transform hover:scale-101 transition duration-200">
+                                    <p class="font-semibold text-sm text-gray-800">Order #${order.id}</p>
+                                    <p class="text-xs text-gray-600">Total: ₹${order.total}</p>
+                                    <p class="text-xs text-gray-600">Status: ${order.status}</p>
+                                    <button onclick="openCancelOrderModal('${order.id}')" class="mt-2 bg-red-500 text-white small-btn rounded-lg hover:bg-red-600">Cancel Order</button>
+                                </div>`;
+                        });
+                    }
+                } catch (error) {
+                    showToast('Failed to fetch active orders.', 'error');
+                }
+            }
+
+            // Open cancel order modal
+            function openCancelOrderModal(orderId) {
+                document.getElementById('cancelOrderModal').classList.remove('hidden', 'modal-slide-out');
+                document.getElementById('cancelOrderModal').classList.add('modal-slide-in');
+                document.getElementById('cancelReason').dataset.orderId = orderId;
+            }
+
+            // Submit cancel order
+            async function submitCancelOrder() {
+                const orderId = document.getElementById('cancelReason').dataset.orderId;
+                const reason = document.getElementById('cancelReason').value;
+                if (!reason) {
+                    showToast('Please provide a reason.', 'error');
+                    return;
+                }
+                try {
+                    const response = await fetch('/api/orders/cancel', {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify({ orderId, reason })
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        showToast('Order cancelled!', 'success');
+                        closeModal('cancelOrderModal');
+                        fetchActiveOrders();
+                        fetchOrderHistory();
+                        fetchTotalOrders();
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                } catch (error) {
+                    showToast('Failed to cancel order.', 'error');
+                }
+            }
+
+            // Fetch order history
+            async function fetchOrderHistory() {
+                try {
+                    const response = await fetch('/api/orders/history', {
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        const orderHistory = document.getElementById('orderHistory');
+                        orderHistory.innerHTML = '';
+                        data.orders.forEach(order => {
+                            orderHistory.innerHTML += `
+                                <div class="bg-gray-100 p-3 rounded-lg transform hover:scale-101 transition duration-200">
+                                    <p class="font-semibold text-sm text-gray-800">Order #${order.id}</p>
+                                    <p class="text-xs text-gray-600">Total: ₹${order.total}</p>
+                                    <p class="text-xs text-gray-600">Status: ${order.status}</p>
+                                </div>`;
+                        });
+                    }
+                } catch (error) {
+                    showToast('Failed to fetch order history.', 'error');
+                }
+            }
+
+            // Clear order history
+            async function clearOrderHistory() {
+                try {
+                    const response = await fetch('/api/orders/history/clear', {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        showToast('Order history cleared!', 'success');
+                        fetchOrderHistory();
+                        fetchTotalOrders();
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                } catch (error) {
+                    showToast('Failed to clear order history.', 'error');
+                }
+            }
+
+            // Logout
+            async function logout() {
+                try {
+                    const response = await fetch('/api/logout', {
+                        method: 'POST',
+                        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                    });
+                    const data = await response.json();
+                    if (response.ok) {
+                        localStorage.removeItem('token');
+                        showToast('Logged out successfully!', 'success');
+                        setTimeout(() => window.location.href = 'index.html', 1000);
+                    } else {
+                        showToast(data.message, 'error');
+                    }
+                } catch (error) {
+                    showToast('Failed to logout.', 'error');
+                }
+            }
+
+            // Initialize
+            document.addEventListener('DOMContentLoaded', () => {
+                if (!localStorage.getItem('token')) {
+                    window.location.href = 'index.html';
+                    return;
+                }
+                fetchUserData();
+                fetchTotalOrders();
+                fetchCoupons();
+                fetchMenuItems();
+                fetchCart();
+                fetchAddresses();
+                fetchFavourites();
+                fetchActiveOrders();
+                fetchOrderHistory();
+                setupMenuFilters();
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,17 @@
+DATABASE_URL=postgresql://delicute_db_user:5wsu1Frd1uHr1PDWEGglf1iFle6SlR69@dpg-d0eoa3p5pdvs73asuobg-a.oregon-postgres.render.com/delicute_db
+JWT_SECRET=b404ce00d1bfa7f6c6392dab1245ffadbce3466dc556eb39ce8685bfe13a4406
+GOOGLE_CLIENT_ID=1019406651586-rgl91utq3nn9ohudbrt15o74el8eq75j.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+EMAIL_USER=svasudevareddy18604@gmail.com
+EMAIL_PASS=xhvt kbar ldei btms
+RAZORPAY_KEY_ID=rzp_test_1a2b3c4d5e6f7g
+RAZORPAY_KEY_SECRET=1234567890abcdef12345678
+PORT=3000
+CLIENT_URL=https://delicute.onrender.com
+SERVER_URL=https://delicute.onrender.com
+NODE_ENV=production
+PAYPAL_CLIENT_ID=AYarbhTihMwB0cn5LEA1FJyOnOfA7aok3BXfTT7rWdbIr2jHnzBSyt0Q3iDWi8mBVLQ1T94GT2dUVajJ
+PAYPAL_CLIENT_SECRET=EGHTs-23i4fH3z8RF2ALPj1aEO75X30Szosfln4XEtm2zOb9EMWxhuIaS-czigSMaj9mL8nyJeVH-ogI
+PAYPAL_CURRENCY=USD
+PAYPAL_RETURN_URL=http://localhost:3000/success
+PAYPAL_CANCEL_URL=http://localhost:3000/cancel
