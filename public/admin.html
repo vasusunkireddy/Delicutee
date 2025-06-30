@@ -2,12 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Delicute - Admin Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
         h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
         p, input, button, a { font-family: 'Inter', sans-serif; font-weight: 400; }
         .animate-bounce-slow { animation: bounce 2s ease-in-out infinite; }
@@ -15,7 +20,10 @@
             0%, 100% { transform: translateY(0); } 
             50% { transform: translateY(-5px); } 
         }
-        .toast { transition: opacity 0.5s ease, transform 0.5s ease; }
+        .toast { 
+            transition: opacity 0.5s ease, transform 0.5s ease; 
+            max-width: 90vw;
+        }
         .toast-hidden { opacity: 0; transform: translateY(-20px); }
         .toast-visible { opacity: 1; transform: translateY(0); }
         .modal-slide-in { 
@@ -33,17 +41,33 @@
             to { transform: translateY(-50px); opacity: 0; }
         }
         .input-container { position: relative; }
-        .eye-icon { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; }
+        .eye-icon { 
+            position: absolute; 
+            right: 10px; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            cursor: pointer; 
+        }
         .glass-morphism {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
         }
         @media (max-width: 640px) {
-            .glass-morphism { padding: 1rem; }
-            input { font-size: 0.9rem; padding: 0.5rem; }
-            button { font-size: 0.9rem; padding: 0.5rem 1rem; }
+            h1 { font-size: 1.75rem; }
+            h2 { font-size: 1.5rem; }
+            p, input, button, a { font-size: 0.875rem; }
+            .glass-morphism { padding: 1rem; max-width: 95vw; }
+            .modal-slide-in { max-width: 95vw; }
+            nav .max-w-7xl { padding-left: 1rem; padding-right: 1rem; }
+            nav .flex { flex-direction: column; height: auto; padding: 1rem 0; }
+            nav .space-x-4 { margin-top: 1rem; }
+        }
+        @media (min-width: 641px) {
+            .glass-morphism { padding: 1.5rem; }
+            input { font-size: 1rem; padding: 0.75rem; }
+            button { font-size: 1rem; padding: 0.75rem 1.5rem; }
         }
     </style>
 </head>
@@ -51,62 +75,62 @@
     <!-- Navigation Bar -->
     <nav class="bg-white shadow-lg fixed w-full top-0 z-10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+            <div class="flex justify-between items-center h-16 sm:h-auto">
                 <div class="flex items-center">
-                    <img src="https://imgur.com/ZbhzFqT.jpg" alt="Delicute Logo" class="h-14 w-auto rounded-full shadow-md">
+                    <img src="https://imgur.com/ZbhzFqT.jpg" alt="Delicute Logo" class="h-12 w-auto rounded-full shadow-md lazy-load" loading="lazy">
                     <div class="ml-3">
-                        <h1 class="text-3xl font-bold text-gray-800">Delicute Admin</h1>
-                        <p class="text-sm text-gray-600">Manage Your Culinary Stories</p>
+                        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Delicute Admin</h1>
+                        <p class="text-xs sm:text-sm text-gray-600">Manage Your Culinary Stories</p>
                     </div>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <a href="#Home" class="text-gray-600 hover:text-yellow-500 transition duration-300">Home</a>
-                    <a href="#About" class="text-gray-600 hover:text-yellow-500 transition duration-300">About</a>
-                    <a href="#Contact" class="text-gray-600 hover:text-yellow-500 transition duration-300">Contact</a>
-                    <button onclick="showModal('adminLoginModal')" class="text-yellow-500 font-semibold hover:text-yellow-600 transition duration-300 animate-bounce-slow">Login</button>
-                    <button onclick="showModal('adminSignupModal')" class="bg-yellow-500 text-white px-4 py-2 rounded-full hover:bg-yellow-600 transition duration-300">Sign Up</button>
+                <div class="flex flex-wrap justify-center sm:justify-end items-center space-x-2 sm:space-x-4">
+                    <a href="#Home" class="text-gray-600 hover:text-yellow-500 transition duration-200 text-sm sm:text-base">Home</a>
+                    <a href="#About" class="text-gray-600 hover:text-yellow-500 transition duration-200 text-sm sm:text-base">About</a>
+                    <a href="#Contact" class="text-gray-600 hover:text-yellow-500 transition duration-200 text-sm sm:text-base">Contact</a>
+                    <button onclick="showModal('adminLoginModal')" class="text-yellow-500 font-semibold hover:text-yellow-600 transition duration-200 text-sm sm:text-base animate-bounce-slow">Login</button>
+                    <button onclick="showModal('adminSignupModal')" class="bg-yellow-500 text-white px-3 py-1.5 rounded-full hover:bg-yellow-600 transition duration-200 text-sm sm:text-base">Sign Up</button>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Toast Notification -->
-    <div id="toast" class="fixed top-4 right-4 z-50 toast-hidden bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-lg max-w-xs">
+    <div id="toast" class="fixed top-4 right-4 z-50 toast-hidden bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-lg max-w-xs sm:max-w-sm">
         <p id="toastMessage"></p>
     </div>
 
     <!-- Hero Section -->
     <section id="Home" class="min-h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')">
-        <div class="text-center text-white bg-black bg-opacity-60 p-8 sm:p-12 rounded-xl max-w-2xl mx-4">
-            <h2 class="text-4xl sm:text-5xl font-bold mb-4">Delicute Admin Portal</h2>
-            <p class="text-lg sm:text-xl mb-6">Manage Your Culinary Stories</p>
-            <p id="restaurantStatus" class="text-base sm:text-lg font-semibold mb-6"></p>
-            <button onclick="showModal('adminLoginModal')" class="bg-yellow-500 text-white px-6 py-3 rounded-full hover:bg-yellow-600 transition duration-300 animate-bounce-slow">Login sekarang</button>
+        <div class="text-center text-white bg-black bg-opacity-60 p-6 sm:p-8 rounded-xl max-w-lg mx-4">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-4">Delicute Admin Portal</h2>
+            <p class="text-base sm:text-lg mb-4">Manage Your Culinary Stories</p>
+            <p id="restaurantStatus" class="text-sm sm:text-base font-semibold mb-4"></p>
+            <button onclick="showModal('adminLoginModal')" class="bg-yellow-500 text-white px-4 py-2 rounded-full hover:bg-yellow-600 transition duration-200 text-sm sm:text-base animate-bounce-slow">Login Now</button>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="About" class="py-16 bg-white">
+    <section id="About" class="py-12 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">About Delicute</h2>
-            <p class="text-lg text-gray-600 text-center max-w-3xl mx-auto">
+            <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6">About Delicute</h2>
+            <p class="text-base sm:text-lg text-gray-600 text-center max-w-3xl mx-auto">
                 At Delicute, we craft every dish with passion, using the freshest ingredients to bring unforgettable flavors to your table. Our cloud kitchen is dedicated to delivering culinary stories that delight with every bite.
             </p>
         </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="Contact" class="py-16 bg-gray-100">
+    <section id="Contact" class="py-12 bg-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Get in Touch</h2>
+            <h2 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-6">Get in Touch</h2>
             <div class="text-center">
-                <p class="text-lg text-gray-600 mb-2">Feel free to contact us for any order-related issues</p>
-                <p class="text-lg text-gray-600 mb-2">Email: <a href="mailto:contactdelicute@gmail.com" class="text-yellow-500 hover:underline">contactdelicute@gmail.com</a></p>
-                <p class="text-lg text-gray-600 mb-2">Phone: <a href="tel:+919652296548" class="text-yellow-500 hover:underline">+91 96522 96548</a></p>
+                <p class="text-base sm:text-lg text-gray-600 mb-2">Feel free to contact us for any order-related issues</p>
+                <p class="text-base sm:text-lg text-gray-600 mb-2">Email: <a href="mailto:contactdelicute@gmail.com" class="text-yellow-500 hover:underline">contactdelicute@gmail.com</a></p>
+                <p class="text-base sm:text-lg text-gray-600 mb-2">Phone: <a href="tel:+919652296548" class="text-yellow-500 hover:underline">+91 96522 96548</a></p>
                 <div class="mt-4">
-                    <p class="text-lg font-semibold text-gray-800">Operating Hours</p>
-                    <p class="text-base text-gray-600">Mon - Fri: 4PM - 12AM</p>
-                    <p class="text-base text-gray-600">Sat - Sun: 12PM - 12AM</p>
+                    <p class="text-base sm:text-lg font-semibold text-gray-800">Operating Hours</p>
+                    <p class="text-sm sm:text-base text-gray-600">Mon - Fri: 4PM - 12AM</p>
+                    <p class="text-sm sm:text-base text-gray-600">Sat - Sun: 12PM - 12AM</p>
                 </div>
             </div>
         </div>
@@ -114,110 +138,110 @@
 
     <!-- Admin Login Modal -->
     <div id="adminLoginModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-20">
-        <div class="glass-morphism p-6 sm:p-8 rounded-xl w-full max-w-sm mx-4 modal-slide-in shadow-2xl">
-            <h2 class="text-2xl font-bold mb-6 text-center text-white">Admin Login - Delicute</h2>
+        <div class="glass-morphism p-6 sm:p-8 rounded-xl w-full max-w-sm mx-4 modal-slide-in shadow-xl">
+            <h2 class="text-xl sm:text-2xl font-bold mb-6 text-center text-white">Admin Login - Delicute</h2>
             <div class="space-y-4">
                 <div class="input-container">
-                    <input type="email" id="adminEmail" placeholder="Admin Email" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
+                    <input type="email" id="adminEmail" placeholder="Admin Email" class="w-full p-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm sm:text-base text-white placeholder-gray-300" required>
                 </div>
                 <div class="input-container">
-                    <input type="password" id="adminPassword" placeholder="Password" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
+                    <input type="password" id="adminPassword" placeholder="Password" class="w-full p-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm sm:text-base text-white placeholder-gray-300" required>
                     <span class="eye-icon" onclick="togglePassword('adminPassword', 'adminEye')">
-                        <svg id="adminEye" class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg id="adminEye" class="w-4 sm:w-5 h-4 sm:h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                         </svg>
                     </span>
                 </div>
-                <button onclick="adminLogin()" class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition duration-300 text-sm font-semibold">Login</button>
+                <button onclick="adminLogin()" class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition duration-200 text-sm sm:text-base font-semibold">Login</button>
                 <div class="text-center">
-                    <a href="javascript:void(0)" onclick="showModal('forgotPasswordModal')" class="text-yellow-500 hover:underline text-sm">Forgot Password?</a>
+                    <a href="javascript:void(0)" onclick="showModal('forgotPasswordModal')" class="text-yellow-500 hover:underline text-sm sm:text-base">Forgot Password?</a>
                 </div>
             </div>
-            <button onclick="closeModal('adminLoginModal')" class="mt-4 text-gray-300 hover:text-yellow-500 w-full text-center text-sm">Close</button>
+            <button onclick="closeModal('adminLoginModal')" class="mt-4 text-gray-300 hover:text-yellow-500 w-full text-center text-sm sm:text-base">Close</button>
         </div>
     </div>
 
     <!-- Admin Signup Modal -->
     <div id="adminSignupModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-20">
-        <div class="glass-morphism p-6 sm:p-8 rounded-xl w-full max-w-sm mx-4 modal-slide-in shadow-2xl">
-            <h2 class="text-2xl font-bold mb-6 text-center text-white">Admin Sign Up - Delicute</h2>
+        <div class="glass-morphism p-6 sm:p-8 rounded-xl w-full max-w-sm mx-4 modal-slide-in shadow-xl">
+            <h2 class="text-xl sm:text-2xl font-bold mb-6 text-center text-white">Admin Sign Up - Delicute</h2>
             <div class="space-y-4">
                 <div class="input-container">
-                    <input type="text" id="signupName" placeholder="Full Name" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
+                    <input type="text" id="signupName" placeholder="Full Name" class="w-full p-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm sm:text-base text-white placeholder-gray-300" required>
                 </div>
                 <div class="input-container">
-                    <input type="email" id="signupEmail" placeholder="Email" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
+                    <input type="email" id="signupEmail" placeholder="Email" class="w-full p-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm sm:text-base text-white placeholder-gray-300" required>
                 </div>
                 <div class="input-container">
-                    <input type="password" id="signupPassword" placeholder="Create Password" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
+                    <input type="password" id="signupPassword" placeholder="Create Password" class="w-full p-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm sm:text-base text-white placeholder-gray-300" required>
                     <span class="eye-icon" onclick="togglePassword('signupPassword', 'signupPasswordEye')">
-                        <svg id="signupPasswordEye" class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg id="signupPasswordEye" class="w-4 sm:w-5 h-4 sm:h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                         </svg>
                     </span>
                 </div>
                 <div class="input-container">
-                    <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
+                    <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" class="w-full p-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm sm:text-base text-white placeholder-gray-300" required>
                     <span class="eye-icon" onclick="togglePassword('signupConfirmPassword', 'signupConfirmPasswordEye')">
-                        <svg id="signupConfirmPasswordEye" class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg id="signupConfirmPasswordEye" class="w-4 sm:w-5 h-4 sm:h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                         </svg>
                     </span>
                 </div>
-                <p class="text-sm text-gray-300 text-center">By signing up, you agree to our <a href="terms.html" class="text-yellow-500 hover:underline">Terms and Conditions</a>.</p>
-                <button onclick="adminSignup()" class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition duration-300 text-sm font-semibold">Sign Up</button>
+                <p class="text-xs sm:text-sm text-gray-300 text-center">By signing up, you agree to our <a href="terms.html" class="text-yellow-500 hover:underline">Terms and Conditions</a>.</p>
+                <button onclick="adminSignup()" class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition duration-200 text-sm sm:text-base font-semibold">Sign Up</button>
             </div>
-            <button onclick="closeModal('adminSignupModal')" class="mt-4 text-gray-300 hover:text-yellow-500 w-full text-center text-sm">Close</button>
+            <button onclick="closeModal('adminSignupModal')" class="mt-4 text-gray-300 hover:text-yellow-500 w-full text-center text-sm sm:text-base">Close</button>
         </div>
     </div>
 
     <!-- Forgot Password Modal -->
     <div id="forgotPasswordModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-20">
-        <div class="glass-morphism p-6 sm:p-8 rounded-xl w-full max-w-sm mx-4 modal-slide-in shadow-2xl">
-            <h2 class="text-2xl font-bold mb-6 text-center text-white">Reset Admin Password</h2>
+        <div class="glass-morphism p-6 sm:p-8 rounded-xl w-full max-w-sm mx-4 modal-slide-in shadow-xl">
+            <h2 class="text-xl sm:text-2xl font-bold mb-6 text-center text-white">Reset Admin Password</h2>
             <div id="forgotPasswordStep1" class="space-y-4">
                 <div class="input-container">
-                    <input type="email" id="forgotEmail" placeholder="Enter Admin Email" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
+                    <input type="email" id="forgotEmail" placeholder="Enter Admin Email" class="w-full p-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm sm:text-base text-white placeholder-gray-300" required>
                 </div>
-                <button onclick="sendOtp()" class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition duration-300 text-sm font-semibold">Send OTP</button>
+                <button onclick="sendOtp()" class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition duration-200 text-sm sm:text-base font-semibold">Send OTP</button>
             </div>
             <div id="forgotPasswordStep2" class="space-y-4 hidden">
                 <div class="input-container">
-                    <input type="text" id="otpInput" placeholder="Enter OTP" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
+                    <input type="text" id="otpInput" placeholder="Enter OTP" class="w-full p-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm sm:text-base text-white placeholder-gray-300" required>
                 </div>
                 <div class="input-container hidden" id="newPasswordContainer">
-                    <input type="password" id="newPassword" placeholder="New Password" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
+                    <input type="password" id="newPassword" placeholder="New Password" class="w-full p-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm sm:text-base text-white placeholder-gray-300" required>
                     <span class="eye-icon" onclick="togglePassword('newPassword', 'newPasswordEye')">
-                        <svg id="newPasswordEye" class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg id="newPasswordEye" class="w-4 sm:w-5 h-4 sm:h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                         </svg>
                     </span>
                 </div>
                 <div class="input-container hidden" id="confirmPasswordContainer">
-                    <input type="password" id="confirmPassword" placeholder="Confirm Password" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
+                    <input type="password" id="confirmPassword" placeholder="Confirm Password" class="w-full p-2 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm sm:text-base text-white placeholder-gray-300" required>
                     <span class="eye-icon" onclick="togglePassword('confirmPassword', 'confirmPasswordEye')">
-                        <svg id="confirmPasswordEye" class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg id="confirmPasswordEye" class="w-4 sm:w-5 h-4 sm:h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                         </svg>
                     </span>
                 </div>
-                <button onclick="verifyOtp()" class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition duration-300 text-sm font-semibold">Verify OTP</button>
-                <button onclick="resetPassword()" id="resetPasswordBtn" class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition duration-300 text-sm font-semibold hidden">Reset Password</button>
+                <button onclick="verifyOtp()" class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition duration-200 text-sm sm:text-base font-semibold">Verify OTP</button>
+                <button onclick="resetPassword()" id="resetPasswordBtn" class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition duration-200 text-sm sm:text-base font-semibold hidden">Reset Password</button>
             </div>
-            <button onclick="closeModal('forgotPasswordModal')" class="mt-4 text-gray-300 hover:text-yellow-500 w-full text-center text-sm">Close</button>
+            <button onclick="closeModal('forgotPasswordModal')" class="mt-4 text-gray-300 hover:text-yellow-500 w-full text-center text-sm sm:text-base">Close</button>
         </div>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8">
+    <footer class="bg-gray-800 text-white py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p class="text-center text-sm">© 2025 Delicute. All rights reserved.</p>
+            <p class="text-center text-sm sm:text-base">© 2025 Delicute. All rights reserved.</p>
         </div>
     </footer>
 
     <script>
-        // API base URL (configurable for production)
-        const API_BASE_URL = 'http://localhost:3000/api/admin';
+        // API base URL (replace with your Render domain in production)
+        const API_BASE_URL = window.location.hostname.includes('localhost') ? 'http://localhost:3000/api/admin' : 'https://your-render-domain.com/api/admin';
 
         // Toast notification
         function showToast(message, type = 'info') {
@@ -229,7 +253,7 @@
             setTimeout(() => {
                 toast.classList.remove('toast-visible');
                 toast.classList.add('toast-hidden');
-            }, 5000); // Increased duration for readability
+            }, 4000);
         }
 
         // Validate email format
@@ -249,6 +273,11 @@
             return password.length >= 6;
         }
 
+        // Validate OTP (6-digit number)
+        function isValidOTP(otp) {
+            return otp.length === 6 && /^\d+$/.test(otp);
+        }
+
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -257,7 +286,7 @@
                 if (href && href !== '#') {
                     const target = document.querySelector(href);
                     if (target) {
-                        target.scrollIntoView({ behavior: 'smooth' });
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     } else {
                         console.warn(`Target element for href ${href} not found`);
                     }
@@ -309,7 +338,7 @@
             setTimeout(() => {
                 modal.classList.add('hidden');
                 modal.classList.remove('modal-slide-in', 'modal-slide-out');
-            }, 300);
+            }, 200);
         }
 
         // Toggle password visibility
@@ -325,12 +354,31 @@
             }
         }
 
+        // API call with retry mechanism
+        async function fetchWithRetry(url, options, retries = 3, delay = 1000) {
+            for (let attempt = 1; attempt <= retries; attempt++) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 5000);
+                    const response = await fetch(url, { ...options, signal: controller.signal });
+                    clearTimeout(timeoutId);
+                    return response;
+                } catch (error) {
+                    if (attempt === retries || error.name !== 'AbortError') {
+                        console.error(`Fetch failed after ${attempt} attempts:`, error);
+                        throw error;
+                    }
+                    await new Promise(resolve => setTimeout(resolve, delay * attempt));
+                }
+            }
+        }
+
         // API calls
         async function adminLogin() {
             const email = document.getElementById('adminEmail').value.trim();
             const password = document.getElementById('adminPassword').value.trim();
             console.log('Login attempt:', { email, password: password ? '[provided]' : '[missing]' });
-            
+
             if (!email || !password) {
                 showToast('Please enter both email and password.', 'error');
                 return;
@@ -341,10 +389,10 @@
             }
 
             try {
-                const response = await fetch(`${API_BASE_URL}/login`, {
+                const response = await fetchWithRetry(`${API_BASE_URL}/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
+                    body: JSON.stringify({ input: email, password })
                 });
                 const data = await response.json();
                 console.log('Login response:', data);
@@ -352,10 +400,14 @@
                     showToast('Login successful!', 'success');
                     localStorage.setItem('token', data.token);
                     setTimeout(() => {
-                        window.location.href = './admindashboard.html'; // Ensure correct path
+                        window.location.href = '/admindashboard.html';
                     }, 1000);
                 } else {
-                    showToast(data.message || 'Login failed. Please try again.', 'error');
+                    if (data.message.includes('blocked')) {
+                        showToast('Your account is blocked by admin due to security reasons.', 'error');
+                    } else {
+                        showToast(data.message || 'Login failed. Please try again.', 'error');
+                    }
                 }
             } catch (error) {
                 console.error('Login error:', error);
@@ -369,7 +421,7 @@
             const password = document.getElementById('signupPassword').value.trim();
             const confirmPassword = document.getElementById('signupConfirmPassword').value.trim();
             console.log('Signup attempt:', { name, email, password: password ? '[provided]' : '[missing]', confirmPassword: confirmPassword ? '[provided]' : '[missing]' });
-            
+
             if (!name || !email || !password || !confirmPassword) {
                 showToast('Please fill all fields.', 'error');
                 return;
@@ -392,10 +444,10 @@
             }
 
             try {
-                const response = await fetch(`${API_BASE_URL}/signup`, {
+                const response = await fetchWithRetry(`${API_BASE_URL}/signup`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password })
+                    body: JSON.stringify({ name, email, phone: email, password }) // Using email as phone for admin signup
                 });
                 const data = await response.json();
                 console.log('Signup response:', data);
@@ -415,7 +467,7 @@
         async function sendOtp() {
             const email = document.getElementById('forgotEmail').value.trim();
             console.log('Send OTP attempt:', { email });
-            
+
             if (!email) {
                 showToast('Please enter your email.', 'error');
                 return;
@@ -426,7 +478,7 @@
             }
 
             try {
-                const response = await fetch(`${API_BASE_URL}/forgot-password`, {
+                const response = await fetchWithRetry(`${API_BASE_URL}/forgot-password`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email })
@@ -450,7 +502,7 @@
             const email = document.getElementById('forgotEmail').value.trim();
             const otp = document.getElementById('otpInput').value.trim();
             console.log('Verify OTP attempt:', { email, otp });
-            
+
             if (!email || !otp) {
                 showToast('Please enter email and OTP.', 'error');
                 return;
@@ -459,13 +511,13 @@
                 showToast('Please enter a valid email address.', 'error');
                 return;
             }
-            if (otp.length !== 6 || !/^\d+$/.test(otp)) {
+            if (!isValidOTP(otp)) {
                 showToast('OTP must be a 6-digit number.', 'error');
                 return;
             }
 
             try {
-                const response = await fetch(`${API_BASE_URL}/reset-password`, {
+                const response = await fetchWithRetry(`${API_BASE_URL}/reset-password`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, otp })
@@ -493,7 +545,7 @@
             const newPassword = document.getElementById('newPassword').value.trim();
             const confirmPassword = document.getElementById('confirmPassword').value.trim();
             console.log('Reset password attempt:', { email, otp, newPassword: newPassword ? '[provided]' : '[missing]', confirmPassword: confirmPassword ? '[provided]' : '[missing]' });
-            
+
             if (!email || !otp || !newPassword || !confirmPassword) {
                 showToast('Please fill all fields.', 'error');
                 return;
@@ -510,9 +562,13 @@
                 showToast('Passwords do not match.', 'error');
                 return;
             }
+            if (!isValidOTP(otp)) {
+                showToast('OTP must be a 6-digit number.', 'error');
+                return;
+            }
 
             try {
-                const response = await fetch(`${API_BASE_URL}/reset-password`, {
+                const response = await fetchWithRetry(`${API_BASE_URL}/reset-password`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, otp, newPassword, confirmPassword })
@@ -532,8 +588,8 @@
             }
         }
 
-        // Update restaurant status
-        async function updateRestaurantStatus() {
+        // Update restaurant status with retry
+        async function updateRestaurantStatus(attempt = 1, maxAttempts = 3) {
             const token = localStorage.getItem('token');
             if (!token) {
                 console.log('No token found, skipping restaurant status fetch');
@@ -541,7 +597,7 @@
                 return;
             }
             try {
-                const response = await fetch(`${API_BASE_URL}/restaurant-status`, {
+                const response = await fetchWithRetry(`${API_BASE_URL}/restaurant-status`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await response.json();
@@ -552,11 +608,15 @@
                     statusElement.classList.remove('text-green-400', 'text-red-400');
                     statusElement.classList.add(data.status === 'open' ? 'text-green-400' : 'text-red-400');
                 } else {
-                    showToast(data.message || 'Failed to fetch restaurant status.', 'error');
+                    throw new Error(data.message || 'Failed to fetch status');
                 }
             } catch (error) {
-                console.error('Restaurant status error:', error);
-                showToast('Failed to fetch restaurant status.', 'error');
+                console.error(`Restaurant status error (attempt ${attempt}):`, error);
+                if (attempt < maxAttempts) {
+                    setTimeout(() => updateRestaurantStatus(attempt + 1, maxAttempts), 1000 * attempt);
+                } else {
+                    showToast('Failed to fetch restaurant status after multiple attempts.', 'error');
+                }
             }
         }
 
@@ -565,9 +625,26 @@
             updateRestaurantStatus();
             const token = localStorage.getItem('token');
             if (token) {
-                window.location.href = './admindashboard.html'; // Ensure correct path
+                fetchWithRetry(`${API_BASE_URL}/verify-token`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (response.ok) {
+                            window.location.href = '/admindashboard.html';
+                        } else {
+                            localStorage.removeItem('token');
+                        }
+                    })
+                    .catch(() => localStorage.removeItem('token'));
             }
         };
+
+        // Lazy-load images
+        document.querySelectorAll('img.lazy-load').forEach(img => {
+            img.addEventListener('load', () => img.classList.add('loaded'));
+            img.src = img.dataset.src || img.src;
+        });
     </script>
 </body>
 </html>
