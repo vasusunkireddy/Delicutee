@@ -148,15 +148,16 @@ router.get('/restaurant-status', async (req, res) => {
     let db;
     try {
         db = await getDbConnection();
-        let restaurantStatus = 'Closed';
         const settingsTableExists = await tableExists(db, 'settings');
-        if (settingsTableExists) {
-            const hasKeyColumn = await columnExists(db, 'settings', 'key');
-            if (hasKeyColumn) {
-                const [settings] = await db.execute('SELECT value FROM settings WHERE `key` = "restaurant_status"');
-                restaurantStatus = settings[0]?.value || 'Closed';
-            }
+        if (!settingsTableExists) {
+            return res.status(500).json({ message: 'Settings table not found' });
         }
+        const hasKeyColumn = await columnExists(db, 'settings', 'key');
+        if (!hasKeyColumn) {
+            return res.status(500).json({ message: 'Settings table missing key column' });
+        }
+        const [settings] = await db.execute('SELECT value FROM settings WHERE `key` = ?', ['restaurant_status']);
+        const restaurantStatus = settings[0]?.value || 'Closed';
         res.status(200).json({ message: `Restaurant is ${restaurantStatus.toLowerCase()}`, status: restaurantStatus.toLowerCase() });
     } catch (error) {
         console.error('Fetch restaurant status error:', error);
@@ -175,16 +176,19 @@ router.post('/restaurant-status', authenticateToken, async (req, res) => {
     let db;
     try {
         db = await getDbConnection();
-        const hasKeyColumn = await columnExists(db, 'settings', 'key');
-        if (hasKeyColumn) {
-            await db.execute(
-                'INSERT INTO settings (`key`, `value`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `value` = ?',
-                ['restaurant_status', status, status]
-            );
-            res.json({ message: 'Restaurant status updated' });
-        } else {
-            return res.status(400).json({ message: 'Settings table not configured' });
+        const settingsTableExists = await tableExists(db, 'settings');
+        if (!settingsTableExists) {
+            return res.status(500).json({ message: 'Settings table not found' });
         }
+        const hasKeyColumn = await columnExists(db, 'settings', 'key');
+        if (!hasKeyColumn) {
+            return res.status(500).json({ message: 'Settings table missing key column' });
+        }
+        await db.execute(
+            'INSERT INTO settings (`key`, `value`, `created_at`, `updated_at`) VALUES (?, ?, NOW(), NOW()) ON DUPLICATE KEY UPDATE `value` = ?, `updated_at` = NOW()',
+            ['restaurant_status', status, status]
+        );
+        res.json({ message: 'Restaurant status updated' });
     } catch (error) {
         console.error('Toggle restaurant status error:', error);
         res.status(500).json({ message: 'Server error.', error: error.message });
@@ -422,16 +426,31 @@ router.post('/reset-password', [
     }
 });
 
-// Admin profile route
+// Admin profile route (fixed)
 router.get('/profile', authenticateToken, async (req, res) => {
     let db;
     try {
         db = await getDbConnection();
+        const usersTableExists = await tableExists(db, 'users');
+        if (!usersTableExists) {
+            return res.status(500).json({ message: 'Users table not found.' });
+        }
+
         const hasProfileImageColumn = await columnExists(db, 'users', 'profile_image');
-        const query = hasProfileImageColumn
-            ? 'SELECT id, name, email, profile_image AS profileImage FROM users WHERE id = ? AND role = "admin"'
-            : 'SELECT id, name, email FROM users WHERE id = ? AND role = "admin"';
-        const [rows] = await db.execute(query, [req.user.id]);
+        const hasRoleColumn = await columnExists(db, 'users', 'role');
+        let query;
+        if (hasProfileImageColumn && hasRoleColumn) {
+            query = 'SELECT id, name, email, profile_image AS profileImage FROM users WHERE id = ? AND role = ?';
+        } else if (hasProfileImageColumn) {
+            query = 'SELECT id, name, email, profile_image AS profileImage FROM users WHERE id = ?';
+        } else if (hasRoleColumn) {
+            query = 'SELECT id, name, email FROM users WHERE id = ? AND role = ?';
+        } else {
+            query = 'SELECT id, name, email FROM users WHERE id = ?';
+        }
+        const params = hasRoleColumn ? [req.user.id, 'admin'] : [req.user.id];
+
+        const [rows] = await db.execute(query, params);
         if (rows.length === 0) {
             return res.status(404).json({ message: 'Admin not found' });
         }
@@ -450,10 +469,18 @@ router.post('/profile/update', authenticateToken, validateProfile, handleValidat
     let db;
     try {
         db = await getDbConnection();
-        await db.execute(
-            'UPDATE users SET name = ? WHERE id = ? AND role = "admin"',
-            [name, req.user.id]
-        );
+        const usersTableExists = await tableExists(db, 'users');
+        if (!usersTableExists) {
+            return res.status(500).json({ message: 'Users table not found.' });
+        }
+
+        const hasRoleColumn = await columnExists(db, 'users', 'role');
+        const query = hasRoleColumn
+            ? 'UPDATE users SET name = ? WHERE id = ? AND role = ?'
+            : 'UPDATE users SET name = ? WHERE id = ?';
+        const params = hasRoleColumn ? [name, req.user.id, 'admin'] : [name, req.user.id];
+
+        await db.execute(query, params);
         res.json({ message: 'Profile updated' });
     } catch (error) {
         console.error('Update profile error:', error);
@@ -479,10 +506,13 @@ router.post('/profile/image', authenticateToken, upload.single('image'), async (
             folder: 'delicute/profiles',
             public_id: `admin_${req.user.id}_${Date.now()}`
         });
-        await db.execute(
-            'UPDATE users SET profile_image = ? WHERE id = ? AND role = "admin"',
-            [result.secure_url, req.user.id]
-        );
+        const hasRoleColumn = await columnExists(db, 'users', 'role');
+        const query = hasRoleColumn
+            ? 'UPDATE users SET profile_image = ? WHERE id = ? AND role = ?'
+            : 'UPDATE users SET profile_image = ? WHERE id = ?';
+        const params = hasRoleColumn ? [result.secure_url, req.user.id, 'admin'] : [result.secure_url, req.user.id];
+
+        await db.execute(query, params);
         res.json({ message: 'Profile image updated' });
     } catch (error) {
         console.error('Upload profile image error:', error);
@@ -492,11 +522,16 @@ router.post('/profile/image', authenticateToken, upload.single('image'), async (
     }
 });
 
-// Dashboard stats route
+// Dashboard stats route (fixed)
 router.get('/stats', authenticateToken, async (req, res) => {
     let db;
     try {
         db = await getDbConnection();
+        const usersTableExists = await tableExists(db, 'users');
+        if (!usersTableExists) {
+            return res.status(500).json({ message: 'Users table not found.' });
+        }
+
         const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
         const ordersQuery = hasDeletedAtColumn
             ? 'SELECT COUNT(*) as count FROM orders WHERE deleted_at IS NULL'
@@ -509,18 +544,29 @@ router.get('/stats', authenticateToken, async (req, res) => {
             : 'SELECT COUNT(*) as count FROM coupons';
         const [coupons] = await db.execute(couponsQuery);
         
-        const [users] = await db.execute('SELECT COUNT(*) as count FROM users WHERE role IN ("user", "customer")');
+        let userCount;
+        const hasRoleColumn = await columnExists(db, 'users', 'role');
+        if (hasRoleColumn) {
+            const [users] = await db.execute('SELECT COUNT(*) as count FROM users WHERE role IN (?, ?)', ['user', 'customer']);
+            userCount = users[0].count;
+        } else {
+            const [users] = await db.execute('SELECT COUNT(*) as count FROM users');
+            userCount = users[0].count;
+        }
 
+        const settingsTableExists = await tableExists(db, 'settings');
         let restaurantStatus = 'Closed';
-        const hasKeyColumn = await columnExists(db, 'settings', 'key');
-        if (hasKeyColumn) {
-            const [settings] = await db.execute('SELECT value FROM settings WHERE `key` = "restaurant_status"');
-            restaurantStatus = settings[0]?.value || 'Closed';
+        if (settingsTableExists) {
+            const hasKeyColumn = await columnExists(db, 'settings', 'key');
+            if (hasKeyColumn) {
+                const [settings] = await db.execute('SELECT value FROM settings WHERE `key` = ?', ['restaurant_status']);
+                restaurantStatus = settings[0]?.value || 'Closed';
+            }
         }
 
         res.json({
             totalOrders: orders[0].count,
-            totalUsers: users[0].count,
+            totalUsers: userCount,
             totalCoupons: coupons[0].count,
             restaurantStatus
         });
@@ -795,13 +841,23 @@ router.get('/users', authenticateToken, async (req, res) => {
     let db;
     try {
         db = await getDbConnection();
+        const usersTableExists = await tableExists(db, 'users');
+        if (!usersTableExists) {
+            return res.status(500).json({ message: 'Users table not found.' });
+        }
+
         const search = req.query.search || '';
-        let query = 'SELECT id, name, email, phone, is_blocked AS isBlocked FROM users WHERE role IN ("user", "customer")';
-        let params = [];
+        const hasRoleColumn = await columnExists(db, 'users', 'role');
+        let query = hasRoleColumn
+            ? 'SELECT id, name, email, phone, is_blocked AS isBlocked FROM users WHERE role IN (?, ?)'
+            : 'SELECT id, name, email, phone, is_blocked AS isBlocked FROM users';
+        let params = hasRoleColumn ? ['user', 'customer'] : [];
+
         if (search) {
             query += ' AND (name LIKE ? OR email LIKE ?)';
-            params = [`%${search}%`, `%${search}%`];
+            params.push(`%${search}%`, `%${search}%`);
         }
+
         const [users] = await db.execute(query, params);
         res.json({ users });
     } catch (error) {
@@ -817,10 +873,18 @@ router.post('/users/block', authenticateToken, async (req, res) => {
     let db;
     try {
         db = await getDbConnection();
-        await db.execute(
-            'UPDATE users SET is_blocked = ? WHERE id = ? AND role IN ("user", "customer")',
-            [block ? 1 : 0, userId]
-        );
+        const usersTableExists = await tableExists(db, 'users');
+        if (!usersTableExists) {
+            return res.status(500).json({ message: 'Users table not found.' });
+        }
+
+        const hasRoleColumn = await columnExists(db, 'users', 'role');
+        const query = hasRoleColumn
+            ? 'UPDATE users SET is_blocked = ? WHERE id = ? AND role IN (?, ?)'
+            : 'UPDATE users SET is_blocked = ? WHERE id = ?';
+        const params = hasRoleColumn ? [block ? 1 : 0, userId, 'user', 'customer'] : [block ? 1 : 0, userId];
+
+        await db.execute(query, params);
         res.json({ message: `User ${block ? 'blocked' : 'unblocked'}` });
     } catch (error) {
         console.error('Toggle block user error:', error);
@@ -937,7 +1001,7 @@ router.get('/orders/:id', authenticateToken, async (req, res) => {
             }))
         };
         res.json({ order: formattedOrder });
-    } catch (error) {
+    } catch (error) { // ✅ fixed here
         console.error('Fetch order details error:', error);
         res.status(500).json({ message: 'Server error.', error: error.message });
     } finally {
@@ -989,7 +1053,8 @@ router.post('/orders/delete', authenticateToken, async (req, res) => {
     }
 });
 
-router.get('/orders/trash', authenticateToken, async (req,raffleId) => {
+// Fixed route for fetching trashed orders
+router.get('/orders/trash', authenticateToken, async (req, res) => {
     let db;
     try {
         db = await getDbConnection();

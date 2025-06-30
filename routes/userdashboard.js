@@ -454,7 +454,7 @@ router.post('/profile/update', authenticateToken, async (req, res) => {
 router.get('/orders/active', authenticateToken, async (req, res) => {
   try {
     const db = await getDBConnection();
-    const [rows] = await db.execute('SELECT id, total, status FROM orders WHERE userId = ? AND status NOT IN ("DELIVERED", "CANCELLED")', [req.user.id]);
+    const [rows] = await db.execute('SELECT id, total, status FROM orders WHERE userId = ? AND status NOT IN (?, ?)', [req.user.id, 'DELIVERED', 'CANCELLED']);
     await db.end();
     res.json({ orders: rows });
   } catch (error) {
@@ -465,18 +465,18 @@ router.get('/orders/active', authenticateToken, async (req, res) => {
 
 // Cancel order
 router.post('/orders/cancel', authenticateToken, async (req, res) => {
-  const { orderId, reason } = req.body;
-  if (!orderId || !reason) return res.status(400).json({ message: 'Order ID and reason are required' });
+  const { orderId } = req.body;
+  if (!orderId) return res.status(400).json({ message: 'Order ID is required' });
 
   try {
     const db = await getDBConnection();
-    const [rows] = await db.execute('SELECT id FROM orders WHERE id = ? AND userId = ? AND status = "PLACED"', [orderId, req.user.id]);
+    const [rows] = await db.execute('SELECT id FROM orders WHERE id = ? AND userId = ? AND status = ?', [orderId, req.user.id, 'PLACED']);
     if (!rows.length) {
       await db.end();
       return res.status(404).json({ message: 'Order not found or cannot be cancelled' });
     }
 
-    await db.execute('UPDATE orders SET status = "CANCELLED", cancelReason = ? WHERE id = ?', [reason, orderId]);
+    await db.execute('UPDATE orders SET status = ? WHERE id = ?', ['CANCELLED', orderId]);
     await db.end();
     res.json({ message: 'Order cancelled' });
   } catch (error) {
@@ -502,7 +502,7 @@ router.get('/orders/history', authenticateToken, async (req, res) => {
 router.post('/orders/history/clear', authenticateToken, async (req, res) => {
   try {
     const db = await getDBConnection();
-    await db.execute('DELETE FROM orders WHERE userId = ? AND status IN ("DELIVERED", "CANCELLED")', [req.user.id]);
+    await db.execute('DELETE FROM orders WHERE userId = ? AND status IN (?, ?)', [req.user.id, 'DELIVERED', 'CANCELLED']);
     await db.end();
     res.json({ message: 'Order history cleared' });
   } catch (error) {

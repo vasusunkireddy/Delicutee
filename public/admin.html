@@ -40,6 +40,11 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
+        @media (max-width: 640px) {
+            .glass-morphism { padding: 1rem; }
+            input { font-size: 0.9rem; padding: 0.5rem; }
+            button { font-size: 0.9rem; padding: 0.5rem 1rem; }
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -55,11 +60,11 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <a href="#home" class="text-gray-600 hover:text-yellow-500 transition duration-300">Home</a>
-                    <a href="#about" class="text-gray-600 hover:text-yellow-500 transition duration-300">About</a>
-                    <a href="#contact" class="text-gray-600 hover:text-yellow-500 transition duration-300">Contact</a>
-                    <button onclick="showLogin()" class="text-yellow-500 font-semibold hover:text-yellow-600 transition duration-300 animate-bounce-slow">Login</button>
-                    <button onclick="showSignup()" class="bg-yellow-500 text-white px-4 py-2 rounded-full hover:bg-yellow-600 transition duration-300">Sign Up</button>
+                    <a href="#Home" class="text-gray-600 hover:text-yellow-500 transition duration-300">Home</a>
+                    <a href="#About" class="text-gray-600 hover:text-yellow-500 transition duration-300">About</a>
+                    <a href="#Contact" class="text-gray-600 hover:text-yellow-500 transition duration-300">Contact</a>
+                    <button onclick="showModal('adminLoginModal')" class="text-yellow-500 font-semibold hover:text-yellow-600 transition duration-300 animate-bounce-slow">Login</button>
+                    <button onclick="showModal('adminSignupModal')" class="bg-yellow-500 text-white px-4 py-2 rounded-full hover:bg-yellow-600 transition duration-300">Sign Up</button>
                 </div>
             </div>
         </div>
@@ -71,17 +76,17 @@
     </div>
 
     <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')">
+    <section id="Home" class="min-h-screen flex items-center justify-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80')">
         <div class="text-center text-white bg-black bg-opacity-60 p-8 sm:p-12 rounded-xl max-w-2xl mx-4">
             <h2 class="text-4xl sm:text-5xl font-bold mb-4">Delicute Admin Portal</h2>
             <p class="text-lg sm:text-xl mb-6">Manage Your Culinary Stories</p>
             <p id="restaurantStatus" class="text-base sm:text-lg font-semibold mb-6"></p>
-            <button onclick="showLogin()" class="bg-yellow-500 text-white px-6 py-3 rounded-full hover:bg-yellow-600 transition duration-300 animate-bounce-slow">Login Now</button>
+            <button onclick="showModal('adminLoginModal')" class="bg-yellow-500 text-white px-6 py-3 rounded-full hover:bg-yellow-600 transition duration-300 animate-bounce-slow">Login sekarang</button>
         </div>
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-16 bg-white">
+    <section id="About" class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">About Delicute</h2>
             <p class="text-lg text-gray-600 text-center max-w-3xl mx-auto">
@@ -91,7 +96,7 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-16 bg-gray-100">
+    <section id="Contact" class="py-16 bg-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Get in Touch</h2>
             <div class="text-center">
@@ -113,10 +118,10 @@
             <h2 class="text-2xl font-bold mb-6 text-center text-white">Admin Login - Delicute</h2>
             <div class="space-y-4">
                 <div class="input-container">
-                    <input type="email" id="adminEmail" placeholder="Admin Email" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300">
+                    <input type="email" id="adminEmail" placeholder="Admin Email" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
                 </div>
                 <div class="input-container">
-                    <input type="password" id="adminPassword" placeholder="Password" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300">
+                    <input type="password" id="adminPassword" placeholder="Password" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
                     <span class="eye-icon" onclick="togglePassword('adminPassword', 'adminEye')">
                         <svg id="adminEye" class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
@@ -125,7 +130,7 @@
                 </div>
                 <button onclick="adminLogin()" class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition duration-300 text-sm font-semibold">Login</button>
                 <div class="text-center">
-                    <a href="javascript:void(0)" onclick="showForgotPassword()" class="text-yellow-500 hover:underline text-sm">Forgot Password?</a>
+                    <a href="javascript:void(0)" onclick="showModal('forgotPasswordModal')" class="text-yellow-500 hover:underline text-sm">Forgot Password?</a>
                 </div>
             </div>
             <button onclick="closeModal('adminLoginModal')" class="mt-4 text-gray-300 hover:text-yellow-500 w-full text-center text-sm">Close</button>
@@ -138,15 +143,23 @@
             <h2 class="text-2xl font-bold mb-6 text-center text-white">Admin Sign Up - Delicute</h2>
             <div class="space-y-4">
                 <div class="input-container">
-                    <input type="text" id="signupName" placeholder="Full Name" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300">
+                    <input type="text" id="signupName" placeholder="Full Name" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
                 </div>
                 <div class="input-container">
-                    <input type="email" id="signupEmail" placeholder="Email" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300">
+                    <input type="email" id="signupEmail" placeholder="Email" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
                 </div>
                 <div class="input-container">
-                    <input type="password" id="signupPassword" placeholder="Create Password" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300">
+                    <input type="password" id="signupPassword" placeholder="Create Password" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
                     <span class="eye-icon" onclick="togglePassword('signupPassword', 'signupPasswordEye')">
                         <svg id="signupPasswordEye" class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                        </svg>
+                    </span>
+                </div>
+                <div class="input-container">
+                    <input type="password" id="signupConfirmPassword" placeholder="Confirm Password" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
+                    <span class="eye-icon" onclick="togglePassword('signupConfirmPassword', 'signupConfirmPasswordEye')">
+                        <svg id="signupConfirmPasswordEye" class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                         </svg>
                     </span>
@@ -164,16 +177,16 @@
             <h2 class="text-2xl font-bold mb-6 text-center text-white">Reset Admin Password</h2>
             <div id="forgotPasswordStep1" class="space-y-4">
                 <div class="input-container">
-                    <input type="email" id="forgotEmail" placeholder="Enter Admin Email" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300">
+                    <input type="email" id="forgotEmail" placeholder="Enter Admin Email" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
                 </div>
                 <button onclick="sendOtp()" class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition duration-300 text-sm font-semibold">Send OTP</button>
             </div>
             <div id="forgotPasswordStep2" class="space-y-4 hidden">
                 <div class="input-container">
-                    <input type="text" id="otpInput" placeholder="Enter OTP" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300">
+                    <input type="text" id="otpInput" placeholder="Enter OTP" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
                 </div>
                 <div class="input-container hidden" id="newPasswordContainer">
-                    <input type="password" id="newPassword" placeholder="New Password" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300">
+                    <input type="password" id="newPassword" placeholder="New Password" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
                     <span class="eye-icon" onclick="togglePassword('newPassword', 'newPasswordEye')">
                         <svg id="newPasswordEye" class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
@@ -181,7 +194,7 @@
                     </span>
                 </div>
                 <div class="input-container hidden" id="confirmPasswordContainer">
-                    <input type="password" id="confirmPassword" placeholder="Confirm Password" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300">
+                    <input type="password" id="confirmPassword" placeholder="Confirm Password" class="w-full p-2.5 bg-white bg-opacity-20 border border-white border-opacity-30 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 text-sm text-white placeholder-gray-300" required>
                     <span class="eye-icon" onclick="togglePassword('confirmPassword', 'confirmPasswordEye')">
                         <svg id="confirmPasswordEye" class="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
@@ -203,6 +216,9 @@
     </footer>
 
     <script>
+        // API base URL (configurable for production)
+        const API_BASE_URL = 'http://localhost:3000/api/admin';
+
         // Toast notification
         function showToast(message, type = 'info') {
             const toast = document.getElementById('toast');
@@ -213,7 +229,24 @@
             setTimeout(() => {
                 toast.classList.remove('toast-visible');
                 toast.classList.add('toast-hidden');
-            }, 3000);
+            }, 5000); // Increased duration for readability
+        }
+
+        // Validate email format
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Validate name (at least 2 characters, no special characters)
+        function isValidName(name) {
+            const nameRegex = /^[a-zA-Z\s]{2,}$/;
+            return nameRegex.test(name);
+        }
+
+        // Validate password (at least 6 characters)
+        function isValidPassword(password) {
+            return password.length >= 6;
         }
 
         // Smooth scrolling for navigation links
@@ -228,43 +261,46 @@
                     } else {
                         console.warn(`Target element for href ${href} not found`);
                     }
-                } else {
-                    console.warn('Invalid href attribute:', href);
                 }
             });
         });
 
         // Modal controls
-        function showLogin() {
-            document.getElementById('adminLoginModal').classList.remove('hidden');
-            document.getElementById('adminSignupModal').classList.add('hidden');
-            document.getElementById('forgotPasswordModal').classList.add('hidden');
-            document.getElementById('adminEmail').value = '';
-            document.getElementById('adminPassword').value = '';
+        function showModal(modalId) {
+            const modals = ['adminLoginModal', 'adminSignupModal', 'forgotPasswordModal'];
+            modals.forEach(id => {
+                const modal = document.getElementById(id);
+                if (id === modalId) {
+                    modal.classList.remove('hidden', 'modal-slide-out');
+                    modal.classList.add('modal-slide-in');
+                    resetModalInputs(id);
+                } else {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('modal-slide-in', 'modal-slide-out');
+                }
+            });
         }
 
-        function showSignup() {
-            document.getElementById('adminSignupModal').classList.remove('hidden');
-            document.getElementById('adminLoginModal').classList.add('hidden');
-            document.getElementById('forgotPasswordModal').classList.add('hidden');
-            document.getElementById('signupName').value = '';
-            document.getElementById('signupEmail').value = '';
-            document.getElementById('signupPassword').value = '';
-        }
-
-        function showForgotPassword() {
-            document.getElementById('forgotPasswordModal').classList.remove('hidden');
-            document.getElementById('adminLoginModal').classList.add('hidden');
-            document.getElementById('adminSignupModal').classList.add('hidden');
-            document.getElementById('forgotPasswordStep1').classList.remove('hidden');
-            document.getElementById('forgotPasswordStep2').classList.add('hidden');
-            document.getElementById('newPasswordContainer').classList.add('hidden');
-            document.getElementById('confirmPasswordContainer').classList.add('hidden');
-            document.getElementById('resetPasswordBtn').classList.add('hidden');
-            document.getElementById('forgotEmail').value = '';
-            document.getElementById('otpInput').value = '';
-            document.getElementById('newPassword').value = '';
-            document.getElementById('confirmPassword').value = '';
+        function resetModalInputs(modalId) {
+            if (modalId === 'adminLoginModal') {
+                document.getElementById('adminEmail').value = '';
+                document.getElementById('adminPassword').value = '';
+            } else if (modalId === 'adminSignupModal') {
+                document.getElementById('signupName').value = '';
+                document.getElementById('signupEmail').value = '';
+                document.getElementById('signupPassword').value = '';
+                document.getElementById('signupConfirmPassword').value = '';
+            } else if (modalId === 'forgotPasswordModal') {
+                document.getElementById('forgotEmail').value = '';
+                document.getElementById('otpInput').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+                document.getElementById('forgotPasswordStep1').classList.remove('hidden');
+                document.getElementById('forgotPasswordStep2').classList.add('hidden');
+                document.getElementById('newPasswordContainer').classList.add('hidden');
+                document.getElementById('confirmPasswordContainer').classList.add('hidden');
+                document.getElementById('resetPasswordBtn').classList.add('hidden');
+            }
         }
 
         function closeModal(modalId) {
@@ -272,7 +308,7 @@
             modal.classList.add('modal-slide-out');
             setTimeout(() => {
                 modal.classList.add('hidden');
-                modal.classList.remove('modal-slide-out');
+                modal.classList.remove('modal-slide-in', 'modal-slide-out');
             }, 300);
         }
 
@@ -293,29 +329,37 @@
         async function adminLogin() {
             const email = document.getElementById('adminEmail').value.trim();
             const password = document.getElementById('adminPassword').value.trim();
+            console.log('Login attempt:', { email, password: password ? '[provided]' : '[missing]' });
+            
             if (!email || !password) {
                 showToast('Please enter both email and password.', 'error');
                 return;
             }
+            if (!isValidEmail(email)) {
+                showToast('Please enter a valid email address.', 'error');
+                return;
+            }
+
             try {
-                const response = await fetch('http://localhost:3000/api/admin/login', {
+                const response = await fetch(`${API_BASE_URL}/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 });
                 const data = await response.json();
+                console.log('Login response:', data);
                 if (response.ok) {
                     showToast('Login successful!', 'success');
                     localStorage.setItem('token', data.token);
                     setTimeout(() => {
-                        window.location.href = '/admindashboard.html'; // Ensure this matches your dashboard file
+                        window.location.href = './admindashboard.html'; // Ensure correct path
                     }, 1000);
                 } else {
-                    showToast(data.message || 'Login failed.', 'error');
+                    showToast(data.message || 'Login failed. Please try again.', 'error');
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                showToast('Server error. Please try again later.', 'error');
+                showToast('Network error. Please check your connection and try again.', 'error');
             }
         }
 
@@ -323,70 +367,111 @@
             const name = document.getElementById('signupName').value.trim();
             const email = document.getElementById('signupEmail').value.trim();
             const password = document.getElementById('signupPassword').value.trim();
-            if (!name || !email || !password) {
+            const confirmPassword = document.getElementById('signupConfirmPassword').value.trim();
+            console.log('Signup attempt:', { name, email, password: password ? '[provided]' : '[missing]', confirmPassword: confirmPassword ? '[provided]' : '[missing]' });
+            
+            if (!name || !email || !password || !confirmPassword) {
                 showToast('Please fill all fields.', 'error');
                 return;
             }
+            if (!isValidName(name)) {
+                showToast('Name must be at least 2 characters and contain only letters and spaces.', 'error');
+                return;
+            }
+            if (!isValidEmail(email)) {
+                showToast('Please enter a valid email address.', 'error');
+                return;
+            }
+            if (!isValidPassword(password)) {
+                showToast('Password must be at least 6 characters.', 'error');
+                return;
+            }
+            if (password !== confirmPassword) {
+                showToast('Passwords do not match.', 'error');
+                return;
+            }
+
             try {
-                const response = await fetch('http://localhost:3000/api/admin/signup', {
+                const response = await fetch(`${API_BASE_URL}/signup`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, email, password })
                 });
                 const data = await response.json();
+                console.log('Signup response:', data);
                 if (response.ok) {
                     showToast(data.message, 'success');
                     closeModal('adminSignupModal');
-                    setTimeout(showLogin, 1000);
+                    setTimeout(() => showModal('adminLoginModal'), 1000);
                 } else {
-                    showToast(data.message || 'Signup failed.', 'error');
+                    showToast(data.message || 'Signup failed. Please try again.', 'error');
                 }
             } catch (error) {
                 console.error('Signup error:', error);
-                showToast('Server error. Please try again later.', 'error');
+                showToast('Network error. Please check your connection and try again.', 'error');
             }
         }
 
         async function sendOtp() {
             const email = document.getElementById('forgotEmail').value.trim();
+            console.log('Send OTP attempt:', { email });
+            
             if (!email) {
                 showToast('Please enter your email.', 'error');
                 return;
             }
+            if (!isValidEmail(email)) {
+                showToast('Please enter a valid email address.', 'error');
+                return;
+            }
+
             try {
-                const response = await fetch('http://localhost:3000/api/admin/forgot-password', {
+                const response = await fetch(`${API_BASE_URL}/forgot-password`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email })
                 });
                 const data = await response.json();
+                console.log('Send OTP response:', data);
                 if (response.ok) {
                     showToast(data.message, 'success');
                     document.getElementById('forgotPasswordStep1').classList.add('hidden');
                     document.getElementById('forgotPasswordStep2').classList.remove('hidden');
                 } else {
-                    showToast(data.message || 'Failed to send OTP.', 'error');
+                    showToast(data.message || 'Failed to send OTP. Please try again.', 'error');
                 }
             } catch (error) {
                 console.error('Send OTP error:', error);
-                showToast('Server error. Please try again later.', 'error');
+                showToast('Network error. Please check your connection and try again.', 'error');
             }
         }
 
         async function verifyOtp() {
             const email = document.getElementById('forgotEmail').value.trim();
             const otp = document.getElementById('otpInput').value.trim();
+            console.log('Verify OTP attempt:', { email, otp });
+            
             if (!email || !otp) {
                 showToast('Please enter email and OTP.', 'error');
                 return;
             }
+            if (!isValidEmail(email)) {
+                showToast('Please enter a valid email address.', 'error');
+                return;
+            }
+            if (otp.length !== 6 || !/^\d+$/.test(otp)) {
+                showToast('OTP must be a 6-digit number.', 'error');
+                return;
+            }
+
             try {
-                const response = await fetch('http://localhost:3000/api/admin/reset-password', {
+                const response = await fetch(`${API_BASE_URL}/reset-password`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, otp })
                 });
                 const data = await response.json();
+                console.log('Verify OTP response:', data);
                 if (response.ok) {
                     showToast('OTP verified successfully.', 'success');
                     document.getElementById('newPasswordContainer').classList.remove('hidden');
@@ -394,11 +479,11 @@
                     document.getElementById('resetPasswordBtn').classList.remove('hidden');
                     document.getElementById('otpInput').parentElement.classList.add('hidden');
                 } else {
-                    showToast(data.message || 'Invalid OTP.', 'error');
+                    showToast(data.message || 'Invalid OTP. Please try again.', 'error');
                 }
             } catch (error) {
                 console.error('Verify OTP error:', error);
-                showToast('Server error. Please try again later.', 'error');
+                showToast('Network error. Please check your connection and try again.', 'error');
             }
         }
 
@@ -407,37 +492,60 @@
             const otp = document.getElementById('otpInput').value.trim();
             const newPassword = document.getElementById('newPassword').value.trim();
             const confirmPassword = document.getElementById('confirmPassword').value.trim();
+            console.log('Reset password attempt:', { email, otp, newPassword: newPassword ? '[provided]' : '[missing]', confirmPassword: confirmPassword ? '[provided]' : '[missing]' });
+            
             if (!email || !otp || !newPassword || !confirmPassword) {
                 showToast('Please fill all fields.', 'error');
                 return;
             }
+            if (!isValidEmail(email)) {
+                showToast('Please enter a valid email address.', 'error');
+                return;
+            }
+            if (!isValidPassword(newPassword)) {
+                showToast('New password must be at least 6 characters.', 'error');
+                return;
+            }
+            if (newPassword !== confirmPassword) {
+                showToast('Passwords do not match.', 'error');
+                return;
+            }
+
             try {
-                const response = await fetch('http://localhost:3000/api/admin/reset-password', {
+                const response = await fetch(`${API_BASE_URL}/reset-password`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, otp, newPassword, confirmPassword })
                 });
                 const data = await response.json();
+                console.log('Reset password response:', data);
                 if (response.ok) {
                     showToast(data.message, 'success');
                     closeModal('forgotPasswordModal');
-                    setTimeout(showLogin, 1000);
+                    setTimeout(() => showModal('adminLoginModal'), 1000);
                 } else {
-                    showToast(data.message || 'Failed to reset password.', 'error');
+                    showToast(data.message || 'Failed to reset password. Please try again.', 'error');
                 }
             } catch (error) {
                 console.error('Reset password error:', error);
-                showToast('Server error. Please try again later.', 'error');
+                showToast('Network error. Please check your connection and try again.', 'error');
             }
         }
 
         // Update restaurant status
         async function updateRestaurantStatus() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.log('No token found, skipping restaurant status fetch');
+                document.getElementById('restaurantStatus').textContent = 'Restaurant status unavailable';
+                return;
+            }
             try {
-                const response = await fetch('http://localhost:3000/api/admin/restaurant-status', {
-                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                const response = await fetch(`${API_BASE_URL}/restaurant-status`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await response.json();
+                console.log('Restaurant status response:', data);
                 if (response.ok) {
                     const statusElement = document.getElementById('restaurantStatus');
                     statusElement.textContent = data.message;
@@ -457,7 +565,7 @@
             updateRestaurantStatus();
             const token = localStorage.getItem('token');
             if (token) {
-                window.location.href = '/admindashboard.html'; // Redirect to dashboard if logged in
+                window.location.href = './admindashboard.html'; // Ensure correct path
             }
         };
     </script>
