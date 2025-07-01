@@ -185,7 +185,7 @@ router.post('/restaurant-status', authenticateToken, async (req, res) => {
             return res.status(500).json({ message: 'Settings table missing key column' });
         }
         await db.execute(
-            'INSERT INTO settings (`key`, `value`, `created_at`, `updated_at`) VALUES (?, ?, NOW(), NOW()) ON DUPLICATE KEY UPDATE `value` = ?, `updated_at` = NOW()',
+            'INSERT INTO settings (`key`, `value`, created_at, updated_at) VALUES (?, ?, NOW(), NOW()) ON DUPLICATE KEY UPDATE `value` = ?, updated_at = NOW()',
             ['restaurant_status', status, status]
         );
         res.json({ message: 'Restaurant status updated' });
@@ -426,7 +426,7 @@ router.post('/reset-password', [
     }
 });
 
-// Admin profile route (fixed)
+// Admin profile route
 router.get('/profile', authenticateToken, async (req, res) => {
     let db;
     try {
@@ -522,7 +522,7 @@ router.post('/profile/image', authenticateToken, upload.single('image'), async (
     }
 });
 
-// Dashboard stats route (fixed)
+// Dashboard stats route
 router.get('/stats', authenticateToken, async (req, res) => {
     let db;
     try {
@@ -544,13 +544,13 @@ router.get('/stats', authenticateToken, async (req, res) => {
             : 'SELECT COUNT(*) as count FROM coupons';
         const [coupons] = await db.execute(couponsQuery);
         
-        let userCount;
         const hasRoleColumn = await columnExists(db, 'users', 'role');
+        let userCount;
         if (hasRoleColumn) {
-            const [users] = await db.execute('SELECT COUNT(*) as count FROM users WHERE role IN (?, ?)', ['user', 'customer']);
+            const [users] = await db.execute('SELECT COUNT(*) as count FROM users WHERE role IN (?, ?) AND is_blocked = 0', ['user', 'customer']);
             userCount = users[0].count;
         } else {
-            const [users] = await db.execute('SELECT COUNT(*) as count FROM users');
+            const [users] = await db.execute('SELECT COUNT(*) as count FROM users WHERE is_blocked = 0');
             userCount = users[0].count;
         }
 
@@ -584,9 +584,17 @@ router.get('/menu', authenticateToken, async (req, res) => {
     try {
         db = await getDbConnection();
         const hasDeletedAtColumn = await columnExists(db, 'menu_items', 'deleted_at');
-        const query = hasDeletedAtColumn
-            ? 'SELECT id, name, description, CAST(price AS DECIMAL(10,2)) AS price, category, image FROM menu_items WHERE deleted_at IS NULL'
-            : 'SELECT id, name, description, CAST(price AS DECIMAL(10,2)) AS price, category, image FROM menu_items';
+        const hasIsActiveColumn = await columnExists(db, 'menu_items', 'is_active');
+        let query;
+        if (hasDeletedAtColumn && hasIsActiveColumn) {
+            query = 'SELECT id, name, description, CAST(price AS DECIMAL(10,2)) AS price, category, image FROM menu_items WHERE deleted_at IS NULL AND is_active = 1';
+        } else if (hasDeletedAtColumn) {
+            query = 'SELECT id, name, description, CAST(price AS DECIMAL(10,2)) AS price, category, image FROM menu_items WHERE deleted_at IS NULL';
+        } else if (hasIsActiveColumn) {
+            query = 'SELECT id, name, description, CAST(price AS DECIMAL(10,2)) AS price, category, image FROM menu_items WHERE is_active = 1';
+        } else {
+            query = 'SELECT id, name, description, CAST(price AS DECIMAL(10,2)) AS price, category, image FROM menu_items';
+        }
         const [items] = await db.execute(query);
         const formattedItems = items.map(item => ({
             ...item,
@@ -619,9 +627,9 @@ router.post('/menu/add', authenticateToken, upload.single('image'), validateMenu
                 return res.status(500).json({ message: 'Failed to upload image to Cloudinary.', error: uploadError.message });
             }
         }
-        const hasActiveColumn = await columnExists(db, 'menu_items', 'active');
+        const hasActiveColumn = await columnExists(db, 'menu_items', 'is_active');
         const query = hasActiveColumn
-            ? 'INSERT INTO menu_items (name, description, price, category, image, active) VALUES (?, ?, ?, ?, ?, ?)'
+            ? 'INSERT INTO menu_items (name, description, price, category, image, is_active) VALUES (?, ?, ?, ?, ?, ?)'
             : 'INSERT INTO menu_items (name, description, price, category, image) VALUES (?, ?, ?, ?, ?)';
         const params = hasActiveColumn
             ? [name, description, price, category, imageUrl, 1]
@@ -641,9 +649,17 @@ router.get('/menu/:id', authenticateToken, async (req, res) => {
     try {
         db = await getDbConnection();
         const hasDeletedAtColumn = await columnExists(db, 'menu_items', 'deleted_at');
-        const query = hasDeletedAtColumn
-            ? 'SELECT id, name, description, CAST(price AS DECIMAL(10,2)) AS price, category, image FROM menu_items WHERE id = ? AND deleted_at IS NULL'
-            : 'SELECT id, name, description, CAST(price AS DECIMAL(10,2)) AS price, category, image FROM menu_items WHERE id = ?';
+        const hasIsActiveColumn = await columnExists(db, 'menu_items', 'is_active');
+        let query;
+        if (hasDeletedAtColumn && hasIsActiveColumn) {
+            query = 'SELECT id, name, description, CAST(price AS DECIMAL(10,2)) AS price, category, image FROM menu_items WHERE id = ? AND deleted_at IS NULL AND is_active = 1';
+        } else if (hasDeletedAtColumn) {
+            query = 'SELECT id, name, description, CAST(price AS DECIMAL(10,2)) AS price, category, image FROM menu_items WHERE id = ? AND deleted_at IS NULL';
+        } else if (hasIsActiveColumn) {
+            query = 'SELECT id, name, description, CAST(price AS DECIMAL(10,2)) AS price, category, image FROM menu_items WHERE id = ? AND is_active = 1';
+        } else {
+            query = 'SELECT id, name, description, CAST(price AS DECIMAL(10,2)) AS price, category, image FROM menu_items WHERE id = ?';
+        }
         const [rows] = await db.execute(query, [req.params.id]);
         if (rows.length === 0) {
             return res.status(404).json({ message: 'Menu item not found' });
@@ -680,9 +696,17 @@ router.post('/menu/update', authenticateToken, upload.single('image'), validateM
             }
         }
         const hasDeletedAtColumn = await columnExists(db, 'menu_items', 'deleted_at');
-        const query = hasDeletedAtColumn
-            ? 'UPDATE menu_items SET name = ?, description = ?, price = ?, category = ?, image = COALESCE(?, image) WHERE id = ? AND deleted_at IS NULL'
-            : 'UPDATE menu_items SET name = ?, description = ?, price = ?, category = ?, image = COALESCE(?, image) WHERE id = ?';
+        const hasIsActiveColumn = await columnExists(db, 'menu_items', 'is_active');
+        let query;
+        if (hasDeletedAtColumn && hasIsActiveColumn) {
+            query = 'UPDATE menu_items SET name = ?, description = ?, price = ?, category = ?, image = COALESCE(?, image) WHERE id = ? AND deleted_at IS NULL AND is_active = 1';
+        } else if (hasDeletedAtColumn) {
+            query = 'UPDATE menu_items SET name = ?, description = ?, price = ?, category = ?, image = COALESCE(?, image) WHERE id = ? AND deleted_at IS NULL';
+        } else if (hasIsActiveColumn) {
+            query = 'UPDATE menu_items SET name = ?, description = ?, price = ?, category = ?, image = COALESCE(?, image) WHERE id = ? AND is_active = 1';
+        } else {
+            query = 'UPDATE menu_items SET name = ?, description = ?, price = ?, category = ?, image = COALESCE(?, image) WHERE id = ?';
+        }
         await db.execute(query, [name, description, price, category, imageUrl, id]);
         res.json({ message: 'Menu item updated' });
     } catch (error) {
@@ -698,13 +722,20 @@ router.post('/menu/delete', authenticateToken, async (req, res) => {
     let db;
     try {
         db = await getDbConnection();
-        const hasDeletedAtColumn = await columnExists(db, 'menu_items', 'deleted_at');
-        const query = hasDeletedAtColumn
-            ? 'UPDATE menu_items SET deleted_at = NOW() WHERE id = ?'
-            : 'DELETE FROM menu_items WHERE id = ?';
-        await db.execute(query, [id]);
-        res.json({ message: 'Menu item deleted' });
+        await db.beginTransaction();
+        
+        // Delete related records from cart, favourites, and order_items
+        await db.execute('DELETE FROM cart WHERE itemId = ?', [id]);
+        await db.execute('DELETE FROM favourites WHERE itemId = ? OR item_id = ?', [id, id]);
+        await db.execute('DELETE FROM order_items WHERE itemId = ?', [id]);
+        
+        // Permanently delete the menu item
+        await db.execute('DELETE FROM menu_items WHERE id = ?', [id]);
+        
+        await db.commit();
+        res.json({ message: 'Menu item permanently deleted' });
     } catch (error) {
+        if (db) await db.rollback();
         console.error('Delete menu item error:', error);
         res.status(500).json({ message: 'Server error.', error: error.message });
     } finally {
@@ -822,13 +853,19 @@ router.post('/coupons/delete', authenticateToken, async (req, res) => {
     let db;
     try {
         db = await getDbConnection();
-        const hasIsActiveColumn = await columnExists(db, 'coupons', 'is_active');
-        const query = hasIsActiveColumn
-            ? 'UPDATE coupons SET is_active = 0 WHERE id = ?'
-            : 'DELETE FROM coupons WHERE id = ?';
-        await db.execute(query, [id]);
-        res.json({ message: 'Coupon deleted' });
+        await db.beginTransaction();
+        
+        // Delete related records from cart and orders
+        await db.execute('DELETE FROM cart WHERE couponId = ?', [id]);
+        await db.execute('UPDATE orders SET couponId = NULL WHERE couponId = ?', [id]);
+        
+        // Permanently delete the coupon
+        await db.execute('DELETE FROM coupons WHERE id = ?', [id]);
+        
+        await db.commit();
+        res.json({ message: 'Coupon permanently deleted' });
     } catch (error) {
+        if (db) await db.rollback();
         console.error('Delete coupon error:', error);
         res.status(500).json({ message: 'Server error.', error: error.message });
     } finally {
@@ -849,8 +886,8 @@ router.get('/users', authenticateToken, async (req, res) => {
         const search = req.query.search || '';
         const hasRoleColumn = await columnExists(db, 'users', 'role');
         let query = hasRoleColumn
-            ? 'SELECT id, name, email, phone, is_blocked AS isBlocked FROM users WHERE role IN (?, ?)'
-            : 'SELECT id, name, email, phone, is_blocked AS isBlocked FROM users';
+            ? 'SELECT id, name, email, phone, is_blocked AS isBlocked FROM users WHERE role IN (?, ?) AND is_blocked = 0'
+            : 'SELECT id, name, email, phone, is_blocked AS isBlocked FROM users WHERE is_blocked = 0';
         let params = hasRoleColumn ? ['user', 'customer'] : [];
 
         if (search) {
@@ -905,7 +942,7 @@ router.get('/orders', authenticateToken, async (req, res) => {
         let query = `
             SELECT o.id, CAST(o.total AS DECIMAL(10,2)) AS total, o.status, u.name AS userName
             FROM orders o
-            LEFT JOIN users u ON o.userId = u.id
+            LEFT JOIN users u ON o.user_id = u.id
         `;
         let params = [];
         if (hasDeletedAtColumn) {
@@ -942,15 +979,15 @@ router.get('/orders/recent', authenticateToken, async (req, res) => {
             ? `
                 SELECT o.id, CAST(o.total AS DECIMAL(10,2)) AS total, o.status, u.name AS userName
                 FROM orders o
-                LEFT JOIN users u ON o.userId = u.id
+                LEFT JOIN users u ON o.user_id = u.id
                 WHERE o.deleted_at IS NULL
-                ORDER BY o.created_at DESC LIMIT 5
+                ORDER BY o.createdAt DESC LIMIT 5
             `
             : `
                 SELECT o.id, CAST(o.total AS DECIMAL(10,2)) AS total, o.status, u.name AS userName
                 FROM orders o
-                LEFT JOIN users u ON o.userId = u.id
-                ORDER BY o.created_at DESC LIMIT 5
+                LEFT JOIN users u ON o.user_id = u.id
+                ORDER BY o.createdAt DESC LIMIT 5
             `;
         const [orders] = await db.execute(query);
         const formattedOrders = orders.map(order => ({
@@ -973,15 +1010,15 @@ router.get('/orders/:id', authenticateToken, async (req, res) => {
         const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
         const query = hasDeletedAtColumn
             ? `
-                SELECT o.id, o.address, CAST(o.total AS DECIMAL(10,2)) AS total, o.status, o.coupon_code AS couponCode, u.name AS userName, u.email AS userEmail
+                SELECT o.id, o.address, CAST(o.total AS DECIMAL(10,2)) AS total, o.status, o.couponId, u.name AS userName, u.email AS userEmail
                 FROM orders o
-                LEFT JOIN users u ON o.userId = u.id
+                LEFT JOIN users u ON o.user_id = u.id
                 WHERE o.id = ? AND o.deleted_at IS NULL
             `
             : `
-                SELECT o.id, o.address, CAST(o.total AS DECIMAL(10,2)) AS total, o.status, o.coupon_code AS couponCode, u.name AS userName, u.email AS userEmail
+                SELECT o.id, o.address, CAST(o.total AS DECIMAL(10,2)) AS total, o.status, o.couponId, u.name AS userName, u.email AS userEmail
                 FROM orders o
-                LEFT JOIN users u ON o.userId = u.id
+                LEFT JOIN users u ON o.user_id = u.id
                 WHERE o.id = ?
             `;
         const [orders] = await db.execute(query, [req.params.id]);
@@ -989,19 +1026,34 @@ router.get('/orders/:id', authenticateToken, async (req, res) => {
             return res.status(404).json({ message: 'Order not found' });
         }
         const [items] = await db.execute(
-            'SELECT name, quantity, CAST(price AS DECIMAL(10,2)) AS price FROM order_items WHERE order_id = ?',
+            `
+            SELECT mi.name, oi.quantity, CAST(mi.price AS DECIMAL(10,2)) AS price
+            FROM order_items oi
+            JOIN menu_items mi ON oi.itemId = mi.id
+            WHERE oi.orderId = ?
+            `,
             [req.params.id]
         );
+        const couponId = orders[0].couponId;
+        let couponCode = null;
+        if (couponId) {
+            const [coupon] = await db.execute(
+                'SELECT code FROM coupons WHERE id = ? AND is_active = 1',
+                [couponId]
+            );
+            couponCode = coupon.length > 0 ? coupon[0].code : null;
+        }
         const formattedOrder = {
             ...orders[0],
             total: Number(orders[0].total),
+            couponCode,
             items: items.map(item => ({
                 ...item,
                 price: Number(item.price)
             }))
         };
         res.json({ order: formattedOrder });
-    } catch (error) { // ✅ fixed here
+    } catch (error) {
         console.error('Fetch order details error:', error);
         res.status(500).json({ message: 'Server error.', error: error.message });
     } finally {
@@ -1039,13 +1091,25 @@ router.post('/orders/delete', authenticateToken, async (req, res) => {
     let db;
     try {
         db = await getDbConnection();
+        await db.beginTransaction();
+        
+        // Delete related order_items first
+        await db.execute(
+            `DELETE FROM order_items WHERE orderId IN (${orderIds.map(() => '?').join(',')})`,
+            orderIds
+        );
+        
+        // Delete orders
         const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
         const query = hasDeletedAtColumn
             ? `UPDATE orders SET deleted_at = NOW() WHERE id IN (${orderIds.map(() => '?').join(',')})`
             : `DELETE FROM orders WHERE id IN (${orderIds.map(() => '?').join(',')})`;
         await db.execute(query, orderIds);
+        
+        await db.commit();
         res.json({ message: 'Orders moved to trash' });
     } catch (error) {
+        if (db) await db.rollback();
         console.error('Delete orders error:', error);
         res.status(500).json({ message: 'Server error.', error: error.message });
     } finally {
@@ -1053,7 +1117,6 @@ router.post('/orders/delete', authenticateToken, async (req, res) => {
     }
 });
 
-// Fixed route for fetching trashed orders
 router.get('/orders/trash', authenticateToken, async (req, res) => {
     let db;
     try {
@@ -1066,7 +1129,7 @@ router.get('/orders/trash', authenticateToken, async (req, res) => {
             `
             SELECT o.id, CAST(o.total AS DECIMAL(10,2)) AS total, o.status, o.deleted_at AS deletedAt, u.name AS userName
             FROM orders o
-            LEFT JOIN users u ON o.userId = u.id
+            LEFT JOIN users u ON o.user_id = u.id
             WHERE o.deleted_at IS NOT NULL
             `
         );
@@ -1117,15 +1180,20 @@ router.post('/orders/delete-permanent', authenticateToken, async (req, res) => {
     try {
         db = await getDbConnection();
         await db.beginTransaction();
+        
+        // Delete related order_items first
         await db.execute(
-            `DELETE FROM order_items WHERE order_id IN (${orderIds.map(() => '?').join(',')})`,
+            `DELETE FROM order_items WHERE orderId IN (${orderIds.map(() => '?').join(',')})`,
             orderIds
         );
+        
+        // Delete orders
         const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
         const query = hasDeletedAtColumn
             ? `DELETE FROM orders WHERE id IN (${orderIds.map(() => '?').join(',')}) AND deleted_at IS NOT NULL`
             : `DELETE FROM orders WHERE id IN (${orderIds.map(() => '?').join(',')})`;
         await db.execute(query, orderIds);
+        
         await db.commit();
         res.json({ message: 'Orders permanently deleted' });
     } catch (error) {
@@ -1150,7 +1218,7 @@ router.post('/orders/trash/clear', authenticateToken, async (req, res) => {
         const orderIds = orders.map(order => order.id);
         if (orderIds.length > 0) {
             await db.execute(
-                `DELETE FROM order_items WHERE order_id IN (${orderIds.map(() => '?').join(',')})`,
+                `DELETE FROM order_items WHERE orderId IN (${orderIds.map(() => '?').join(',')})`,
                 orderIds
             );
             await db.execute('DELETE FROM orders WHERE deleted_at IS NOT NULL');

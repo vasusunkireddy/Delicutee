@@ -8,6 +8,7 @@
               "dev": "nodemon server.js"
        },
        "dependencies": {
+              "@colors/colors": "^1.6.0",
               "@paypal/checkout-server-sdk": "^1.0.3",
               "@sendgrid/mail": "^8.1.5",
               "bcrypt": "^6.0.0",
@@ -38,7 +39,7 @@
               "multer-storage-cloudinary": "^4.0.0",
               "mysql2": "^3.14.1",
               "mysql2-promise": "^0.1.4",
-              "nodemailer": "^7.0.3",
+              "nodemailer": "^7.0.4",
               "nodemailer-sendgrid-transport": "^0.2.0",
               "passport": "^0.7.0",
               "passport-google-oauth20": "^2.0.0",

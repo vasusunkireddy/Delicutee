@@ -8,11 +8,12 @@ const nodemailer = require('nodemailer');
 const { OAuth2Client } = require('google-auth-library');
 const path = require('path');
 
+// Load environment variables
 dotenv.config();
 
 const app = express();
 
-// Nodemailer configuration
+// Nodemailer configuration for email notifications
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -21,7 +22,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Middleware
+// Middleware setup
 app.use(cors({
     origin: process.env.CLIENT_URL || 'http://localhost:3000',
     credentials: true
@@ -31,6 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/Uploads', express.static(path.join(__dirname, 'Uploads')));
 
+// Session configuration with 1-hour expiry
 app.use(session({
     key: 'session_cookie',
     secret: process.env.SESSION_SECRET || 'your-secret-key',
@@ -39,13 +41,17 @@ app.use(session({
         port: process.env.DB_PORT,
         user: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
-        database: process.env.DB_NAME
+        database: process.env.DB_NAME,
+        clearExpired: true,
+        checkExpirationInterval: 15 * 60 * 1000, // Check for expired sessions every 15 minutes
+        expiration: 60 * 60 * 1000 // Sessions expire after 1 hour
     }),
     resave: false,
     saveUninitialized: false,
     cookie: {
         secure: process.env.NODE_ENV === 'production',
-        maxAge: 24 * 60 * 60 * 1000
+        httpOnly: true,
+        maxAge: 60 * 60 * 1000 // 1 hour
     }
 }));
 
@@ -61,7 +67,7 @@ async function initializeDatabase() {
     return db;
 }
 
-// Google OAuth2 Client
+// Google OAuth2 Client for authentication
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Routes

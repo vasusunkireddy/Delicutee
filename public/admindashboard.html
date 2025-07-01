@@ -15,7 +15,7 @@
       margin: 0;
     }
     h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 700; }
-    p, input, button, a { font-family: 'Inter', sans-serif; font-weight: 400; }
+    p, input, button, a, select { font-family: 'Inter', sans-serif; font-weight: 400; }
     .animate-bounce-slow { animation: bounce 2s ease-in-out infinite; }
     @keyframes bounce { 
       0%, 100% { transform: translateY(0); } 
@@ -82,7 +82,7 @@
     .profile-img:hover {
       transform: scale(1.05);
     }
-    .input-field {
+    .input-field, select {
       padding: 0.75rem;
       font-size: 1rem;
       border-radius: 8px;
@@ -114,16 +114,30 @@
     tr:hover {
       background: rgba(234, 179, 8, 0.05);
     }
+    .loading::after {
+      content: '';
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid #fff;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 0.5rem;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
     @media (max-width: 640px) {
       .profile-img-nav { width: 2.5rem; height: 2.5rem; }
       .profile-img-profile { width: 5rem; height: 5rem; }
-      .input-field { padding: 0.75rem; font-size: 1rem; }
+      .input-field, select { padding: 0.75rem; font-size: 1rem; }
       th, td { padding: 0.5rem; font-size: 0.875rem; }
     }
     @media (min-width: 641px) {
       .profile-img-nav { width: 3rem; height: 3rem; }
       .profile-img-profile { width: 6rem; height: 6rem; }
-      .input-field { padding: 0.75rem; font-size: 0.875rem; }
+      .input-field, select { padding: 0.75rem; font-size: 0.875rem; }
     }
   </style>
 </head>
@@ -144,12 +158,12 @@
             <img id="profileImage" src="https://placehold.co/40x40?text=Admin" alt="Profile" class="profile-img profile-img-nav rounded-full cursor-pointer" onclick="toggleProfileDropdown()">
             <div id="profileDropdown" class="absolute right-0 mt-2 profile-dropdown profile-dropdown-hidden">
               <div class="p-4 border-b bg-gray-50 rounded-t-lg">
-                <p id="adminName" class="text-gray-800 font-semibold text-sm"></p>
-                <p id="adminEmail" class="text-gray-600 text-xs truncate"></p>
+                <p id="adminName" class="text-gray-800 font-semibold text-sm">Loading...</p>
+                <p id="adminEmail" class="text-gray-600 text-xs truncate">Loading...</p>
               </div>
               <div class="py-2">
                 <a href="#dashboard" class="flex items-center px-4 py-2 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition duration-200" onclick="showSection('dashboard')">
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1 h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                   Dashboard
                 </a>
                 <a href="#menu" class="flex items-center px-4 py-2 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition duration-200" onclick="showSection('menu')">
@@ -157,11 +171,11 @@
                   Menu Management
                 </a>
                 <a href="#coupons" class="flex items-center px-4 py-2 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition duration-200" onclick="showSection('coupons')">
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
+                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4ValapV7a2 2 0 00-2-2H5z"></path></svg>
                   Coupons
                 </a>
                 <a href="#customers" class="flex items-center px-4 py-2 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition duration-200" onclick="showSection('customers')">
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0  4 4 0 018 0z"></path></svg>
                   Customers
                 </a>
                 <a href="#orders" class="flex items-center px-4 py-2 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition duration-200" onclick="showSection('orders')">
@@ -185,780 +199,811 @@
           </div>
         </div>
       </div>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-4 right-4 z-50 toast-hidden bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-lg max-w-xs">
+      <p id="toastMessage"></p>
     </div>
-  </nav>
 
-  <!-- Toast Notification -->
-  <div id="toast" class="fixed top-4 right-4 z-50 toast-hidden bg-yellow-500 text-white px-4 py-2 rounded-lg shadow-lg max-w-xs">
-    <p id="toastMessage"></p>
-  </div>
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+      <!-- Dashboard Section -->
+      <section id="dashboard" class="section">
+        <div class="glass-morphism rounded-xl shadow-lg p-6 mb-6">
+          <h2 class="text-2xl font-bold mb-4 text-gray-800 welcome-animation">Welcome, <span id="welcomeName">Admin</span>!</h2>
+          <div class="flex items-center mb-6">
+            <h3 class="text-xl font-semibold mr-4">Restaurant Status:</h3>
+            <button id="restaurantStatusBtn" onclick="toggleRestaurantStatus()" class="small-btn text-white hover:bg-opacity-90">Loading...</button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            <div class="bg-gray-100 p-4 rounded-lg shadow-sm">
+              <p class="text-lg font-semibold text-gray-700">Total Orders</p>
+              <p id="totalOrders" class="text-2xl font-bold text-gray-800">0</p>
+            </div>
+            <div class="bg-gray-100 p-4 rounded-lg shadow-sm">
+              <p class="text-lg font-semibold text-gray-700">Total Customers</p>
+              <p id="totalCustomers" class="text-2xl font-bold text-gray-800">0</p>
+            </div>
+            <div class="bg-gray-100 p-4 rounded-lg shadow-sm">
+              <p class="text-lg font-semibold text-gray-700">Active Coupons</p>
+              <p id="totalCoupons" class="text-2xl font-bold text-gray-800">0</p>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-xl font-semibold mb-3 text-gray-800">Recent Orders</h3>
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Customer</th>
+                    <th>Status</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="recentOrders"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
 
-  <!-- Main Content -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
-    <!-- Dashboard Section -->
-    <section id="dashboard" class="section">
-      <div class="glass-morphism rounded-xl shadow-lg p-6 mb-6">
-        <h2 class="text-2xl font-bold mb-4 text-gray-800 welcome-animation">Welcome, <span id="welcomeName"></span>!</h2>
-        <div class="flex items-center mb-6">
-          <h3 class="text-xl font-semibold mr-4">Restaurant Status:</h3>
-          <button id="restaurantStatusBtn" onclick="toggleRestaurantStatus()" class="small-btn text-white hover:bg-opacity-90">Loading...</button>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-          <div class="bg-gray-100 p-4 rounded-lg shadow-sm">
-            <p class="text-lg font-semibold text-gray-700">Total Orders</p>
-            <p id="totalOrders" class="text-2xl font-bold text-gray-800">0</p>
+      <!-- Menu Management Section -->
+      <section id="menu" class="section hidden">
+        <div class="glass-morphism rounded-xl shadow-lg p-6 mb-6">
+          <h2 class="text-2xl font-bold mb-4 text-gray-800">Menu Management</h2>
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold mb-3">Add/Edit Menu Item</h3>
+            <div class="grid grid-cols-1 gap-4">
+              <input type="text" id="menuName" placeholder="Item Name" class="input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
+              <textarea id="menuDescription" placeholder="Description" class="input-field focus:outline-none focus:ring-2 focus:ring-yellow-500" rows="4"></textarea>
+              <input type="number" id="menuPrice" placeholder="Price (INR)" min="0" step="0.01" class="input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
+              <select id="menuCategory" class="input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                <option value="">Select Category</option>
+                <option value="MOCKTAILS">Mocktails</option>
+                <option value="JUICES">Juices</option>
+                <option value="MAGGIE">Maggie</option>
+                <option value="PASTA">Pasta</option>
+                <option value="SHAKES">Shakes</option>
+                <option value="WAFFLES">Waffles</option>
+                <option value="EXTRA TOPPINGS">Extra Toppings</option>
+                <option value="FRENCH FRIES">French Fries</option>
+                <option value="DESSERTS">Desserts</option>
+                <option value="VEG PIZZA">Veg Pizza</option>
+                <option value="NON-VEG PIZZA">Non-Veg Pizza</option>
+              </select>
+              <input type="file" id="menuImage" accept="image/*" class="input-field">
+              <div class="flex gap-2">
+                <button id="saveMenuBtn" onclick="saveMenuItem()" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Save Item</button>
+                <button id="cancelMenuBtn" onclick="resetMenuForm()" class="bg-gray-500 text-white small-btn hover:bg-gray-600 hidden">Cancel</button>
+              </div>
+            </div>
           </div>
-          <div class="bg-gray-100 p-4 rounded-lg shadow-sm">
-            <p class="text-lg font-semibold text-gray-700">Total Customers</p>
-            <p id="totalCustomers" class="text-2xl font-bold text-gray-800">0</p>
-          </div>
-          <div class="bg-gray-100 p-4 rounded-lg shadow-sm">
-            <p class="text-lg font-semibold text-gray-700">Active Coupons</p>
-            <p id="totalCoupons" class="text-2xl font-bold text-gray-800">0</p>
-          </div>
-        </div>
-        <div>
-          <h3 class="text-xl font-semibold mb-3 text-gray-800">Recent Orders</h3>
           <div class="table-container">
             <table>
               <thead>
                 <tr>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Price</th>
+                  <th>Category</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="menuItems"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Coupons Section -->
+      <section id="coupons" class="section hidden">
+        <div class="glass-morphism rounded-xl shadow-lg p-6 mb-6">
+          <h2 class="text-2xl font-bold mb-4 text-gray-800">Coupons Management</h2>
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold mb-3">Add/Edit Coupon</h3>
+            <div class="grid grid-cols-1 gap-4">
+              <input type="text" id="couponCode" placeholder="Coupon Code" class="input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
+              <textarea id="couponDescription" placeholder="Description" class="input-field focus:outline-none focus:ring-2 focus:ring-yellow-500" rows="4"></textarea>
+              <input type="number" id="couponDiscount" placeholder="Discount (%)" min="0" max="100" class="input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
+              <input type="file" id="couponImage" accept="image/*" class="input-field">
+              <div class="flex gap-2">
+                <button id="saveCouponBtn" onclick="saveCoupon()" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Save Coupon</button>
+                <button id="cancelCouponBtn" onclick="resetCouponForm()" class="bg-gray-500 text-white small-btn hover:bg-gray-600 hidden">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Code</th>
+                  <th>Description</th>
+                  <th>Discount</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="couponsList"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Customers Section -->
+      <section id="customers" class="section hidden">
+        <div class="glass-morphism rounded-xl shadow-lg p-6 mb-6">
+          <h2 class="text-2xl font-bold mb-4 text-gray-800">Customers</h2>
+          <div class="mb-4 flex items-center gap-2">
+            <input type="text" id="searchCustomers" placeholder="Search by name or email..." class="flex-1 input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
+            <button id="searchCustomersBtn" onclick="fetchCustomers()" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Search</button>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="selectAllCustomers" onchange="toggleSelectAllCustomers(this.checked)"></th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="customersList"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Orders Section -->
+      <section id="orders" class="section hidden">
+        <div class="glass-morphism rounded-xl shadow-lg p-6 mb-6">
+          <h2 class="text-2xl font-bold mb-4 text-gray-800">All Orders</h2>
+          <div class="mb-4 flex items-center gap-2">
+            <input type="text" id="searchOrders" placeholder="Search by order ID or customer..." class="flex-1 input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
+            <select id="orderStatusFilter" class="input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
+              <option value="">All Statuses</option>
+              <option value="Pending">Pending</option>
+              <option value="Confirmed">Confirmed</option>
+              <option value="Shipped">Shipped</option>
+              <option value="Delivered">Delivered</option>
+              <option value="Refunded">Refunded</option>
+            </select>
+            <button id="searchOrdersBtn" onclick="fetchOrders()" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Search</button>
+          </div>
+          <div class="mb-4">
+            <button id="deleteSelectedOrdersBtn" onclick="deleteSelectedOrders()" class="bg-red-500 text-white small-btn hover:bg-red-600">Move to Trash</button>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="selectAllOrders" onchange="toggleSelectAllOrders(this.checked)"></th>
                   <th>Order ID</th>
                   <th>Customer</th>
                   <th>Status</th>
                   <th>Total</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
-              <tbody id="recentOrders"></tbody>
+              <tbody id="ordersList"></tbody>
             </table>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Menu Management Section -->
-    <section id="menu" class="section hidden">
-      <div class="glass-morphism rounded-xl shadow-lg p-6 mb-6">
-        <h2 class="text-2xl font-bold mb-4 text-gray-800">Menu Management</h2>
-        <div class="mb-6">
-          <h3 class="text-lg font-semibold mb-3">Add/Edit Menu Item</h3>
-          <div class="grid grid-cols-1 gap-4">
-            <input type="text" id="menuName" placeholder="Item Name" class="input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
-            <textarea id="menuDescription" placeholder="Description" class="input-field focus:outline-none focus:ring-2 focus:ring-yellow-500" rows="4"></textarea>
-            <input type="number" id="menuPrice" placeholder="Price (INR)" min="0" step="0.01" class="input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
-            <select id="menuCategory" class="input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
-              <option value="">Select Category</option>
-              <option value="MOCKTAILS">Mocktails</option>
-              <option value="JUICES">Juices</option>
-              <option value="MAGGIE">Maggie</option>
-              <option value="PASTA">Pasta</option>
-              <option value="SHAKES">Shakes</option>
-              <option value="WAFFLES">Waffles</option>
-              <option value="EXTRA TOPPINGS">Extra Toppings</option>
-              <option value="FRENCH FRIES">French Fries</option>
-              <option value="DESSERTS">Desserts</option>
-              <option value="VEG PIZZA">Veg Pizza</option>
-              <option value="NON-VEG PIZZA">Non-Veg Pizza</option>
+      <!-- Trash Section -->
+      <section id="trash" class="section hidden">
+        <div class="glass-morphism rounded-xl shadow-lg p-6 mb-6">
+          <h2 class="text-2xl font-bold mb-4 text-gray-800">Trash</h2>
+          <div class="mb-4 flex items-center gap-2">
+            <button id="restoreSelectedBtn" onclick="restoreSelectedOrders()" class="bg-green-500 text-white small-btn hover:bg-green-600">Restore Selected</button>
+            <button id="deletePermanentlyBtn" onclick="deletePermanentlySelectedOrders()" class="bg-red-500 text-white small-btn hover:bg-red-600">Delete Permanently</button>
+            <button id="clearTrashBtn" onclick="clearTrash()" class="bg-red-600 text-white small-btn hover:bg-red-700">Clear All Trash</button>
+          </div>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" id="selectAllTrash" onchange="toggleSelectAllTrash(this.checked)"></th>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Status</th>
+                  <th>Total</th>
+                  <th>Deleted At</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="trashList"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Profile Section -->
+      <section id="profile" class="section hidden">
+        <div class="glass-morphism rounded-xl shadow-lg p-6 mb-6 max-w-2xl mx-auto">
+          <h2 class="text-2xl font-bold mb-4 text-gray-800 text-center">Admin Profile</h2>
+          <div class="space-y-4">
+            <div class="flex justify-center items-center flex-col sm:flex-row gap-4">
+              <img id="profilePicture" src="https://placehold.co/100x100?text=Admin" alt="Profile Picture" class="profile-img profile-img-profile rounded-full">
+              <input type="file" id="profileImageInput" accept="image/*" class="hidden" onchange="uploadProfileImage()">
+              <button onclick="document.getElementById('profileImageInput').click()" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Change Picture</button>
+            </div>
+            <input type="text" id="profileName" placeholder="Full Name" class="w-full input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
+            <input type="email" id="profileEmail" placeholder="Email" class="w-full input-field focus:outline-none focus:ring-2 focus:ring-yellow-500" disabled>
+            <button id="saveProfileBtn" onclick="saveProfile()" class="w-full bg-yellow-500 text-white small-btn hover:bg-yellow-600">Save Profile</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Order Details Modal -->
+      <div id="orderDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-20">
+        <div class="glass-morphism p-6 sm:p-8 rounded-xl w-full max-w-lg mx-4 modal-slide-in shadow-2xl">
+          <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Order Details</h2>
+          <div id="orderDetailsContent" class="space-y-4 text-gray-800"></div>
+          <div class="mt-6">
+            <label for="orderStatusSelect" class="block text-sm font-medium text-gray-700 mb-2">Update Status</label>
+            <select id="orderStatusSelect" class="input-field w-full focus:outline-none focus:ring-2 focus:ring-yellow-500 mb-4">
+              <option value="PLACED">Pending</option>
+              <option value="PROCESSING">Confirmed</option>
+              <option value="SHIPPED">Shipped</option>
+              <option value="DELIVERED">Delivered</option>
+              <option value="CANCELLED">Refunded</option>
             </select>
-            <input type="file" id="menuImage" accept="image/*" class="input-field">
-            <button onclick="saveMenuItem()" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Save Item</button>
+            <button id="updateStatusBtn" class="w-full bg-blue-500 text-white small-btn hover:bg-blue-600">Update Status</button>
           </div>
-        </div>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Category</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="menuItems"></tbody>
-          </table>
+          <button onclick="closeModal('orderDetailsModal')" class="mt-4 text-gray-600 hover:text-yellow-500 w-full text-center text-sm">Close</button>
         </div>
       </div>
-    </section>
+    </main>
 
-    <!-- Coupons Section -->
-    <section id="coupons" class="section hidden">
-      <div class="glass-morphism rounded-xl shadow-lg p-6 mb-6">
-        <h2 class="text-2xl font-bold mb-4 text-gray-800">Coupons Management</h2>
-        <div class="mb-6">
-          <h3 class="text-lg font-semibold mb-3">Add/Edit Coupon</h3>
-          <div class="grid grid-cols-1 gap-4">
-            <input type="text" id="couponCode" placeholder="Coupon Code" class="input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
-            <textarea id="couponDescription" placeholder="Description" class="input-field focus:outline-none focus:ring-2 focus:ring-yellow-500" rows="4"></textarea>
-            <input type="number" id="couponDiscount" placeholder="Discount (%)" min="0" max="100" class="input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
-            <input type="file" id="couponImage" accept="image/*" class="input-field">
-            <button onclick="saveCoupon()" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Save Coupon</button>
-          </div>
-        </div>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Image</th>
-                <th>Code</th>
-                <th>Description</th>
-                <th>Discount</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="couponsList"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+    <script>
+      // State management
+      const state = {
+        selectedOrders: [],
+        selectedCustomers: [],
+        restaurantStatus: 'Closed',
+        currentOrderId: null,
+        isLoading: false
+      };
 
-    <!-- Customers Section -->
-    <section id="customers" class="section hidden">
-      <div class="glass-morphism rounded-xl shadow-lg p-6 mb-6">
-        <h2 class="text-2xl font-bold mb-4 text-gray-800">Customers</h2>
-        <div class="mb-4 flex items-center gap-2">
-          <input type="text" id="searchCustomers" placeholder="Search by name or email..." class="flex-1 input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
-          <button onclick="fetchCustomers()" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Search</button>
-        </div>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th><input type="checkbox" id="selectAllCustomers" onchange="toggleSelectAllCustomers(this.checked)"></th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="customersList"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+      const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+      const BASE_URL = 'http://localhost:3000';
 
-    <!-- Orders Section -->
-    <section id="orders" class="section hidden">
-      <div class="glass-morphism rounded-xl shadow-lg p-6 mb-6">
-        <h2 class="text-2xl font-bold mb-4 text-gray-800">All Orders</h2>
-        <div class="mb-4 flex items-center gap-2">
-          <input type="text" id="searchOrders" placeholder="Search by order ID or customer..." class="flex-1 input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
-          <select id="orderStatusFilter" class="input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
-            <option value="">All Statuses</option>
-            <option value="Pending">Pending</option>
-            <option value="Confirmed">Confirmed</option>
-            <option value="Delivered">Delivered</option>
-            <option value="Refunded">Refunded</option>
-          </select>
-          <button onclick="fetchOrders()" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Search</button>
-        </div>
-        <div class="mb-4">
-          <button onclick="deleteSelectedOrders()" class="bg-red-500 text-white small-btn hover:bg-red-600">Move to Trash</button>
-        </div>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th><input type="checkbox" id="selectAllOrders" onchange="toggleSelectAllOrders(this.checked)"></th>
-                <th>Order ID</th>
-                <th>Customer</th>
-                <th>Status</th>
-                <th>Total</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="ordersList"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
+      const STATUS_MAP = {
+        'PLACED': 'Pending',
+        'PROCESSING': 'Confirmed',
+        'SHIPPED': 'Shipped',
+        'DELIVERED': 'Delivered',
+        'CANCELLED': 'Refunded'
+      };
 
-    <!-- Trash Section -->
-    <section id="trash" class="section hidden">
-      <div class="glass-morphism rounded-xl shadow-lg p-6 mb-6">
-        <h2 class="text-2xl font-bold mb-4 text-gray-800">Trash</h2>
-        <div class="mb-4 flex items-center gap-2">
-          <button onclick="restoreSelectedOrders()" class="bg-green-500 text-white small-btn hover:bg-green-600">Restore Selected</button>
-          <button onclick="deletePermanentlySelectedOrders()" class="bg-red-500 text-white small-btn hover:bg-red-600">Delete Permanently</button>
-          <button onclick="clearTrash()" class="bg-red-600 text-white small-btn hover:bg-red-700">Clear All Trash</button>
-        </div>
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th><input type="checkbox" id="selectAllTrash" onchange="toggleSelectAllTrash(this.checked)"></th>
-                <th>Order ID</th>
-                <th>Customer</th>
-                <th>Status</th>
-                <th>Total</th>
-                <th>Deleted At</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="trashList"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- Profile Section -->
-    <section id="profile" class="section hidden">
-      <div class="glass-morphism rounded-xl shadow-lg p-6 mb-6 max-w-2xl mx-auto">
-        <h2 class="text-2xl font-bold mb-4 text-gray-800 text-center">Admin Profile</h2>
-        <div class="space-y-4">
-          <div class="flex justify-center items-center flex-col sm:flex-row gap-4">
-            <img id="profilePicture" src="https://placehold.co/100x100?text=Admin" alt="Profile Picture" class="profile-img profile-img-profile rounded-full">
-            <input type="file" id="profileImageInput" accept="image/*" class="hidden" onchange="uploadProfileImage()">
-            <button onclick="document.getElementById('profileImageInput').click()" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Change Picture</button>
-          </div>
-          <input type="text" id="profileName" placeholder="Full Name" class="w-full input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
-          <input type="email" id="profileEmail" placeholder="Email" class="w-full input-field focus:outline-none focus:ring-2 focus:ring-yellow-500" disabled>
-          <button onclick="saveProfile()" class="w-full bg-yellow-500 text-white small-btn hover:bg-yellow-600">Save Profile</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- Order Details Modal -->
-    <div id="orderDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-20">
-      <div class="glass-morphism p-6 sm:p-8 rounded-xl w-full max-w-lg mx-4 modal-slide-in shadow-2xl">
-        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Order Details</h2>
-        <div id="orderDetailsContent" class="space-y-4 text-gray-800"></div>
-        <button onclick="closeModal('orderDetailsModal')" class="mt-4 text-gray-600 hover:text-yellow-500 w-full text-center text-sm">Close</button>
-      </div>
-    </div>
-  </main>
-
-  <script>
-    let selectedOrders = [];
-    let selectedCustomers = [];
-    let restaurantStatus = 'Closed';
-    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-    const BASE_URL = 'http://localhost:3000'; // Consistent base URL
-
-    // Status mapping to align frontend and backend
-    const STATUS_MAP = {
-      'PLACED': 'Pending',
-      'PROCESSING': 'Confirmed',
-      'SHIPPED': 'Shipped',
-      'DELIVERED': 'Delivered',
-      'CANCELLED': 'Refunded'
-    };
-
-    // Validate file size and type
-    function validateFile(file, inputId) {
-      if (!file) return true;
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-      if (!allowedTypes.includes(file.type)) {
-        showToast('Only JPEG, PNG, GIF, or WebP images are allowed.', 'error');
-        document.getElementById(inputId).value = '';
-        return false;
+      // Utility Functions
+      function setLoading(elementId, isLoading) {
+        const btn = document.getElementById(elementId);
+        if (btn) {
+          btn.disabled = isLoading;
+          btn.classList.toggle('loading', isLoading);
+        }
       }
-      if (file.size > MAX_FILE_SIZE) {
-        showToast('File size exceeds 5MB limit.', 'error');
-        document.getElementById(inputId).value = '';
-        return false;
+
+      function validateFile(file, inputId) {
+        if (!file) return true;
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!allowedTypes.includes(file.type)) {
+          showToast('Only JPEG, PNG, GIF, or WebP images are allowed.', 'error');
+          document.getElementById(inputId).value = '';
+          return false;
+        }
+        if (file.size > MAX_FILE_SIZE) {
+          showToast('File size exceeds 5MB limit.', 'error');
+          document.getElementById(inputId).value = '';
+          return false;
+        }
+        return true;
       }
-      return true;
-    }
 
-    // Show toast notification
-    function showToast(message, type = 'info') {
-      const toast = document.getElementById('toast');
-      const toastMessage = document.getElementById('toastMessage');
-      toastMessage.textContent = message;
-      toast.classList.remove('toast-hidden', 'bg-yellow-500', 'bg-red-500', 'bg-green-500');
-      toast.classList.add('toast-visible', type === 'error' ? 'bg-red-500' : type === 'success' ? 'bg-green-500' : 'bg-yellow-500');
-      setTimeout(() => {
-        toast.classList.remove('toast-visible');
-        toast.classList.add('toast-hidden');
-      }, 3000);
-    }
+      function showToast(message, type = 'info') {
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+        toastMessage.textContent = message;
+        toast.classList.remove('toast-hidden', 'bg-yellow-500', 'bg-red-500', 'bg-green-500');
+        toast.classList.add('toast-visible', type === 'error' ? 'bg-red-500' : type === 'success' ? 'bg-green-500' : 'bg-yellow-500');
+        setTimeout(() => {
+          toast.classList.remove('toast-visible');
+          toast.classList.add('toast-hidden');
+        }, 3000);
+      }
 
-    // Toggle profile dropdown
-    function toggleProfileDropdown() {
-      const dropdown = document.getElementById('profileDropdown');
-      dropdown.classList.toggle('profile-dropdown-hidden');
-      dropdown.classList.toggle('profile-dropdown-visible');
-    }
+      function toggleProfileDropdown() {
+        const dropdown = document.getElementById('profileDropdown');
+        dropdown.classList.toggle('profile-dropdown-hidden');
+        dropdown.classList.toggle('profile-dropdown-visible');
+      }
 
-    // Show section
-    function showSection(sectionId) {
-      document.querySelectorAll('.section').forEach(section => section.classList.add('hidden'));
-      document.getElementById(sectionId).classList.remove('hidden');
-      toggleProfileDropdown();
-    }
+      function showSection(sectionId) {
+        document.querySelectorAll('.section').forEach(section => section.classList.add('hidden'));
+        const section = document.getElementById(sectionId);
+        if (section) section.classList.remove('hidden');
+        toggleProfileDropdown();
+        // Load data when section is shown
+        if (sectionId === 'menu') fetchMenuItems();
+        else if (sectionId === 'coupons') fetchCoupons();
+        else if (sectionId === 'customers') fetchCustomers();
+        else if (sectionId === 'orders') fetchOrders();
+        else if (sectionId === 'trash') fetchTrash();
+        else if (sectionId === 'dashboard') {
+          fetchDashboardStats();
+          fetchRecentOrders();
+        }
+      }
 
-    // Close modal
-    function closeModal(modalId) {
-      const modal = document.getElementById(modalId);
-      modal.classList.add('modal-slide-out');
-      setTimeout(() => {
-        modal.classList.add('hidden');
-        modal.classList.remove('modal-slide-out');
-      }, 300);
-    }
+      function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+          modal.classList.add('modal-slide-out');
+          setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.classList.remove('modal-slide-out');
+            state.currentOrderId = null;
+          }, 300);
+        }
+      }
 
-    // Fetch admin data
-    async function fetchAdminData() {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
+      // API Functions
+      async function fetchAdminData() {
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) {
+            showToast('Session expired. Please log in.', 'error');
+            setTimeout(() => window.location.href = '/admin', 1000);
+            return;
+          }
+          const response = await fetch(`${BASE_URL}/api/admin/profile`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to fetch admin data.');
+          }
+          const data = await response.json();
+          document.getElementById('adminName').textContent = data.name || 'Admin';
+          document.getElementById('adminEmail').textContent = data.email || 'N/A';
+          document.getElementById('welcomeName').textContent = data.name || 'Admin';
+          document.getElementById('profileName').value = data.name || '';
+          document.getElementById('profileEmail').value = data.email || '';
+          document.getElementById('profileImage').src = data.profileImage || 'https://placehold.co/40x40?text=Admin';
+          document.getElementById('profilePicture').src = data.profileImage || 'https://placehold.co/100x100?text=Admin';
+        } catch (error) {
+          console.error('Fetch admin data error:', error);
+          showToast(error.message || 'Failed to fetch admin data.', 'error');
           setTimeout(() => window.location.href = '/admin', 1000);
-          return;
         }
-        const response = await fetch(`${BASE_URL}/api/admin/profile`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to fetch admin data.');
-        }
-        const data = await response.json();
-        document.getElementById('adminName').textContent = data.name || 'Admin';
-        document.getElementById('adminEmail').textContent = data.email || 'N/A';
-        document.getElementById('welcomeName').textContent = data.name || 'Admin';
-        document.getElementById('profileName').value = data.name || '';
-        document.getElementById('profileEmail').value = data.email || '';
-        document.getElementById('profileImage').src = data.profileImage || 'https://placehold.co/40x40?text=Admin';
-        document.getElementById('profilePicture').src = data.profileImage || 'https://placehold.co/100x100?text=Admin';
-      } catch (error) {
-        console.error('Fetch admin data error:', error);
-        showToast('Failed to fetch admin data.', 'error');
-        setTimeout(() => window.location.href = '/admin', 1000);
       }
-    }
 
-    // Fetch dashboard stats
-    async function fetchDashboardStats() {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
+      async function fetchDashboardStats() {
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          setLoading('restaurantStatusBtn', true);
+          const response = await fetch(`${BASE_URL}/api/admin/stats`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to fetch stats.');
+          }
+          const data = await response.json();
+          document.getElementById('totalOrders').textContent = data.totalOrders || 0;
+          document.getElementById('totalCustomers').textContent = data.totalCustomers || 0;
+          document.getElementById('totalCoupons').textContent = data.totalCoupons || 0;
+          state.restaurantStatus = data.restaurantStatus || 'Closed';
+          updateRestaurantStatusButton();
+        } catch (error) {
+          console.error('Fetch stats error:', error);
+          showToast(error.message || 'Failed to fetch dashboard stats.', 'error');
+        } finally {
+          setLoading('restaurantStatusBtn', false);
         }
-        const response = await fetch(`${BASE_URL}/api/admin/stats`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to fetch stats.');
-        }
-        const data = await response.json();
-        document.getElementById('totalOrders').textContent = data.totalOrders || 0;
-        document.getElementById('totalCustomers').textContent = data.totalCustomers || 0;
-        document.getElementById('totalCoupons').textContent = data.totalCoupons || 0;
-        restaurantStatus = data.restaurantStatus || 'Closed';
-        updateRestaurantStatusButton();
-      } catch (error) {
-        console.error('Fetch stats error:', error);
-        showToast('Failed to fetch stats.', 'error');
       }
-    }
 
-    // Update restaurant status button
-    function updateRestaurantStatusButton() {
-      const btn = document.getElementById('restaurantStatusBtn');
-      btn.textContent = restaurantStatus === 'Open' ? 'Close Restaurant' : 'Open Restaurant';
-      btn.classList.remove('bg-green-500', 'bg-red-500');
-      btn.classList.add(restaurantStatus === 'Open' ? 'bg-green-500' : 'bg-red-500');
-    }
-
-    // Toggle restaurant status
-    async function toggleRestaurantStatus() {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
+      function updateRestaurantStatusButton() {
+        const btn = document.getElementById('restaurantStatusBtn');
+        if (btn) {
+          btn.textContent = state.restaurantStatus === 'Open' ? 'Close Restaurant' : 'Open Restaurant';
+          btn.classList.remove('bg-green-500', 'bg-red-500');
+          btn.classList.add(state.restaurantStatus === 'Open' ? 'bg-green-500' : 'bg-red-500');
         }
-        const newStatus = restaurantStatus === 'Open' ? 'Closed' : 'Open';
-        const response = await fetch(`${BASE_URL}/api/admin/restaurant-status`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ status: newStatus })
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to update restaurant status.');
-        }
-        const data = await response.json();
-        restaurantStatus = newStatus;
-        updateRestaurantStatusButton();
-        showToast(`Restaurant is now ${newStatus}!`, 'success');
-      } catch (error) {
-        console.error('Toggle restaurant status error:', error);
-        showToast('Failed to update restaurant status.', 'error');
       }
-    }
 
-    // Fetch recent orders
-    async function fetchRecentOrders() {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
+      async function toggleRestaurantStatus() {
+        setLoading('restaurantStatusBtn', true);
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const newStatus = state.restaurantStatus === 'Open' ? 'Closed' : 'Open';
+          const response = await fetch(`${BASE_URL}/api/admin/restaurant-status`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ status: newStatus })
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to update restaurant status.');
+          }
+          state.restaurantStatus = newStatus;
+          updateRestaurantStatusButton();
+          showToast(`Restaurant is now ${newStatus}!`, 'success');
+        } catch (error) {
+          console.error('Toggle restaurant status error:', error);
+          showToast(error.message || 'Failed to update restaurant status.', 'error');
+        } finally {
+          setLoading('restaurantStatusBtn', false);
         }
-        const response = await fetch(`${BASE_URL}/api/admin/orders/recent`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to fetch recent orders.');
-        }
-        const data = await response.json();
-        const recentOrders = document.getElementById('recentOrders');
-        recentOrders.innerHTML = '';
-        if (!data.orders || data.orders.length === 0) {
-          recentOrders.innerHTML = '<tr><td colspan="4" class="text-center text-gray-600 py-4">No recent orders.</td></tr>';
-          return;
-        }
-        data.orders.forEach(order => {
-          const isPaid = order.status === 'DELIVERED' ? ' (Paid)' : '';
-          recentOrders.innerHTML += `
+      }
+
+      async function fetchRecentOrders() {
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const response = await fetch(`${BASE_URL}/api/admin/orders/recent`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to fetch recent orders.');
+          }
+          const data = await response.json();
+          const recentOrders = document.getElementById('recentOrders');
+          recentOrders.innerHTML = data.orders?.length ? data.orders.map(order => `
             <tr>
-              <td>#${order.id}</td>
+              <td>#${order.id || 'N/A'}</td>
               <td>${order.userName || 'Unknown'}</td>
-              <td>${STATUS_MAP[order.status] || order.status}${isPaid}</td>
-              <td>₹${Number(order.total).toFixed(2)}</td>
-            </tr>`;
-        });
-      } catch (error) {
-        console.error('Fetch recent orders error:', error);
-        showToast('Failed to fetch recent orders.', 'error');
+              <td>${STATUS_MAP[order.status] || order.status}${order.status === 'DELIVERED' ? ' (Paid)' : ''}</td>
+              <td>₹${Number(order.total || 0).toFixed(2)}</td>
+            </tr>`).join('') : '<tr><td colspan="4" class="text-center text-gray-600 py-4">No recent orders.</td></tr>';
+        } catch (error) {
+          console.error('Fetch recent orders error:', error);
+          showToast(error.message || 'Failed to fetch recent orders.', 'error');
+        }
       }
-    }
 
-    // Fetch menu items
-    async function fetchMenuItems() {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
-        }
-        const response = await fetch(`${BASE_URL}/api/admin/menu`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to fetch menu items.');
-        }
-        const data = await response.json();
-        const menuItems = document.getElementById('menuItems');
-        menuItems.innerHTML = '';
-        if (!data.items || data.items.length === 0) {
-          menuItems.innerHTML = '<tr><td colspan="6" class="text-center text-gray-600 py-4">No menu items found. Add some to get started!</td></tr>';
-          return;
-        }
-        data.items.forEach(item => {
-          menuItems.innerHTML += `
+      async function fetchMenuItems() {
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const response = await fetch(`${BASE_URL}/api/admin/menu`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to fetch menu items.');
+          }
+          const data = await response.json();
+          const menuItems = document.getElementById('menuItems');
+          menuItems.innerHTML = data.items?.length ? data.items.map(item => `
             <tr>
-              <td><img src="${item.image || 'https://placehold.co/50x50'}" alt="${item.name}" class="h-12 w-12 object-cover rounded"></td>
-              <td>${item.name}</td>
-              <td>${item.description}</td>
-              <td>₹${Number(item.price).toFixed(2)}</td>
-              <td>${item.category}</td>
+              <td><img src="${item.image || 'https://placehold.co/50x50'}" alt="${item.name || 'Item'}" class="h-12 w-12 object-cover rounded"></td>
+              <td>${item.name || 'N/A'}</td>
+              <td>${item.description || 'N/A'}</td>
+              <td>₹${Number(item.price || 0).toFixed(2)}</td>
+              <td>${item.category || 'N/A'}</td>
               <td>
                 <button onclick="editMenuItem('${item.id}')" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Edit</button>
                 <button onclick="deleteMenuItem('${item.id}')" class="bg-red-500 text-white small-btn hover:bg-red-600">Delete</button>
               </td>
-            </tr>`;
-        });
-      } catch (error) {
-        console.error('Fetch menu items error:', error);
-        showToast('Failed to fetch menu items.', 'error');
+            </tr>`).join('') : '<tr><td colspan="6" class="text-center text-gray-600 py-4">No menu items found. Add some to get started!</td></tr>';
+        } catch (error) {
+          console.error('Fetch menu items error:', error);
+          showToast(error.message || 'Failed to fetch menu items.', 'error');
+        }
       }
-    }
 
-    // Save menu item
-    async function saveMenuItem() {
-      const name = document.getElementById('menuName').value.trim();
-      const description = document.getElementById('menuDescription').value.trim();
-      const price = parseFloat(document.getElementById('menuPrice').value);
-      const category = document.getElementById('menuCategory').value;
-      const image = document.getElementById('menuImage').files[0];
-      if (!name || !description || isNaN(price) || !category) {
-        showToast('Please fill all required fields.', 'error');
-        return;
-      }
-      if (image && !validateFile(image, 'menuImage')) return;
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('description', description);
-      formData.append('price', price);
-      formData.append('category', category);
-      if (image) formData.append('image', image);
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
-        }
-        const itemId = document.getElementById('menuName').dataset.id;
-        const url = itemId ? `${BASE_URL}/api/admin/menu/update` : `${BASE_URL}/api/admin/menu/add`;
-        if (itemId) formData.append('id', itemId);
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}` },
-          body: formData
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to save menu item.');
-        }
-        const data = await response.json();
-        showToast(itemId ? 'Menu item updated!' : 'Menu item added!', 'success');
-        document.getElementById('menuName').value = '';
-        document.getElementById('menuDescription').value = '';
-        document.getElementById('menuPrice').value = '';
-        document.getElementById('menuCategory').value = '';
-        document.getElementById('menuImage').value = '';
+      function resetMenuForm() {
+        const formFields = ['menuName', 'menuDescription', 'menuPrice', 'menuCategory', 'menuImage'];
+        formFields.forEach(id => document.getElementById(id).value = '');
         delete document.getElementById('menuName').dataset.id;
-        fetchMenuItems();
-      } catch (error) {
-        console.error('Save menu item error:', error);
-        showToast('Failed to save menu item.', 'error');
+        document.getElementById('saveMenuBtn').textContent = 'Save Item';
+        document.getElementById('cancelMenuBtn').classList.add('hidden');
       }
-    }
 
-    // Edit menu item
-    async function editMenuItem(itemId) {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
+      async function saveMenuItem() {
+        setLoading('saveMenuBtn', true);
+        const name = document.getElementById('menuName').value.trim();
+        const description = document.getElementById('menuDescription').value.trim();
+        const price = parseFloat(document.getElementById('menuPrice').value);
+        const category = document.getElementById('menuCategory').value;
+        const image = document.getElementById('menuImage').files[0];
+        if (!name || !description || isNaN(price) || price < 0 || !category) {
+          showToast('Please fill all required fields with valid values.', 'error');
+          setLoading('saveMenuBtn', false);
           return;
         }
-        const response = await fetch(`${BASE_URL}/api/admin/menu/${itemId}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to fetch menu item.');
+        if (image && !validateFile(image, 'menuImage')) {
+          setLoading('saveMenuBtn', false);
+          return;
         }
-        const data = await response.json();
-        document.getElementById('menuName').value = data.name;
-        document.getElementById('menuDescription').value = data.description;
-        document.getElementById('menuPrice').value = data.price;
-        document.getElementById('menuCategory').value = data.category;
-        document.getElementById('menuName').dataset.id = itemId;
-        document.getElementById('menuName').focus();
-        document.getElementById('menu').scrollIntoView({ behavior: 'smooth' });
-      } catch (error) {
-        console.error('Fetch menu item error:', error);
-        showToast('Failed to fetch menu item.', 'error');
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('description', description);
+        formData.append('price', price);
+        formData.append('category', category);
+        if (image) formData.append('image', image);
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const itemId = document.getElementById('menuName').dataset.id;
+          const url = itemId ? `${BASE_URL}/api/admin/menu/update` : `${BASE_URL}/api/admin/menu/add`;
+          if (itemId) formData.append('id', itemId);
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` },
+            body: formData
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to save menu item.');
+          }
+          showToast(itemId ? 'Menu item updated!' : 'Menu item added!', 'success');
+          resetMenuForm();
+          fetchMenuItems();
+        } catch (error) {
+          console.error('Save menu item error:', error);
+          showToast(error.message || 'Failed to save menu item.', 'error');
+        } finally {
+          setLoading('saveMenuBtn', false);
+        }
       }
-    }
 
-    // Delete menu item
-    async function deleteMenuItem(itemId) {
-      if (!confirm('Are you sure you want to delete this menu item?')) return;
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
+      async function editMenuItem(itemId) {
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const response = await fetch(`${BASE_URL}/api/admin/menu/${itemId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to fetch menu item.');
+          }
+          const data = await response.json();
+          document.getElementById('menuName').value = data.name || '';
+          document.getElementById('menuDescription').value = data.description || '';
+          document.getElementById('menuPrice').value = data.price || '';
+          document.getElementById('menuCategory').value = data.category || '';
+          document.getElementById('menuName').dataset.id = itemId;
+          document.getElementById('saveMenuBtn').textContent = 'Update Item';
+          document.getElementById('cancelMenuBtn').classList.remove('hidden');
+          document.getElementById('menuName').focus();
+          document.getElementById('menu').scrollIntoView({ behavior: 'smooth' });
+        } catch (error) {
+          console.error('Fetch menu item error:', error);
+          showToast(error.message || 'Failed to fetch menu item.', 'error');
         }
-        const response = await fetch(`${BASE_URL}/api/admin/menu/delete`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ id: itemId })
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to delete menu item.');
-        }
-        const data = await response.json();
-        showToast('Menu item deleted!', 'success');
-        fetchMenuItems();
-      } catch (error) {
-        console.error('Delete menu item error:', error);
-        showToast('Failed to delete menu item.', 'error');
       }
-    }
 
-    // Fetch coupons
-    async function fetchCoupons() {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
+      async function deleteMenuItem(itemId) {
+        if (!confirm('Are you sure you want to delete this menu item?')) return;
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const response = await fetch(`${BASE_URL}/api/admin/menu/delete`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ id: itemId })
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to delete menu item.');
+          }
+          showToast('Menu item deleted!', 'success');
+          fetchMenuItems();
+        } catch (error) {
+          console.error('Delete menu item error:', error);
+          showToast(error.message || 'Failed to delete menu item.', 'error');
         }
-        const response = await fetch(`${BASE_URL}/api/admin/coupons`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to fetch coupons.');
-        }
-        const data = await response.json();
-        const couponsList = document.getElementById('couponsList');
-        couponsList.innerHTML = '';
-        if (!data.coupons || data.coupons.length === 0) {
-          couponsList.innerHTML = '<tr><td colspan="5" class="text-center text-gray-600 py-4">No coupons found.</td></tr>';
-          return;
-        }
-        data.coupons.forEach(coupon => {
-          couponsList.innerHTML += `
+      }
+
+      async function fetchCoupons() {
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const response = await fetch(`${BASE_URL}/api/admin/coupons`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to fetch coupons.');
+          }
+          const data = await response.json();
+          const couponsList = document.getElementById('couponsList');
+          couponsList.innerHTML = data.coupons?.length ? data.coupons.map(coupon => `
             <tr>
-              <td><img src="${coupon.image || 'https://placehold.co/50x50'}" alt="${coupon.code}" class="h-12 w-12 object-cover rounded"></td>
-              <td>${coupon.code}</td>
-              <td>${coupon.description}</td>
-              <td>${coupon.discount}%</td>
+              <td><img src="${coupon.image || 'https://placehold.co/50x50'}" alt="${coupon.code || 'Coupon'}" class="h-12 w-12 object-cover rounded"></td>
+              <td>${coupon.code || 'N/A'}</td>
+              <td>${coupon.description || 'N/A'}</td>
+              <td>${coupon.discount || 0}%</td>
               <td>
                 <button onclick="editCoupon('${coupon.id}')" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Edit</button>
                 <button onclick="deleteCoupon('${coupon.id}')" class="bg-red-500 text-white small-btn hover:bg-red-600">Delete</button>
               </td>
-            </tr>`;
-        });
-      } catch (error) {
-        console.error('Fetch coupons error:', error);
-        showToast('Failed to fetch coupons.', 'error');
+            </tr>`).join('') : '<tr><td colspan="5" class="text-center text-gray-600 py-4">No coupons found.</td></tr>';
+        } catch (error) {
+          console.error('Fetch coupons error:', error);
+          showToast(error.message || 'Failed to fetch coupons.', 'error');
+        }
       }
-    }
 
-    // Save coupon
-    async function saveCoupon() {
-      const code = document.getElementById('couponCode').value.trim();
-      const description = document.getElementById('couponDescription').value.trim();
-      const discount = parseInt(document.getElementById('couponDiscount').value);
-      const image = document.getElementById('couponImage').files[0];
-      if (!code || !description || isNaN(discount) || discount < 0 || discount > 100) {
-        showToast('Please fill all required fields with valid values.', 'error');
-        return;
-      }
-      if (image && !validateFile(image, 'couponImage')) return;
-      const formData = new FormData();
-      formData.append('code', code);
-      formData.append('description', description);
-      formData.append('discount', discount);
-      if (image) formData.append('image', image);
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
-        }
-        const couponId = document.getElementById('couponCode').dataset.id;
-        const url = couponId ? `${BASE_URL}/api/admin/coupons/update` : `${BASE_URL}/api/admin/coupons/add`;
-        if (couponId) formData.append('id', couponId);
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}` },
-          body: formData
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to save coupon.');
-        }
-        const data = await response.json();
-        showToast(couponId ? 'Coupon updated!' : 'Coupon added!', 'success');
-        document.getElementById('couponCode').value = '';
-        document.getElementById('couponDescription').value = '';
-        document.getElementById('couponDiscount').value = '';
-        document.getElementById('couponImage').value = '';
+      function resetCouponForm() {
+        const formFields = ['couponCode', 'couponDescription', 'couponDiscount', 'couponImage'];
+        formFields.forEach(id => document.getElementById(id).value = '');
         delete document.getElementById('couponCode').dataset.id;
-        fetchCoupons();
-      } catch (error) {
-        console.error('Save coupon error:', error);
-        showToast('Failed to save coupon.', 'error');
+        document.getElementById('saveCouponBtn').textContent = 'Save Coupon';
+        document.getElementById('cancelCouponBtn').classList.add('hidden');
       }
-    }
 
-    // Edit coupon
-    async function editCoupon(couponId) {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
+      async function saveCoupon() {
+        setLoading('saveCouponBtn', true);
+        const code = document.getElementById('couponCode').value.trim();
+        const description = document.getElementById('couponDescription').value.trim();
+        const discount = parseInt(document.getElementById('couponDiscount').value);
+        const image = document.getElementById('couponImage').files[0];
+        if (!code || !description || isNaN(discount) || discount < 0 || discount > 100) {
+          showToast('Please fill all required fields with valid values.', 'error');
+          setLoading('saveCouponBtn', false);
           return;
         }
-        const response = await fetch(`${BASE_URL}/api/admin/coupons/${couponId}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to fetch coupon.');
+        if (image && !validateFile(image, 'couponImage')) {
+          setLoading('saveCouponBtn', false);
+          return;
         }
-        const data = await response.json();
-        document.getElementById('couponCode').value = data.code;
-        document.getElementById('couponDescription').value = data.description;
-        document.getElementById('couponDiscount').value = data.discount;
-        document.getElementById('couponCode').dataset.id = couponId;
-        document.getElementById('couponCode').focus();
-        document.getElementById('coupons').scrollIntoView({ behavior: 'smooth' });
-      } catch (error) {
-        console.error('Fetch coupon error:', error);
-        showToast('Failed to fetch coupon.', 'error');
+        const formData = new FormData();
+        formData.append('code', code);
+        formData.append('description', description);
+        formData.append('discount', discount);
+        if (image) formData.append('image', image);
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const couponId = document.getElementById('couponCode').dataset.id;
+          const url = couponId ? `${BASE_URL}/api/admin/coupons/update` : `${BASE_URL}/api/admin/coupons/add`;
+          if (couponId) formData.append('id', couponId);
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${token}` },
+            body: formData
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to save coupon.');
+          }
+          showToast(couponId ? 'Coupon updated!' : 'Coupon added!', 'success');
+          resetCouponForm();
+          fetchCoupons();
+        } catch (error) {
+          console.error('Save coupon error:', error);
+          showToast(error.message || 'Failed to save coupon.', 'error');
+        } finally {
+          setLoading('saveCouponBtn', false);
+        }
       }
-    }
 
-    // Delete coupon
-    async function deleteCoupon(couponId) {
-      if (!confirm('Are you sure you want to delete this coupon?')) return;
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
+      async function editCoupon(couponId) {
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const response = await fetch(`${BASE_URL}/api/admin/coupons/${couponId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to fetch coupon.');
+          }
+          const data = await response.json();
+          document.getElementById('couponCode').value = data.code || '';
+          document.getElementById('couponDescription').value = data.description || '';
+          document.getElementById('couponDiscount').value = data.discount || '';
+          document.getElementById('couponCode').dataset.id = couponId;
+          document.getElementById('saveCouponBtn').textContent = 'Update Coupon';
+          document.getElementById('cancelCouponBtn').classList.remove('hidden');
+          document.getElementById('couponCode').focus();
+          document.getElementById('coupons').scrollIntoView({ behavior: 'smooth' });
+        } catch (error) {
+          console.error('Fetch coupon error:', error);
+          showToast(error.message || 'Failed to fetch coupon.', 'error');
         }
-        const response = await fetch(`${BASE_URL}/api/admin/coupons/delete`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ id: couponId })
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to delete coupon.');
-        }
-        const data = await response.json();
-        showToast('Coupon deleted!', 'success');
-        fetchCoupons();
-      } catch (error) {
-        console.error('Delete coupon error:', error);
-        showToast('Failed to delete coupon.', 'error');
       }
-    }
 
-    // Fetch customers
-    async function fetchCustomers() {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
+      async function deleteCoupon(couponId) {
+        if (!confirm('Are you sure you want to delete this coupon?')) return;
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const response = await fetch(`${BASE_URL}/api/admin/coupons/delete`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ id: couponId })
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to delete coupon.');
+          }
+          showToast('Coupon deleted!', 'success');
+          fetchCoupons();
+        } catch (error) {
+          console.error('Delete coupon error:', error);
+          showToast(error.message || 'Failed to delete coupon.', 'error');
         }
-        const search = document.getElementById('searchCustomers').value.trim();
-        const response = await fetch(`${BASE_URL}/api/admin/users?search=${encodeURIComponent(search)}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to fetch users.');
-        }
-        const data = await response.json();
-        const customersList = document.getElementById('customersList');
-        customersList.innerHTML = '';
-        if (!data.users || data.users.length === 0) {
-          customersList.innerHTML = '<tr><td colspan="6" class="text-center text-gray-600 py-4">No users found. Invite some to join!</td></tr>';
-          return;
-        }
-        data.users.forEach(customer => {
-          customersList.innerHTML += `
+      }
+
+      async function fetchCustomers() {
+        setLoading('searchCustomersBtn', true);
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const search = document.getElementById('searchCustomers').value.trim();
+          const response = await fetch(`${BASE_URL}/api/admin/users?search=${encodeURIComponent(search)}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to fetch customers.');
+          }
+          const data = await response.json();
+          const customersList = document.getElementById('customersList');
+          customersList.innerHTML = data.users?.length ? data.users.map(customer => `
             <tr>
               <td><input type="checkbox" class="customer-checkbox" data-id="${customer.id}" onchange="toggleCustomerSelection('${customer.id}', this.checked)"></td>
               <td>${customer.name || 'N/A'}</td>
@@ -970,572 +1015,571 @@
                   ${customer.isBlocked ? 'Unblock' : 'Block'}
                 </button>
               </td>
-            </tr>`;
-        });
-      } catch (error) {
-        console.error('Fetch users error:', error);
-        showToast(error.message || 'Failed to fetch users.', 'error');
+            </tr>`).join('') : '<tr><td colspan="6" class="text-center text-gray-600 py-4">No customers found.</td></tr>';
+        } catch (error) {
+          console.error('Fetch customers error:', error);
+          showToast(error.message || 'Failed to fetch customers.', 'error');
+        } finally {
+          setLoading('searchCustomersBtn', false);
+        }
       }
-    }
 
-    // Toggle customer selection
-    function toggleCustomerSelection(customerId, isChecked) {
-      if (isChecked) {
-        selectedCustomers.push(customerId);
-      } else {
-        selectedCustomers = selectedCustomers.filter(id => id !== customerId);
+      function toggleCustomerSelection(customerId, isChecked) {
+        if (isChecked) {
+          state.selectedCustomers.push(customerId);
+        } else {
+          state.selectedCustomers = state.selectedCustomers.filter(id => id !== customerId);
+        }
+        document.getElementById('selectAllCustomers').checked = state.selectedCustomers.length === document.querySelectorAll('.customer-checkbox').length;
       }
-    }
 
-    // Toggle select all customers
-    function toggleSelectAllCustomers(isChecked) {
-      selectedCustomers = [];
-      if (isChecked) {
+      function toggleSelectAllCustomers(isChecked) {
+        state.selectedCustomers = [];
         document.querySelectorAll('.customer-checkbox').forEach(checkbox => {
-          checkbox.checked = true;
-          selectedCustomers.push(checkbox.dataset.id);
+          checkbox.checked = isChecked;
+          if (isChecked) state.selectedCustomers.push(checkbox.dataset.id);
         });
-      } else {
-        document.querySelectorAll('.customer-checkbox').forEach(checkbox => checkbox.checked = false);
       }
-    }
 
-    // Toggle block customer
-    async function toggleBlockCustomer(customerId, isBlocked) {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
+      async function toggleBlockCustomer(customerId, isBlocked) {
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const response = await fetch(`${BASE_URL}/api/admin/users/block`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ userId: customerId, block: !isBlocked })
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to update customer status.');
+          }
+          showToast(`Customer ${isBlocked ? 'unblocked' : 'blocked'} successfully!`, 'success');
+          fetchCustomers();
+        } catch (error) {
+          console.error('Toggle block customer error:', error);
+          showToast(error.message || 'Failed to update customer status.', 'error');
         }
-        const response = await fetch(`${BASE_URL}/api/admin/users/block`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ userId: customerId, block: !isBlocked })
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to update user status.');
-        }
-        const data = await response.json();
-        showToast(data.message, 'success');
-        fetchCustomers();
-      } catch (error) {
-        console.error('Toggle block user error:', error);
-        showToast('Failed to update user status.', 'error');
       }
-    }
 
-    // Fetch orders
-    async function fetchOrders() {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
-        }
-        const search = document.getElementById('searchOrders').value.trim();
-        const status = document.getElementById('orderStatusFilter').value;
-        const backendStatus = Object.keys(STATUS_MAP).find(key => STATUS_MAP[key] === status) || status;
-        const response = await fetch(`${BASE_URL}/api/admin/orders?search=${encodeURIComponent(search)}&status=${encodeURIComponent(backendStatus)}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to fetch orders.');
-        }
-        const data = await response.json();
-        const ordersList = document.getElementById('ordersList');
-        ordersList.innerHTML = '';
-        if (!data.orders || data.orders.length === 0) {
-          ordersList.innerHTML = '<tr><td colspan="6" class="text-center text-gray-600 py-4">No orders found.</td></tr>';
-          return;
-        }
-        data.orders.forEach(order => {
-          ordersList.innerHTML += `
+      async function fetchOrders() {
+        setLoading('searchOrdersBtn', true);
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const search = document.getElementById('searchOrders').value.trim();
+          const status = document.getElementById('orderStatusFilter').value;
+          const backendStatus = Object.keys(STATUS_MAP).find(key => STATUS_MAP[key] === status) || status;
+          const response = await fetch(`${BASE_URL}/api/admin/orders?search=${encodeURIComponent(search)}&status=${encodeURIComponent(backendStatus)}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to fetch orders.');
+          }
+          const data = await response.json();
+          const ordersList = document.getElementById('ordersList');
+          ordersList.innerHTML = data.orders?.length ? data.orders.map(order => `
             <tr>
               <td><input type="checkbox" class="order-checkbox" data-id="${order.id}" onchange="toggleOrderSelection('${order.id}', this.checked)"></td>
-              <td>#${order.id}</td>
+              <td>#${order.id || 'N/A'}</td>
               <td>${order.userName || 'Unknown'}</td>
-              <td>${STATUS_MAP[order.status] || order.status}</td>
-              <td>₹${Number(order.total).toFixed(2)}</td>
+              <td>${STATUS_MAP[order.status] || order.status || 'N/A'}</td>
+              <td>₹${Number(order.total || 0).toFixed(2)}</td>
               <td>
                 <button onclick="viewOrderDetails('${order.id}')" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">View</button>
-                <button onclick="updateOrderStatus('${order.id}')" class="bg-blue-500 text-white small-btn hover:bg-blue-600">Update Status</button>
               </td>
-            </tr>`;
-        });
-      } catch (error) {
-        console.error('Fetch orders error:', error);
-        showToast(error.message || 'Failed to fetch orders.', 'error');
+            </tr>`).join('') : '<tr><td colspan="6" class="text-center text-gray-600 py-4">No orders found.</td></tr>';
+          // Reset selected orders
+          state.selectedOrders = [];
+          document.getElementById('selectAllOrders').checked = false;
+        } catch (error) {
+          console.error('Fetch orders error:', error);
+          showToast(error.message || 'Failed to fetch orders.', 'error');
+        } finally {
+          setLoading('searchOrdersBtn', false);
+        }
       }
-    }
 
-    // Toggle order selection
-    function toggleOrderSelection(orderId, isChecked) {
-      if (isChecked) {
-        selectedOrders.push(orderId);
-      } else {
-        selectedOrders = selectedOrders.filter(id => id !== orderId);
+      function toggleOrderSelection(orderId, isChecked) {
+        if (isChecked) {
+          state.selectedOrders.push(orderId);
+        } else {
+          state.selectedOrders = state.selectedOrders.filter(id => id !== orderId);
+        }
+        document.getElementById('selectAllOrders').checked = state.selectedOrders.length === document.querySelectorAll('.order-checkbox').length;
       }
-    }
 
-    // Toggle select all orders
-    function toggleSelectAllOrders(isChecked) {
-      selectedOrders = [];
-      if (isChecked) {
+      function toggleSelectAllOrders(isChecked) {
+        state.selectedOrders = [];
         document.querySelectorAll('.order-checkbox').forEach(checkbox => {
-          checkbox.checked = true;
-          selectedOrders.push(checkbox.dataset.id);
+          checkbox.checked = isChecked;
+          if (isChecked) state.selectedOrders.push(checkbox.dataset.id);
         });
-      } else {
-        document.querySelectorAll('.order-checkbox').forEach(checkbox => checkbox.checked = false);
       }
-    }
 
-    // Delete selected orders
-    async function deleteSelectedOrders() {
-      if (selectedOrders.length === 0) {
-        showToast('Please select at least one order.', 'error');
-        return;
-      }
-      if (!confirm('Are you sure you want to move selected orders to trash?')) return;
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
+      async function deleteSelectedOrders() {
+        if (!state.selectedOrders.length) {
+          showToast('Please select at least one order to move to trash.', 'error');
           return;
         }
-        const response = await fetch(`${BASE_URL}/api/admin/orders/delete`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ orderIds: selectedOrders })
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to delete orders.');
+        if (!confirm(`Are you sure you want to move ${state.selectedOrders.length} order(s) to trash?`)) return;
+        setLoading('deleteSelectedOrdersBtn', true);
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const response = await fetch(`${BASE_URL}/api/admin/orders/delete`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ orderIds: state.selectedOrders })
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to move orders to trash.');
+          }
+          const data = await response.json();
+          if (data.success && data.affectedRows > 0) {
+            showToast(`Successfully moved ${data.affectedRows} order(s) to trash!`, 'success');
+            state.selectedOrders = [];
+            document.getElementById('selectAllOrders').checked = false;
+            fetchOrders();
+            fetchRecentOrders();
+            fetchDashboardStats();
+            fetchTrash(); // Refresh trash to confirm orders are there
+          } else {
+            throw new Error(data.message || 'No orders were moved to trash.');
+          }
+        } catch (error) {
+          console.error('Delete orders error:', error);
+          console.log('Error details:', {
+            message: error.message,
+            response: error.response,
+            stack: error.stack
+          });
+          showToast(error.message || 'Failed to move orders to trash.', 'error');
+        } finally {
+          setLoading('deleteSelectedOrdersBtn', false);
         }
-        const data = await response.json();
-        showToast('Orders moved to trash!', 'success');
-        selectedOrders = [];
-        fetchOrders();
-        fetchRecentOrders();
-      } catch (error) {
-        console.error('Delete orders error:', error);
-        showToast('Failed to delete orders.', 'error');
       }
-    }
 
-    // View order details
-    async function viewOrderDetails(orderId) {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
+      async function viewOrderDetails(orderId) {
+        setLoading('updateStatusBtn', true);
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const response = await fetch(`${BASE_URL}/api/admin/orders/${orderId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to fetch order details.');
+          }
+          const data = await response.json();
+          state.currentOrderId = orderId;
+          const content = document.getElementById('orderDetailsContent');
+          content.innerHTML = `
+            <p><strong>Order ID:</strong> #${data.order.id || 'N/A'}</p>
+            <p><strong>Customer:</strong> ${data.order.userName || 'Unknown'} (${data.order.userEmail || 'N/A'})</p>
+            <p><strong>Address:</strong> ${data.order.address || 'N/A'}</p>
+            <p><strong>Status:</strong> ${STATUS_MAP[data.order.status] || data.order.status || 'N/A'}</p>
+            <p><strong>Total:</strong> ₹${Number(data.order.total || 0).toFixed(2)}</p>
+            <h3 class="mt-4 text-lg font-semibold">Items:</h3>
+            <ul class="list-disc pl-5">
+              ${data.order.items?.length ? data.order.items.map(item => `
+                <li>${item.name || 'Unknown'} (x${item.quantity || 1}) - ₹${Number(item.price || 0).toFixed(2)}</li>
+              `).join('') : '<li>No items found.</li>'}
+            </ul>`;
+          const statusSelect = document.getElementById('orderStatusSelect');
+          statusSelect.value = data.order.status || 'PLACED';
+          document.getElementById('updateStatusBtn').onclick = () => updateOrderStatus(orderId);
+          const modal = document.getElementById('orderDetailsModal');
+          modal.classList.remove('hidden', 'modal-slide-out');
+          modal.classList.add('modal-slide-in');
+        } catch (error) {
+          console.error('Fetch order details error:', error);
+          showToast(error.message || 'Failed to fetch order details.', 'error');
+        } finally {
+          setLoading('updateStatusBtn', false);
         }
-        const response = await fetch(`${BASE_URL}/api/admin/orders/${orderId}`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to fetch order details.');
-        }
-        const data = await response.json();
-        const content = document.getElementById('orderDetailsContent');
-        content.innerHTML = `
-          <p><strong>Order ID:</strong> #${data.order.id}</p>
-          <p><strong>Customer:</strong> ${data.order.userName} (${data.order.userEmail})</p>
-          <p><strong>Address:</strong> ${data.order.address || 'N/A'}</p>
-          <p><strong>Status:</strong> ${STATUS_MAP[data.order.status] || data.order.status}</p>
-          <p><strong>Total:</strong> ₹${Number(data.order.total).toFixed(2)}</p>
-          <h3 class="mt-4 text-lg font-semibold">Items:</h3>
-          <ul class="list-disc pl-5">
-            ${data.order.items.map(item => `<li>${item.name} (x${item.quantity}) - ₹${Number(item.price).toFixed(2)}</li>`).join('')}
-          </ul>`;
-        document.getElementById('orderDetailsModal').classList.remove('hidden');
-      } catch (error) {
-        console.error('Fetch order details error:', error);
-        showToast('Failed to fetch order details.', 'error');
       }
-    }
 
-    // Update order status
-    async function updateOrderStatus(orderId) {
-      const status = prompt('Enter new status (PLACED, PROCESSING, SHIPPED, DELIVERED, CANCELLED):');
-      if (!status || !['PLACED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED'].includes(status)) {
-        showToast('Invalid status. Use PLACED, PROCESSING, SHIPPED, DELIVERED, or CANCELLED.', 'error');
-        return;
-      }
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
+      async function updateOrderStatus(orderId) {
+        setLoading('updateStatusBtn', true);
+        const status = document.getElementById('orderStatusSelect').value;
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const response = await fetch(`${BASE_URL}/api/admin/orders/update`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ orderId, status })
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to update order status.');
+          }
+          showToast('Order status updated!', 'success');
+          closeModal('orderDetailsModal');
+          fetchOrders();
+          fetchRecentOrders();
+          fetchDashboardStats();
+        } catch (error) {
+          console.error('Update order status error:', error);
+          showToast(error.message || 'Failed to update order status.', 'error');
+        } finally {
+          setLoading('updateStatusBtn', false);
         }
-        const response = await fetch(`${BASE_URL}/api/admin/orders/update`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ orderId, status })
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to update order status.');
-        }
-        const data = await response.json();
-        showToast('Order status updated!', 'success');
-        fetchOrders();
-        fetchRecentOrders();
-      } catch (error) {
-        console.error('Update order status error:', error);
-        showToast('Failed to update order status.', 'error');
       }
-    }
 
-    // Fetch trash
-    async function fetchTrash() {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
-        }
-        const response = await fetch(`${BASE_URL}/api/admin/orders/trash`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (response.status === 404) {
+      async function fetchTrash() {
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const response = await fetch(`${BASE_URL}/api/admin/orders/trash`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          if (response.status === 401 || response.status === 403) {
+            throw new Error('Unauthorized access. Please log in.');
+          }
+          if (response.status === 404) {
+            document.getElementById('trashList').innerHTML = '<tr><td colspan="7" class="text-center text-gray-600 py-4">No orders in trash.</td></tr>';
+            return;
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to fetch trash.');
+          }
+          const data = await response.json();
           const trashList = document.getElementById('trashList');
-          trashList.innerHTML = '<tr><td colspan="7" class="text-center text-gray-600 py-4">No orders in trash.</td></tr>';
-          return;
-        }
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to fetch trash.');
-        }
-        const data = await response.json();
-        const trashList = document.getElementById('trashList');
-        trashList.innerHTML = '';
-        if (!data.orders || data.orders.length === 0) {
-          trashList.innerHTML = '<tr><td colspan="7" class="text-center text-gray-600 py-4">No orders in trash.</td></tr>';
-          return;
-        }
-        data.orders.forEach(order => {
-          trashList.innerHTML += `
+          trashList.innerHTML = data.orders?.length ? data.orders.map(order => `
             <tr>
               <td><input type="checkbox" class="trash-checkbox" data-id="${order.id}" onchange="toggleTrashSelection('${order.id}', this.checked)"></td>
-              <td>#${order.id}</td>
+              <td>#${order.id || 'N/A'}</td>
               <td>${order.userName || 'Unknown'}</td>
-              <td>${STATUS_MAP[order.status] || order.status}</td>
-              <td>₹${Number(order.total).toFixed(2)}</td>
-              <td>${new Date(order.deletedAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</td>
+              <td>${STATUS_MAP[order.status] || order.status || 'N/A'}</td>
+              <td>₹${Number(order.total || 0).toFixed(2)}</td>
+              <td>${order.deletedAt ? new Date(order.deletedAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }) : 'N/A'}</td>
               <td>
                 <button onclick="restoreOrder('${order.id}')" class="bg-green-500 text-white small-btn hover:bg-green-600">Restore</button>
                 <button onclick="deletePermanently('${order.id}')" class="bg-red-500 text-white small-btn hover:bg-red-600">Delete</button>
               </td>
-            </tr>`;
-        });
-      } catch (error) {
-        console.error('Fetch trash error:', error);
-        showToast(error.message || 'Failed to fetch trash.', 'error');
+            </tr>`).join('') : '<tr><td colspan="7" class="text-center text-gray-600 py-4">No orders in trash.</td></tr>';
+        } catch (error) {
+          console.error('Fetch trash error:', error);
+          showToast(error.message || 'Failed to fetch trash.', 'error');
+        }
       }
-    }
 
-    // Toggle trash selection
-    function toggleTrashSelection(orderId, isChecked) {
-      if (isChecked) {
-        selectedOrders.push(orderId);
-      } else {
-        selectedOrders = selectedOrders.filter(id => id !== orderId);
+      function toggleTrashSelection(orderId, isChecked) {
+        if (isChecked) {
+          state.selectedOrders.push(orderId);
+        } else {
+          state.selectedOrders = state.selectedOrders.filter(id => id !== orderId);
+        }
+        document.getElementById('selectAllTrash').checked = state.selectedOrders.length === document.querySelectorAll('.trash-checkbox').length;
       }
-    }
 
-    // Toggle select all trash
-    function toggleSelectAllTrash(isChecked) {
-      selectedOrders = [];
-      if (isChecked) {
+      function toggleSelectAllTrash(isChecked) {
+        state.selectedOrders = [];
         document.querySelectorAll('.trash-checkbox').forEach(checkbox => {
-          checkbox.checked = true;
-          selectedOrders.push(checkbox.dataset.id);
+          checkbox.checked = isChecked;
+          if (isChecked) state.selectedOrders.push(checkbox.dataset.id);
         });
-      } else {
-        document.querySelectorAll('.trash-checkbox').forEach(checkbox => checkbox.checked = false);
       }
-    }
 
-    // Restore order
-    async function restoreOrder(orderId) {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
-        }
-        const response = await fetch(`${BASE_URL}/api/admin/orders/restore`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ orderIds: [orderId] })
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to restore order.');
-        }
-        const data = await response.json();
-        showToast('Order restored!', 'success');
-        fetchTrash();
-        fetchOrders();
-        fetchRecentOrders();
-      } catch (error) {
-        console.error('Restore order error:', error);
-        showToast('Failed to restore order.', 'error');
-      }
-    }
-
-    // Restore selected orders
-    async function restoreSelectedOrders() {
-      if (selectedOrders.length === 0) {
-        showToast('Please select at least one order.', 'error');
-        return;
-      }
-      if (!confirm('Are you sure you want to restore selected orders?')) return;
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
-        }
-        const response = await fetch(`${BASE_URL}/api/admin/orders/restore`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ orderIds: selectedOrders })
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to restore orders.');
-        }
-        const data = await response.json();
-        showToast('Orders restored!', 'success');
-        selectedOrders = [];
-        fetchTrash();
-        fetchOrders();
-        fetchRecentOrders();
-      } catch (error) {
-        console.error('Restore orders error:', error);
-        showToast('Failed to restore orders.', 'error');
-      }
-    }
-
-    // Delete permanently
-    async function deletePermanently(orderId) {
-      if (!confirm('Are you sure you want to permanently delete this order?')) return;
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
-        }
-        const response = await fetch(`${BASE_URL}/api/admin/orders/delete-permanent`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ orderIds: [orderId] })
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to delete order.');
-        }
-        const data = await response.json();
-        showToast('Order permanently deleted!', 'success');
-        fetchTrash();
-      } catch (error) {
-        console.error('Delete permanently error:', error);
-        showToast('Failed to delete order.', 'error');
-      }
-    }
-
-    // Delete permanently selected orders
-    async function deletePermanentlySelectedOrders() {
-      if (selectedOrders.length === 0) {
-        showToast('Please select at least one order.', 'error');
-        return;
-      }
-      if (!confirm('Are you sure you want to permanently delete selected orders?')) return;
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
-        }
-        const response = await fetch(`${BASE_URL}/api/admin/orders/delete-permanent`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ orderIds: selectedOrders })
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to delete orders.');
-        }
-        const data = await response.json();
-        showToast('Orders permanently deleted!', 'success');
-        selectedOrders = [];
-        fetchTrash();
-      } catch (error) {
-        console.error('Delete permanently orders error:', error);
-        showToast('Failed to delete orders.', 'error');
-      }
-    }
-
-    // Clear trash
-    async function clearTrash() {
-      if (!confirm('Are you sure you want to clear all trash? This action cannot be undone.')) return;
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
-        }
-        const response = await fetch(`${BASE_URL}/api/admin/orders/trash/clear`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to clear trash.');
-        }
-        const data = await response.json();
-        showToast('Trash cleared!', 'success');
-        fetchTrash();
-      } catch (error) {
-        console.error('Clear trash error:', error);
-        showToast('Failed to clear trash.', 'error');
-      }
-    }
-
-    // Save profile
-    async function saveProfile() {
-      const name = document.getElementById('profileName').value.trim();
-      if (!name) {
-        showToast('Name is required.', 'error');
-        return;
-      }
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
-        }
-        const response = await fetch(`${BASE_URL}/api/admin/profile/update`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ name })
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to update profile.');
-        }
-        const data = await response.json();
-        showToast('Profile updated!', 'success');
-        fetchAdminData();
-      } catch (error) {
-        console.error('Save profile error:', error);
-        showToast('Failed to update profile.', 'error');
-      }
-    }
-
-    // Upload profile image
-    async function uploadProfileImage() {
-      const file = document.getElementById('profileImageInput').files[0];
-      if (!file) {
-        showToast('Please select an image.', 'error');
-        return;
-      }
-      if (!validateFile(file, 'profileImageInput')) return;
-      const formData = new FormData();
-      formData.append('image', file);
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          showToast('Please log in to continue.', 'error');
-          return;
-        }
-        const response = await fetch(`${BASE_URL}/api/admin/profile/image`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}` },
-          body: formData
-        });
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({ message: `HTTP error! status: ${response.status}` }));
-          throw new Error(errorData.message || 'Failed to update profile image.');
-        }
-        const data = await response.json();
-        showToast('Profile image updated!', 'success');
-        fetchAdminData();
-      } catch (error) {
-        console.error('Upload profile image error:', error);
-        showToast('Failed to update profile image.', 'error');
-      }
-    }
-
-    // Logout
-    function logout() {
-      if (confirm('Are you sure you want to logout?')) {
+      async function restoreOrder(orderId) {
+        setLoading('restoreSelectedBtn', true);
         try {
           const token = localStorage.getItem('token');
-          if (token) {
-            fetch(`${BASE_URL}/api/admin/logout`, {
+          if (!token) throw new Error('Session expired. Please log in.');
+          const response = await fetch(`${BASE_URL}/api/admin/orders/restore`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ orderIds: [orderId] })
+          });
+                      if (response.status === 401 || response.status === 403) {
+              throw new Error('Unauthorized access. Please log in.');
+            }
+            if (!response.ok) {
+              const errorData = await response.json().catch(() => ({}));
+              throw new Error(errorData.message || 'Failed to restore order.');
+            }
+            showToast('Order restored successfully!', 'success');
+            state.selectedOrders = state.selectedOrders.filter(id => id !== orderId);
+            fetchTrash();
+            fetchOrders();
+            fetchRecentOrders();
+            fetchDashboardStats();
+          } catch (error) {
+            console.error('Restore order error:', error);
+            showToast(error.message || 'Failed to restore order.', 'error');
+          } finally {
+            setLoading('restoreSelectedBtn', false);
+          }
+        }
+      
+        async function restoreSelectedOrders() {
+          if (!state.selectedOrders.length) {
+            showToast('Please select at least one order to restore.', 'error');
+            return;
+          }
+          if (!confirm(`Are you sure you want to restore ${state.selectedOrders.length} order(s)?`)) return;
+          setLoading('restoreSelectedBtn', true);
+          try {
+            const token = localStorage.getItem('token');
+            if (!token) throw new Error('Session expired. Please log in.');
+            const response = await fetch(`${BASE_URL}/api/admin/orders/restore`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify({ orderIds: state.selectedOrders })
+            });
+            if (response.status === 401 || response.status === 403) {
+              throw new Error('Unauthorized access. Please log in.');
+            }
+            if (!response.ok) {
+              const errorData = await response.json().catch(() => ({}));
+              throw new Error(errorData.message || 'Failed to restore orders.');
+            }
+            showToast(`Successfully restored ${state.selectedOrders.length} order(s)!`, 'success');
+            state.selectedOrders = [];
+            document.getElementById('selectAllTrash').checked = false;
+            fetchTrash();
+            fetchOrders();
+            fetchRecentOrders();
+            fetchDashboardStats();
+          } catch (error) {
+            console.error('Restore selected orders error:', error);
+            showToast(error.message || 'Failed to restore orders.', 'error');
+          } finally {
+            setLoading('restoreSelectedBtn', false);
+          }
+        }
+      
+        async function deletePermanently(orderId) {
+          if (!confirm('Are you sure you want to permanently delete this order? This action cannot be undone.')) return;
+          setLoading('deletePermanentlyBtn', true);
+          try {
+            const token = localStorage.getItem('token');
+            if (!token) throw new Error('Session expired. Please log in.');
+            const response = await fetch(`${BASE_URL}/api/admin/orders/delete-permanent`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify({ orderIds: [orderId] })
+            });
+            if (response.status === 401 || response.status === 403) {
+              throw new Error('Unauthorized access. Please log in.');
+            }
+            if (!response.ok) {
+              const errorData = await response.json().catch(() => ({}));
+              throw new Error(errorData.message || 'Failed to permanently delete order.');
+            }
+            showToast('Order permanently deleted!', 'success');
+            state.selectedOrders = state.selectedOrders.filter(id => id !== orderId);
+            fetchTrash();
+          } catch (error) {
+            console.error('Delete permanently error:', error);
+            showToast(error.message || 'Failed to permanently delete order.', 'error');
+          } finally {
+            setLoading('deletePermanentlyBtn', false);
+          }
+        }
+      
+        async function deletePermanentlySelectedOrders() {
+          if (!state.selectedOrders.length) {
+            showToast('Please select at least one order to permanently delete.', 'error');
+            return;
+          }
+          if (!confirm(`Are you sure you want to permanently delete ${state.selectedOrders.length} order(s)? This action cannot be undone.`)) return;
+          setLoading('deletePermanentlyBtn', true);
+          try {
+            const token = localStorage.getItem('token');
+            if (!token) throw new Error('Session expired. Please log in.');
+            const response = await fetch(`${BASE_URL}/api/admin/orders/delete-permanent`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify({ orderIds: state.selectedOrders })
+            });
+            if (response.status === 401 || response.status === 403) {
+              throw new Error('Unauthorized access. Please log in.');
+            }
+            if (!response.ok) {
+              const errorData = await response.json().catch(() => ({}));
+              throw new Error(errorData.message || 'Failed to permanently delete orders.');
+            }
+            showToast(`Successfully permanently deleted ${state.selectedOrders.length} order(s)!`, 'success');
+            state.selectedOrders = [];
+            document.getElementById('selectAllTrash').checked = false;
+            fetchTrash();
+          } catch (error) {
+            console.error('Delete permanently selected orders error:', error);
+            showToast(error.message || 'Failed to permanently delete orders.', 'error');
+          } finally {
+            setLoading('deletePermanentlyBtn', false);
+          }
+        }
+      
+        async function clearTrash() {
+          if (!confirm('Are you sure you want to clear all orders in trash? This action cannot be undone.')) return;
+          setLoading('clearTrashBtn', true);
+          try {
+            const token = localStorage.getItem('token');
+            if (!token) throw new Error('Session expired. Please log in.');
+            const response = await fetch(`${BASE_URL}/api/admin/orders/clear-trash`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
               }
-            }).then(() => {
-              localStorage.removeItem('token');
-              window.location.href = '/admin';
             });
-          } else {
-            localStorage.removeItem('token');
-            window.location.href = '/admin';
+            if (response.status === 401 || response.status === 403) {
+              throw new Error('Unauthorized access. Please log in.');
+            }
+            if (!response.ok) {
+              const errorData = await response.json().catch(() => ({}));
+              throw new Error(errorData.message || 'Failed to clear trash.');
+            }
+            showToast('Trash cleared successfully!', 'success');
+            state.selectedOrders = [];
+            document.getElementById('selectAllTrash').checked = false;
+            fetchTrash();
+          } catch (error) {
+            console.error('Clear trash error:', error);
+            showToast(error.message || 'Failed to clear trash.', 'error');
+          } finally {
+            setLoading('clearTrashBtn', false);
           }
-        } catch (error) {
-          console.error('Logout error:', error);
-          localStorage.removeItem('token');
-          window.location.href = '/admin';
         }
-      }
-    }
-
-        // Initial load
-    document.addEventListener('DOMContentLoaded', () => {
-      fetchAdminData();
-      fetchDashboardStats();
-      fetchRecentOrders();
-      showSection('dashboard');
-    });
-  </script>
-</body>
-</html>
+      
+        async function uploadProfileImage() {
+          const fileInput = document.getElementById('profileImageInput');
+          const file = fileInput.files[0];
+          if (!file) {
+            showToast('No file selected.', 'error');
+            return;
+          }
+          if (!validateFile(file, 'profileImageInput')) return;
+          setLoading('saveProfileBtn', true);
+          try {
+            const token = localStorage.getItem('token');
+            if (!token) throw new Error('Session expired. Please log in.');
+            const formData = new FormData();
+            formData.append('profileImage', file);
+            const response = await fetch(`${BASE_URL}/api/admin/profile/image`, {
+              method: 'POST',
+              headers: { 'Authorization': `Bearer ${token}` },
+              body: formData
+            });
+            if (response.status === 401 || response.status === 403) {
+              throw new Error('Unauthorized access. Please log in.');
+            }
+            if (!response.ok) {
+              const errorData = await response.json().catch(() => ({}));
+              throw new Error(errorData.message || 'Failed to upload profile image.');
+            }
+            const data = await response.json();
+            document.getElementById('profileImage').src = data.profileImage;
+            document.getElementById('profilePicture').src = data.profileImage;
+            showToast('Profile image updated!', 'success');
+            fileInput.value = '';
+          } catch (error) {
+            console.error('Upload profile image error:', error);
+            showToast(error.message || 'Failed to upload profile image.', 'error');
+          } finally {
+            setLoading('saveProfileBtn', false);
+          }
+        }
+      
+        async function saveProfile() {
+          setLoading('saveProfileBtn', true);
+          const name = document.getElementById('profileName').value.trim();
+          if (!name) {
+            showToast('Please enter a valid name.', 'error');
+            setLoading('saveProfileBtn', false);
+            return;
+          }
+          try {
+            const token = localStorage.getItem('token');
+            if (!token) throw new Error('Session expired. Please log in.');
+            const response = await fetch(`${BASE_URL}/api/admin/profile`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify({ name })
+            });
+            if (response.status === 401 || response.status === 403) {
+              throw new Error('Unauthorized access. Please log in.');
+            }
+            if (!response.ok) {
+              const errorData = await response.json().catch(() => ({}));
+              throw new Error(errorData.message || 'Failed to update profile.');
+            }
+            showToast('Profile updated successfully!', 'success');
+            fetchAdminData();
+          } catch (error) {
+            console.error('Save profile error:', error);
+            showToast(error.message || 'Failed to update profile.', 'error');
+          } finally {
+            setLoading('saveProfileBtn', false);
+          }
+        }
+      
+        function logout() {
+          localStorage.removeItem('token');
+          showToast('Logged out successfully!', 'success');
+          setTimeout(() => window.location.href = '/admin', 1000);
+        }
+      
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+          fetchAdminData();
+          showSection('dashboard');
+          // Event listeners for search inputs
+          document.getElementById('searchCustomers').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') fetchCustomers();
+          });
+          document.getElementById('searchOrders').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') fetchOrders();
+          });
+          document.getElementById('orderStatusFilter').addEventListener('change', fetchOrders);
+        });
+      </script>
+    </body>
+    </html>

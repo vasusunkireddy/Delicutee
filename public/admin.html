@@ -189,7 +189,8 @@
                     </span>
                 </div>
                 <p class="text-xs sm:text-sm text-gray-300 text-center">By signing up, you agree to our <a href="terms.html" class="text-yellow-500 hover:underline">Terms and Conditions</a>.</p>
-                <button onclick="adminSignup()" class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition duration-200 text-sm sm:text-base font-semibold">Sign Up</button>
+                <button onclick="adminSignup()" class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bgრ�
+                    bg-yellow-600 transition duration-200 text-sm sm:text-base font-semibold">Sign Up</button>
             </div>
             <button onclick="closeModal('adminSignupModal')" class="mt-4 text-gray-300 hover:text-yellow-500 w-full text-center text-sm sm:text-base">Close</button>
         </div>
@@ -240,7 +241,7 @@
     </footer>
 
     <script>
-        // API base URL (replace with your Render domain in production)
+        // API base URL
         const API_BASE_URL = window.location.hostname.includes('localhost') ? 'http://localhost:3000/api/admin' : 'https://your-render-domain.com/api/admin';
 
         // Toast notification
@@ -262,18 +263,18 @@
             return emailRegex.test(email);
         }
 
-        // Validate name (at least 2 characters, no special characters)
+        // Validate name
         function isValidName(name) {
             const nameRegex = /^[a-zA-Z\s]{2,}$/;
             return nameRegex.test(name);
         }
 
-        // Validate password (at least 6 characters)
+        // Validate password
         function isValidPassword(password) {
             return password.length >= 6;
         }
 
-        // Validate OTP (6-digit number)
+        // Validate OTP
         function isValidOTP(otp) {
             return otp.length === 6 && /^\d+$/.test(otp);
         }
@@ -392,7 +393,7 @@
                 const response = await fetchWithRetry(`${API_BASE_URL}/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ input: email, password })
+                    body: JSON.stringify({ email, password })
                 });
                 const data = await response.json();
                 console.log('Login response:', data);
@@ -403,11 +404,8 @@
                         window.location.href = '/admindashboard.html';
                     }, 1000);
                 } else {
-                    if (data.message.includes('blocked')) {
-                        showToast('Your account is blocked by admin due to security reasons.', 'error');
-                    } else {
-                        showToast(data.message || 'Login failed. Please try again.', 'error');
-                    }
+                    const errorMessage = data.message || (data.errors && data.errors[0]?.msg) || 'Login failed. Please try again.';
+                    showToast(errorMessage, 'error');
                 }
             } catch (error) {
                 console.error('Login error:', error);
@@ -447,7 +445,7 @@
                 const response = await fetchWithRetry(`${API_BASE_URL}/signup`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, phone: email, password }) // Using email as phone for admin signup
+                    body: JSON.stringify({ name, email, password })
                 });
                 const data = await response.json();
                 console.log('Signup response:', data);
@@ -456,7 +454,8 @@
                     closeModal('adminSignupModal');
                     setTimeout(() => showModal('adminLoginModal'), 1000);
                 } else {
-                    showToast(data.message || 'Signup failed. Please try again.', 'error');
+                    const errorMessage = data.message || (data.errors && data.errors[0]?.msg) || 'Signup failed. Please try again.';
+                    showToast(errorMessage, 'error');
                 }
             } catch (error) {
                 console.error('Signup error:', error);
@@ -490,7 +489,8 @@
                     document.getElementById('forgotPasswordStep1').classList.add('hidden');
                     document.getElementById('forgotPasswordStep2').classList.remove('hidden');
                 } else {
-                    showToast(data.message || 'Failed to send OTP. Please try again.', 'error');
+                    const errorMessage = data.message || (data.errors && data.errors[0]?.msg) || 'Failed to send OTP. Please try again.';
+                    showToast(errorMessage, 'error');
                 }
             } catch (error) {
                 console.error('Send OTP error:', error);
@@ -531,7 +531,8 @@
                     document.getElementById('resetPasswordBtn').classList.remove('hidden');
                     document.getElementById('otpInput').parentElement.classList.add('hidden');
                 } else {
-                    showToast(data.message || 'Invalid OTP. Please try again.', 'error');
+                    const errorMessage = data.message || (data.errors && data.errors[0]?.msg) || 'Invalid OTP. Please try again.';
+                    showToast(errorMessage, 'error');
                 }
             } catch (error) {
                 console.error('Verify OTP error:', error);
@@ -580,7 +581,8 @@
                     closeModal('forgotPasswordModal');
                     setTimeout(() => showModal('adminLoginModal'), 1000);
                 } else {
-                    showToast(data.message || 'Failed to reset password. Please try again.', 'error');
+                    const errorMessage = data.message || (data.errors && data.errors[0]?.msg) || 'Failed to reset password. Please try again.';
+                    showToast(errorMessage, 'error');
                 }
             } catch (error) {
                 console.error('Reset password error:', error);
@@ -608,7 +610,8 @@
                     statusElement.classList.remove('text-green-400', 'text-red-400');
                     statusElement.classList.add(data.status === 'open' ? 'text-green-400' : 'text-red-400');
                 } else {
-                    throw new Error(data.message || 'Failed to fetch status');
+                    const errorMessage = data.message || (data.errors && data.errors[0]?.msg) || 'Failed to fetch status';
+                    throw new Error(errorMessage);
                 }
             } catch (error) {
                 console.error(`Restaurant status error (attempt ${attempt}):`, error);
@@ -630,9 +633,7 @@
                 })
                     .then(response => response.json())
                     .then(data => {
-                        if (response.ok) {
-                            window.location.href = '/admindashboard.html';
-                        } else {
+                        if (!response.ok) {
                             localStorage.removeItem('token');
                         }
                     })

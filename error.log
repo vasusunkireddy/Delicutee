@@ -187,3 +187,171 @@
 {"error":"Unknown column 'active' in 'where clause'","ip":"::1","level":"error","message":"Error fetching addresses","timestamp":"2025-06-28T05:51:13.393Z","url":"/addresses","userId":1}
 {"error":"Unknown column 'mi.active' in 'where clause'","ip":"::1","level":"error","message":"Error fetching cart","timestamp":"2025-06-28T05:51:13.890Z","url":"/cart","userId":1}
 {"error":"Unknown column 'mi.active' in 'where clause'","ip":"::1","level":"error","message":"Error fetching cart","timestamp":"2025-06-28T05:51:13.996Z","url":"/cart","userId":1}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch orders count error:","timestamp":"2025-06-30T17:49:24.093Z","userId":5}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch active orders error:","timestamp":"2025-06-30T17:49:24.111Z","userId":5}
+{"error":"Unknown column 'createdAt' in 'field list'","level":"error","message":"Fetch order history error:","timestamp":"2025-06-30T17:49:24.160Z","userId":5}
+{"addressId":"6","error":"Unknown column 'userId' in 'field list'","level":"error","message":"Place order error:","timestamp":"2025-06-30T17:50:16.234Z","userId":5}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch orders count error:","timestamp":"2025-06-30T17:53:31.405Z","userId":10}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch active orders error:","timestamp":"2025-06-30T17:53:31.460Z","userId":10}
+{"error":"Unknown column 'createdAt' in 'field list'","level":"error","message":"Fetch order history error:","timestamp":"2025-06-30T17:53:31.466Z","userId":10}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch orders count error:","timestamp":"2025-06-30T17:56:33.858Z","userId":10}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch active orders error:","timestamp":"2025-06-30T17:56:33.896Z","userId":10}
+{"error":"Unknown column 'createdAt' in 'field list'","level":"error","message":"Fetch order history error:","timestamp":"2025-06-30T17:56:33.898Z","userId":10}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch orders count error:","timestamp":"2025-07-01T07:22:39.916Z","userId":2}
+{"error":"Unknown column 'createdAt' in 'field list'","level":"error","message":"Fetch order history error:","timestamp":"2025-07-01T07:22:40.037Z","userId":2}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch active orders error:","timestamp":"2025-07-01T07:22:40.159Z","userId":2}
+{"addressId":"5","error":"Unknown column 'userId' in 'field list'","level":"error","message":"Place order error:","timestamp":"2025-07-01T07:24:47.373Z","userId":2}
+{"addressId":"5","error":"Field 'user_id' doesn't have a default value","level":"error","message":"Place order error:","timestamp":"2025-07-01T07:28:43.024Z","userId":2}
+{"addressId":"5","error":"Cannot add or update a child row: a foreign key constraint fails (`delicute`.`orders`, CONSTRAINT `fk_orders_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`))","level":"error","message":"Place order error:","timestamp":"2025-07-01T07:29:55.451Z","userId":2}
+{"error":"Unknown column 'isDeleted' in 'where clause'","level":"error","message":"Fetch coupons error:","timestamp":"2025-07-01T08:11:02.154Z","userId":2}
+{"error":"Unknown column 'm.isDeleted' in 'where clause'","level":"error","message":"Fetch cart error:","timestamp":"2025-07-01T08:11:02.172Z","userId":2}
+{"error":"Unknown column 'isDeleted' in 'where clause'","level":"error","message":"Fetch menu error:","timestamp":"2025-07-01T08:11:02.182Z","userId":2}
+{"error":"Unknown column 'm.isDeleted' in 'where clause'","level":"error","message":"Fetch favourites error:","timestamp":"2025-07-01T08:11:02.194Z","userId":2}
+{"error":"Unknown column 'm.isDeleted' in 'where clause'","level":"error","message":"Fetch active orders error:","timestamp":"2025-07-01T08:11:02.217Z","userId":2}
+{"error":"Unknown column 'm.isDeleted' in 'where clause'","level":"error","message":"Fetch order history error:","timestamp":"2025-07-01T08:11:02.222Z","userId":2}
+{"error":"Unknown column 'isDeleted' in 'where clause'","level":"error","message":"Fetch menu error:","timestamp":"2025-07-01T08:11:12.123Z","userId":2}
+{"error":"Unknown column 'isDeleted' in 'where clause'","level":"error","message":"Fetch coupons error:","timestamp":"2025-07-01T08:11:12.133Z","userId":2}
+{"error":"Unknown column 'm.isDeleted' in 'where clause'","level":"error","message":"Fetch cart error:","timestamp":"2025-07-01T08:11:12.138Z","userId":2}
+{"error":"Unknown column 'm.isDeleted' in 'where clause'","level":"error","message":"Fetch favourites error:","timestamp":"2025-07-01T08:11:12.160Z","userId":2}
+{"error":"Unknown column 'm.isDeleted' in 'where clause'","level":"error","message":"Fetch active orders error:","timestamp":"2025-07-01T08:11:12.166Z","userId":2}
+{"error":"Unknown column 'm.isDeleted' in 'where clause'","level":"error","message":"Fetch order history error:","timestamp":"2025-07-01T08:11:12.172Z","userId":2}
+{"error":"Unknown column 'isDeleted' in 'where clause'","level":"error","message":"Fetch menu error:","timestamp":"2025-07-01T08:12:18.126Z","userId":8}
+{"error":"Unknown column 'm.isDeleted' in 'where clause'","level":"error","message":"Fetch cart error:","timestamp":"2025-07-01T08:12:18.127Z","userId":8}
+{"error":"Unknown column 'isDeleted' in 'where clause'","level":"error","message":"Fetch coupons error:","timestamp":"2025-07-01T08:12:18.129Z","userId":8}
+{"error":"Unknown column 'm.isDeleted' in 'where clause'","level":"error","message":"Fetch favourites error:","timestamp":"2025-07-01T08:12:18.145Z","userId":8}
+{"error":"Unknown column 'isDeleted' in 'where clause'","level":"error","message":"Fetch coupons error:","timestamp":"2025-07-01T08:12:22.056Z","userId":8}
+{"error":"Unknown column 'isDeleted' in 'where clause'","level":"error","message":"Fetch menu error:","timestamp":"2025-07-01T08:12:22.057Z","userId":8}
+{"error":"Unknown column 'm.isDeleted' in 'where clause'","level":"error","message":"Fetch cart error:","timestamp":"2025-07-01T08:12:22.060Z","userId":8}
+{"error":"Unknown column 'm.isDeleted' in 'where clause'","level":"error","message":"Fetch favourites error:","timestamp":"2025-07-01T08:12:22.077Z","userId":8}
+{"error":"Unknown column 'm.isDeleted' in 'where clause'","level":"error","message":"Fetch cart error:","timestamp":"2025-07-01T08:13:51.419Z","userId":8}
+{"error":"Unknown column 'isDeleted' in 'where clause'","level":"error","message":"Fetch menu error:","timestamp":"2025-07-01T08:13:51.428Z","userId":8}
+{"error":"Unknown column 'm.isDeleted' in 'where clause'","level":"error","message":"Fetch favourites error:","timestamp":"2025-07-01T08:13:51.433Z","userId":8}
+{"couponCode":"WELCOME10","error":"Unknown column 'm.isDeleted' in 'where clause'","level":"error","message":"Apply coupon error:","timestamp":"2025-07-01T08:15:54.060Z","userId":8}
+{"couponCode":"DELICUTE10","error":"Unknown column 'm.isDeleted' in 'where clause'","level":"error","message":"Apply coupon error:","timestamp":"2025-07-01T08:15:56.983Z","userId":8}
+{"error":"Unknown column 'o.updatedAt' in 'field list'","level":"error","message":"Fetch active orders error:","timestamp":"2025-07-01T11:00:19.356Z","userId":8}
+{"error":"Unknown column 'o.updatedAt' in 'field list'","level":"error","message":"Fetch order history error:","timestamp":"2025-07-01T11:00:19.396Z","userId":8}
+{"error":"Unknown column 'o.updatedAt' in 'field list'","level":"error","message":"Fetch active orders error:","timestamp":"2025-07-01T11:00:39.297Z","userId":2}
+{"error":"Unknown column 'o.updatedAt' in 'field list'","level":"error","message":"Fetch order history error:","timestamp":"2025-07-01T11:00:39.741Z","userId":2}
+{"error":"Unknown column 'o.updatedAt' in 'field list'","level":"error","message":"Fetch active orders error:","timestamp":"2025-07-01T11:00:46.212Z","userId":2}
+{"error":"Unknown column 'o.updatedAt' in 'field list'","level":"error","message":"Fetch order history error:","timestamp":"2025-07-01T11:00:46.215Z","userId":2}
+{"error":"Unknown column 'o.updatedAt' in 'field list'","level":"error","message":"Fetch order history error:","timestamp":"2025-07-01T11:00:54.197Z","userId":2}
+{"error":"Unknown column 'o.updatedAt' in 'field list'","level":"error","message":"Fetch active orders error:","timestamp":"2025-07-01T11:01:15.761Z","userId":2}
+{"error":"Unknown column 'o.updatedAt' in 'field list'","level":"error","message":"Fetch active orders error:","timestamp":"2025-07-01T11:01:33.013Z","userId":2}
+{"error":"Unknown column 'o.updatedAt' in 'field list'","level":"error","message":"Fetch order history error:","timestamp":"2025-07-01T11:01:33.030Z","userId":2}
+{"error":"jwt malformed","level":"error","message":"Token verification error:","timestamp":"2025-07-01T11:23:29.927Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error:","timestamp":"2025-07-01T11:23:29.978Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error:","timestamp":"2025-07-01T11:23:29.985Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error:","timestamp":"2025-07-01T11:23:30.017Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error:","timestamp":"2025-07-01T11:23:30.026Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error:","timestamp":"2025-07-01T11:23:30.040Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error:","timestamp":"2025-07-01T11:23:30.047Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error:","timestamp":"2025-07-01T11:23:30.065Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error:","timestamp":"2025-07-01T11:23:30.075Z"}
+{"error":"Unknown column 'profileImage' in 'field list'","level":"error","message":"Fetch user error","timestamp":"2025-07-01T12:33:35.986Z","userId":2}
+{"error":"Table 'delicute.cart' doesn't exist","level":"error","message":"Fetch cart error","timestamp":"2025-07-01T12:33:36.015Z","userId":2}
+{"error":"Table 'delicute.favourites' doesn't exist","level":"error","message":"Fetch favourites error","timestamp":"2025-07-01T12:33:36.031Z","userId":2}
+{"error":"Unknown column 'active' in 'where clause'","level":"error","message":"Fetch coupons error","timestamp":"2025-07-01T12:33:36.037Z","userId":2}
+{"error":"Table 'delicute.addresses' doesn't exist","level":"error","message":"Fetch addresses error","timestamp":"2025-07-01T12:33:36.047Z","userId":2}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch active orders error","timestamp":"2025-07-01T12:33:36.050Z","userId":2}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch order history error","timestamp":"2025-07-01T12:33:36.054Z","userId":2}
+{"error":"Unknown column 'profileImage' in 'field list'","level":"error","message":"Fetch user error","timestamp":"2025-07-01T12:38:22.564Z","userId":1}
+{"error":"Unknown column 'c.itemId' in 'field list'","level":"error","message":"Fetch cart error","timestamp":"2025-07-01T12:38:22.584Z","userId":1}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch addresses error","timestamp":"2025-07-01T12:38:22.622Z","userId":1}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch orders count error","timestamp":"2025-07-01T12:38:22.629Z","userId":1}
+{"error":"Unknown column 'f.userId' in 'where clause'","level":"error","message":"Fetch favourites error","timestamp":"2025-07-01T12:38:22.634Z","userId":1}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch coupons error","timestamp":"2025-07-01T12:38:22.650Z","userId":1}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch active orders error","timestamp":"2025-07-01T12:38:22.652Z","userId":1}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch order history error","timestamp":"2025-07-01T12:38:22.654Z","userId":1}
+{"error":"Unknown column 'profileImage' in 'field list'","level":"error","message":"Fetch user error","timestamp":"2025-07-01T12:39:46.063Z","userId":1}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch orders count error","timestamp":"2025-07-01T12:39:46.192Z","userId":1}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch addresses error","timestamp":"2025-07-01T12:39:46.195Z","userId":1}
+{"error":"Unknown column 'c.itemId' in 'field list'","level":"error","message":"Fetch cart error","timestamp":"2025-07-01T12:39:46.204Z","userId":1}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch coupons error","timestamp":"2025-07-01T12:39:46.248Z","userId":1}
+{"error":"Unknown column 'f.userId' in 'where clause'","level":"error","message":"Fetch favourites error","timestamp":"2025-07-01T12:39:46.272Z","userId":1}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch active orders error","timestamp":"2025-07-01T12:39:46.394Z","userId":1}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch order history error","timestamp":"2025-07-01T12:39:46.458Z","userId":1}
+{"error":"Unknown column 'googleUser' in 'field list'","level":"error","message":"Fetch user error","timestamp":"2025-07-01T12:41:13.699Z","userId":1}
+{"error":"Unknown column 'c.couponId' in 'field list'","level":"error","message":"Fetch cart error","timestamp":"2025-07-01T12:41:13.721Z","userId":1}
+{"error":"Unknown column 'f.itemId' in 'on clause'","level":"error","message":"Fetch favourites error","timestamp":"2025-07-01T12:41:13.723Z","userId":1}
+{"addressId":"1","error":"Unknown column 'addressId' in 'field list'","level":"error","message":"Place order error","timestamp":"2025-07-01T12:50:03.762Z","userId":2}
+{"addressId":"1","error":"Unknown column 'couponId' in 'field list'","level":"error","message":"Place order error","timestamp":"2025-07-01T12:50:49.448Z","userId":2}
+{"addressId":"1","error":"Field 'address_id' doesn't have a default value","level":"error","message":"Place order error","timestamp":"2025-07-01T12:51:21.427Z","userId":2}
+{"addressId":"1","error":"Unknown column 'orderId' in 'field list'","level":"error","message":"Place order error","timestamp":"2025-07-01T12:51:59.118Z","userId":2}
+{"addressId":"1","error":"Unknown column 'addressId' in 'field list'","level":"error","message":"Place order error","timestamp":"2025-07-01T12:53:02.553Z","userId":2}
+{"addressId":"1","error":"Unknown column 'createdAt' in 'field list'","level":"error","message":"Place order error","timestamp":"2025-07-01T12:54:15.195Z","userId":2}
+{"addressId":"1","error":"Unknown column 'orderId' in 'field list'","level":"error","message":"Place order error","timestamp":"2025-07-01T12:56:09.643Z","userId":2}
+{"addressId":"1","error":"Unknown column 'orderId' in 'field list'","level":"error","message":"Place order error","timestamp":"2025-07-01T12:57:20.151Z","userId":2}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/user","timestamp":"2025-07-01T13:18:38.527Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/orders/count","timestamp":"2025-07-01T13:18:38.535Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/menu","timestamp":"2025-07-01T13:18:38.542Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/coupons","timestamp":"2025-07-01T13:18:38.544Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/cart","timestamp":"2025-07-01T13:18:38.547Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/favourites","timestamp":"2025-07-01T13:18:38.552Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/orders/active","timestamp":"2025-07-01T13:18:38.554Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/orders/history","timestamp":"2025-07-01T13:18:38.558Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/addresses","timestamp":"2025-07-01T13:18:38.561Z"}
+{"error":"Unknown column 'profileImage' in 'field list'","level":"error","message":"Fetch user error","timestamp":"2025-07-01T13:22:04.857Z","userId":1}
+{"error":"Unknown column 'active' in 'where clause'","level":"error","message":"Fetch menu error","timestamp":"2025-07-01T13:22:04.882Z","userId":1}
+{"error":"Unknown column 'c.itemId' in 'field list'","level":"error","message":"Fetch cart error","timestamp":"2025-07-01T13:22:04.895Z","userId":1}
+{"error":"Unknown column 'active' in 'where clause'","level":"error","message":"Fetch coupons error","timestamp":"2025-07-01T13:22:04.916Z","userId":1}
+{"error":"Unknown column 'f.userId' in 'where clause'","level":"error","message":"Fetch favourites error","timestamp":"2025-07-01T13:22:04.919Z","userId":1}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch addresses error","timestamp":"2025-07-01T13:22:04.921Z","userId":1}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch orders count error","timestamp":"2025-07-01T13:22:04.922Z","userId":1}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch active orders error","timestamp":"2025-07-01T13:22:04.924Z","userId":1}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch order history error","timestamp":"2025-07-01T13:22:04.940Z","userId":1}
+{"error":"Unknown column 'profileImage' in 'field list'","level":"error","message":"Fetch user error","timestamp":"2025-07-01T13:33:38.037Z","userId":1}
+{"error":"Unknown column 'active' in 'where clause'","level":"error","message":"Fetch coupons error","timestamp":"2025-07-01T13:33:38.052Z","userId":1}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch orders count error","timestamp":"2025-07-01T13:33:38.062Z","userId":1}
+{"error":"Unknown column 'active' in 'where clause'","level":"error","message":"Fetch menu error","timestamp":"2025-07-01T13:33:38.068Z","userId":1}
+{"error":"Unknown column 'f.userId' in 'where clause'","level":"error","message":"Fetch favourites error","timestamp":"2025-07-01T13:33:38.085Z","userId":1}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch addresses error","timestamp":"2025-07-01T13:33:38.087Z","userId":1}
+{"error":"Unknown column 'c.itemId' in 'field list'","level":"error","message":"Fetch cart error","timestamp":"2025-07-01T13:33:38.088Z","userId":1}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch active orders error","timestamp":"2025-07-01T13:33:38.090Z","userId":1}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch order history error","timestamp":"2025-07-01T13:33:38.101Z","userId":1}
+{"error":"Unknown column 'profileImage' in 'field list'","level":"error","message":"Fetch user error","timestamp":"2025-07-01T13:35:36.378Z","userId":1}
+{"error":"Unknown column 'active' in 'where clause'","level":"error","message":"Fetch coupons error","timestamp":"2025-07-01T13:35:36.392Z","userId":1}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch orders count error","timestamp":"2025-07-01T13:35:36.409Z","userId":1}
+{"error":"Unknown column 'c.itemId' in 'field list'","level":"error","message":"Fetch cart error","timestamp":"2025-07-01T13:35:36.412Z","userId":1}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch addresses error","timestamp":"2025-07-01T13:35:36.419Z","userId":1}
+{"error":"Unknown column 'f.userId' in 'where clause'","level":"error","message":"Fetch favourites error","timestamp":"2025-07-01T13:35:36.424Z","userId":1}
+{"error":"Unknown column 'active' in 'where clause'","level":"error","message":"Fetch menu error","timestamp":"2025-07-01T13:35:36.438Z","userId":1}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch active orders error","timestamp":"2025-07-01T13:35:36.444Z","userId":1}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch order history error","timestamp":"2025-07-01T13:35:36.447Z","userId":1}
+{"error":"Unknown column 'profileImage' in 'field list'","level":"error","message":"Fetch user error","timestamp":"2025-07-01T13:52:21.083Z","userId":1}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch orders count error","timestamp":"2025-07-01T13:52:21.105Z","userId":1}
+{"error":"Unknown column 'active' in 'where clause'","level":"error","message":"Fetch coupons error","timestamp":"2025-07-01T13:52:21.123Z","userId":1}
+{"error":"Unknown column 'active' in 'where clause'","level":"error","message":"Fetch menu error","timestamp":"2025-07-01T13:52:21.165Z","userId":1}
+{"error":"Unknown column 'c.itemId' in 'field list'","level":"error","message":"Fetch cart error","timestamp":"2025-07-01T13:52:21.171Z","userId":1}
+{"error":"Unknown column 'f.userId' in 'where clause'","level":"error","message":"Fetch favourites error","timestamp":"2025-07-01T13:52:21.176Z","userId":1}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch active orders error","timestamp":"2025-07-01T13:52:21.182Z","userId":1}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch addresses error","timestamp":"2025-07-01T13:52:21.185Z","userId":1}
+{"error":"Unknown column 'o.createdAt' in 'field list'","level":"error","message":"Fetch order history error","timestamp":"2025-07-01T13:52:21.203Z","userId":1}
+{"error":"Unknown column 'googleUser' in 'field list'","level":"error","message":"Fetch user error","timestamp":"2025-07-01T13:56:49.557Z","userId":1}
+{"error":"Unknown column 'userId' in 'where clause'","level":"error","message":"Fetch coupons error","timestamp":"2025-07-01T13:56:49.591Z","userId":1}
+{"error":"Unknown column 'f.itemId' in 'on clause'","level":"error","message":"Fetch favourites error","timestamp":"2025-07-01T13:56:49.774Z","userId":1}
+{"error":"Unknown column 'c.itemId' in 'field list'","level":"error","message":"Fetch cart error","timestamp":"2025-07-01T13:56:49.831Z","userId":1}
+{"error":"Unknown column 'c.couponId' in 'field list'","level":"error","message":"Fetch cart error","timestamp":"2025-07-01T13:58:47.211Z","userId":1}
+{"error":"Unknown column 'userId' in 'where clause'","itemId":"1","level":"error","message":"Add to cart error","timestamp":"2025-07-01T13:59:00.557Z","userId":1}
+{"error":"Field 'user_id' doesn't have a default value","level":"error","message":"Add address error","timestamp":"2025-07-01T14:00:52.629Z","userId":1}
+{"addressId":"2","error":"Unknown column 'addressId' in 'field list'","level":"error","message":"Place order error","timestamp":"2025-07-01T14:01:54.140Z","userId":1}
+{"addressId":"2","error":"Unknown column 'couponId' in 'field list'","level":"error","message":"Place order error","timestamp":"2025-07-01T14:02:38.964Z","userId":1}
+{"addressId":"2","error":"Field 'user_id' doesn't have a default value","level":"error","message":"Place order error","timestamp":"2025-07-01T14:03:27.275Z","userId":1}
+{"addressId":"2","error":"Field 'user_id' doesn't have a default value","level":"error","message":"Place order error","timestamp":"2025-07-01T14:05:13.596Z","userId":1}
+{"addressId":"2","error":"Field 'user_id' doesn't have a default value","level":"error","message":"Place order error","timestamp":"2025-07-01T14:12:50.544Z","userId":1}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/user","timestamp":"2025-07-01T14:18:08.945Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/orders/count","timestamp":"2025-07-01T14:18:08.984Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/menu","timestamp":"2025-07-01T14:18:09.006Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/favourites","timestamp":"2025-07-01T14:18:09.051Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/orders/active","timestamp":"2025-07-01T14:18:09.079Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/cart","timestamp":"2025-07-01T14:18:09.096Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/addresses","timestamp":"2025-07-01T14:18:09.106Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/orders/history","timestamp":"2025-07-01T14:18:09.118Z"}
+{"error":"jwt malformed","level":"error","message":"Token verification error","path":"/coupons","timestamp":"2025-07-01T14:18:09.125Z"}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'c.user_id' in 'where clause'","sqlMessage":"Unknown column 'c.user_id' in 'where clause'","timestamp":"2025-07-01T14:20:34.002Z"}
+{"error":"Unknown column 'c.user_id' in 'where clause'","level":"error","message":"Fetch cart error","sqlMessage":"Unknown column 'c.user_id' in 'where clause'","timestamp":"2025-07-01T14:20:34.003Z","user_id":1}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'c.user_id' in 'where clause'","sqlMessage":"Unknown column 'c.user_id' in 'where clause'","timestamp":"2025-07-01T14:20:46.859Z"}
+{"couponCode":"DELICUTE10","error":"Unknown column 'c.user_id' in 'where clause'","level":"error","message":"Apply coupon error","sqlMessage":"Unknown column 'c.user_id' in 'where clause'","timestamp":"2025-07-01T14:20:46.860Z","user_id":1}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'user_id' in 'where clause'","sqlMessage":"Unknown column 'user_id' in 'where clause'","timestamp":"2025-07-01T14:20:48.591Z"}
+{"error":"Unknown column 'user_id' in 'where clause'","itemId":"1","level":"error","message":"Add to cart error","sqlMessage":"Unknown column 'user_id' in 'where clause'","timestamp":"2025-07-01T14:20:48.593Z","user_id":1}
+{"code":"ER_NO_DEFAULT_FOR_FIELD","errno":1364,"level":"error","message":"Database operation failed (attempt 1/3): Field 'userId' doesn't have a default value","sqlMessage":"Field 'userId' doesn't have a default value","timestamp":"2025-07-01T14:21:48.478Z"}
+{"addressId":"1","error":"Field 'userId' doesn't have a default value","level":"error","message":"Place order error","sqlMessage":"Field 'userId' doesn't have a default value","timestamp":"2025-07-01T14:21:48.480Z","user_id":1}
