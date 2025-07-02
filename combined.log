@@ -3130,3 +3130,25 @@
 {"count":0,"level":"info","message":"Fetched active orders for user: 6","timestamp":"2025-07-02T08:15:28.988Z","user_id":6}
 {"count":0,"level":"info","message":"Fetched order history for user: 6","timestamp":"2025-07-02T08:15:28.994Z","user_id":6}
 {"count":1,"level":"info","message":"Fetched coupons for user: 6","timestamp":"2025-07-02T08:15:29.008Z","user_id":6}
+{"level":"info","message":"Fetched user data for ID: 5","timestamp":"2025-07-02T15:20:45.182Z","user_id":5}
+{"count":2,"level":"info","message":"Fetched order count for user: 5","timestamp":"2025-07-02T15:20:45.232Z","user_id":5}
+{"count":1,"level":"info","message":"Fetched addresses for user: 5","timestamp":"2025-07-02T15:20:45.292Z","user_id":5}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 5","timestamp":"2025-07-02T15:20:45.299Z","user_id":5}
+{"count":1,"level":"info","message":"Fetched coupons for user: 5","timestamp":"2025-07-02T15:20:45.305Z","user_id":5}
+{"count":6,"level":"info","message":"Fetched menu items for user: 5","timestamp":"2025-07-02T15:20:45.311Z","user_id":5}
+{"count":0,"level":"info","message":"Fetched favourites for user: 5","timestamp":"2025-07-02T15:20:45.325Z","user_id":5}
+{"count":1,"level":"info","message":"Fetched active orders for user: 5","timestamp":"2025-07-02T15:20:45.374Z","user_id":5}
+{"count":2,"level":"info","message":"Fetched order history for user: 5","timestamp":"2025-07-02T15:20:45.395Z","user_id":5}
+{"count":1,"level":"info","message":"Fetched coupons for user: 5","timestamp":"2025-07-02T15:20:45.415Z","user_id":5}
+{"level":"info","message":"Added item to favourites: 7","timestamp":"2025-07-02T15:21:09.236Z","user_id":5}
+{"count":1,"level":"info","message":"Fetched favourites for user: 5","timestamp":"2025-07-02T15:21:09.271Z","user_id":5}
+{"count":6,"level":"info","message":"Fetched menu items for user: 5","timestamp":"2025-07-02T15:21:09.286Z","user_id":5}
+{"count":6,"level":"info","message":"Fetched menu items for user: 5","timestamp":"2025-07-02T15:21:18.812Z","user_id":5}
+{"count":6,"level":"info","message":"Fetched menu items for user: 5","timestamp":"2025-07-02T15:21:19.113Z","user_id":5}
+{"count":6,"level":"info","message":"Fetched menu items for user: 5","timestamp":"2025-07-02T15:21:19.943Z","user_id":5}
+{"count":6,"level":"info","message":"Fetched menu items for user: 5","timestamp":"2025-07-02T15:21:20.138Z","user_id":5}
+{"count":6,"level":"info","message":"Fetched menu items for user: 5","timestamp":"2025-07-02T15:21:24.882Z","user_id":5}
+{"count":6,"level":"info","message":"Fetched menu items for user: 5","timestamp":"2025-07-02T15:21:28.651Z","user_id":5}
+{"level":"info","message":"Removed item from favourites: 7","timestamp":"2025-07-02T15:22:03.916Z","user_id":5}
+{"count":0,"level":"info","message":"Fetched favourites for user: 5","timestamp":"2025-07-02T15:22:03.947Z","user_id":5}
+{"count":6,"level":"info","message":"Fetched menu items for user: 5","timestamp":"2025-07-02T15:22:03.962Z","user_id":5}
