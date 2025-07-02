@@ -66,12 +66,41 @@
     }
     .profile-dropdown-hidden { max-height: 0; opacity: 0; }
     .profile-dropdown-visible { max-height: 500px; opacity: 1; }
-    .small-btn {
-      padding: 0.5rem 1rem;
+    .btn {
+      padding: 0.75rem 1.5rem;
       font-size: 0.875rem;
-      line-height: 1.5;
-      border-radius: 8SSSSpx;
+      font-weight: 500;
+      border-radius: 8px;
       transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .btn-primary {
+      background-color: #f59e0b;
+      color: white;
+    }
+    .btn-primary:hover {
+      background-color: #d97706;
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background-color: #6b7280;
+      color: white;
+    }
+    .btn-secondary:hover {
+      background-color: #4b5563;
+      transform: translateY(-1px);
+    }
+    .btn-danger {
+      background-color: #ef4444;
+      color: white;
+    }
+    .btn-danger:hover {
+      background-color: #dc2626;
+      transform: translateY(-1px);
+    }
+    .btn-small {
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
     }
     .profile-img {
       object-fit: cover;
@@ -87,6 +116,7 @@
       font-size: 1rem;
       border-radius: 8px;
       background-color: rgba(243, 244, 246, 0.9);
+      border: 1px solid #d1d5db;
     }
     .table-container {
       overflow-x: auto;
@@ -133,6 +163,7 @@
       .profile-img-profile { width: 5rem; height: 5rem; }
       .input-field, select { padding: 0.75rem; font-size: 1rem; }
       th, td { padding: 0.5rem; font-size: 0.875rem; }
+      .btn { padding: 0.5rem 1rem; font-size: 0.75rem; }
     }
     @media (min-width: 641px) {
       .profile-img-nav { width: 3rem; height: 3rem; }
@@ -210,7 +241,7 @@
           <h2 class="text-2xl font-bold mb-4 text-gray-800 welcome-animation">Welcome, <span id="welcomeName">Admin</span>!</h2>
           <div class="flex items-center mb-6">
             <h3 class="text-xl font-semibold mr-4">Restaurant Status:</h3>
-            <button id="restaurantStatusBtn" onclick="toggleRestaurantStatus()" class="small-btn text-white hover:bg-opacity-90">Loading...</button>
+            <button id="restaurantStatusBtn" onclick="toggleRestaurantStatus()" class="btn btn-primary">Loading...</button>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
             <div class="bg-gray-100 p-4 rounded-lg shadow-sm">
@@ -271,8 +302,8 @@
               </select>
               <input type="file" id="menuImage" accept="image/*" class="input-field">
               <div class="flex gap-2">
-                <button id="saveMenuBtn" onclick="saveMenuItem()" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Save Item</button>
-                <button id="cancelMenuBtn" onclick="resetMenuForm()" class="bg-gray-500 text-white small-btn hover:bg-gray-600 hidden">Cancel</button>
+                <button id="saveMenuBtn" onclick="saveMenuItem()" class="btn btn-primary">Save Item</button>
+                <button id="cancelMenuBtn" onclick="resetMenuForm()" class="btn btn-secondary hidden">Cancel</button>
               </div>
             </div>
           </div>
@@ -306,8 +337,8 @@
               <input type="number" id="couponDiscount" placeholder="Discount (%)" min="0" max="100" class="input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
               <input type="file" id="couponImage" accept="image/*" class="input-field">
               <div class="flex gap-2">
-                <button id="saveCouponBtn" onclick="saveCoupon()" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Save Coupon</button>
-                <button id="cancelCouponBtn" onclick="resetCouponForm()" class="bg-gray-500 text-white small-btn hover:bg-gray-600 hidden">Cancel</button>
+                <button id="saveCouponBtn" onclick="saveCoupon()" class="btn btn-primary">Save Coupon</button>
+                <button id="cancelCouponBtn" onclick="resetCouponForm()" class="btn btn-secondary hidden">Cancel</button>
               </div>
             </div>
           </div>
@@ -331,10 +362,10 @@
       <!-- Customers Section -->
       <section id="customers" class="section hidden">
         <div class="glass-morphism rounded-xl shadow-lg p-6 mb-6">
-          <h2 class="text-2xl font-bold mb-4 text-gray-800">Users</h2>
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">Users</h2>
           <div class="mb-4 flex items-center gap-2">
             <input type="text" id="searchCustomers" placeholder="Search by name or email..." class="flex-1 input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
-            <button id="searchCustomersBtn" onclick="fetchCustomers()" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Search</button>
+            <button id="searchCustomersBtn" onclick="fetchCustomers()" class="btn btn-primary">Search</button>
           </div>
           <div class="table-container">
             <table>
@@ -368,10 +399,10 @@
               <option value="Delivered">Delivered</option>
               <option value="Refunded">Refunded</option>
             </select>
-            <button id="searchOrdersBtn" onclick="fetchOrders()" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Search</button>
+            <button id="searchOrdersBtn" onclick="fetchOrders()" class="btn btn-primary">Search</button>
           </div>
           <div class="mb-4">
-            <button id="deleteSelectedOrdersBtn" onclick="deleteSelectedOrders()" class="bg-red-500 text-white small-btn hover:bg-red-600">Delete Selected</button>
+            <button id="deleteSelectedOrdersBtn" onclick="deleteSelectedOrders()" class="btn btn-danger">Delete Selected</button>
           </div>
           <div class="table-container">
             <table>
@@ -399,11 +430,11 @@
             <div class="flex justify-center items-center flex-col sm:flex-row gap-4">
               <img id="profilePicture" src="https://placehold.co/100x100?text=Admin" alt="Profile Picture" class="profile-img profile-img-profile rounded-full">
               <input type="file" id="profileImageInput" accept="image/*" class="hidden" onchange="uploadProfileImage()">
-              <button onclick="document.getElementById('profileImageInput').click()" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Change Picture</button>
+              <button onclick="document.getElementById('profileImageInput').click()" class="btn btn-primary">Change Picture</button>
             </div>
             <input type="text" id="profileName" placeholder="Full Name" class="w-full input-field focus:outline-none focus:ring-2 focus:ring-yellow-500">
             <input type="email" id="profileEmail" placeholder="Email" class="w-full input-field focus:outline-none focus:ring-2 focus:ring-yellow-500" disabled>
-            <button id="saveProfileBtn" onclick="saveProfile()" class="w-full bg-yellow-500 text-white small-btn hover:bg-yellow-600">Save Profile</button>
+            <button id="saveProfileBtn" onclick="saveProfile()" class="w-full btn btn-primary">Save Profile</button>
           </div>
         </div>
       </section>
@@ -422,7 +453,7 @@
               <option value="DELIVERED">Delivered</option>
               <option value="CANCELLED">Refunded</option>
             </select>
-            <button id="updateStatusBtn" onclick="updateOrderStatus(state.currentOrderId)" class="w-full bg-blue-500 text-white small-btn hover:bg-blue-600">Update Status</button>
+            <button id="updateStatusBtn" onclick="updateOrderStatus(state.currentOrderId)" class="w-full btn btn-primary">Update Status</button>
           </div>
           <button onclick="closeModal('orderDetailsModal')" class="mt-4 text-gray-600 hover:text-yellow-500 w-full text-center text-sm">Close</button>
         </div>
@@ -691,8 +722,8 @@
               <td>₹${Number(item.price || 0).toFixed(2)}</td>
               <td>${item.category || 'N/A'}</td>
               <td>
-                <button onclick="editMenuItem('${item.id}')" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Edit</button>
-                <button onclick="deleteMenuItem('${item.id}')" class="bg-red-500 text-white small-btn hover:bg-red-600">Delete</button>
+                <button onclick="editMenuItem('${item.id}')" class="btn btn-primary btn-small">Edit</button>
+                <button onclick="deleteMenuItem('${item.id}')" class="btn btn-danger btn-small">Delete</button>
               </td>
             </tr>`).join('') : '<tr><td colspan="6" class="text-center text-gray-600 py-4">No menu items found.</td></tr>';
         } catch (error) {
@@ -788,11 +819,10 @@
 
       async function deleteMenuItem(itemId) {
         if (!confirm('Are you sure you want to permanently delete this menu item? This action cannot be undone.')) return;
-        setLoading('deleteMenuBtn', true);
         try {
           const token = localStorage.getItem('token');
           if (!token) throw new Error('Session expired. Please log in.');
-          const response = await fetch(`${BASE_URL}/api/admin/menu/delete-permanent`, {
+          const response = await fetch(`${BASE_URL}/api/admin/menu/delete`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -810,8 +840,6 @@
         } catch (error) {
           console.error('Delete menu item error:', error);
           showToast(error.message || 'Failed to permanently delete menu item.', 'error');
-        } finally {
-          setLoading('deleteMenuBtn', false);
         }
       }
 
@@ -836,8 +864,8 @@
               <td>${coupon.description || 'N/A'}</td>
               <td>${coupon.discount || 0}%</td>
               <td>
-                <button onclick="editCoupon('${coupon.id}')" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">Edit</button>
-                <button onclick="deleteCoupon('${coupon.id}')" class="bg-red-500 text-white small-btn hover:bg-red-600">Delete</button>
+                <button onclick="editCoupon('${coupon.id}')" class="btn btn-primary btn-small">Edit</button>
+                <button onclick="deleteCoupon('${coupon.id}')" class="btn btn-danger btn-small">Delete</button>
               </td>
             </tr>`).join('') : '<tr><td colspan="5" class="text-center text-gray-600 py-4">No coupons found.</td></tr>';
         } catch (error) {
@@ -930,11 +958,10 @@
 
       async function deleteCoupon(couponId) {
         if (!confirm('Are you sure you want to permanently delete this coupon? This action cannot be undone.')) return;
-        setLoading('deleteCouponBtn', true);
         try {
           const token = localStorage.getItem('token');
           if (!token) throw new Error('Session expired. Please log in.');
-          const response = await fetch(`${BASE_URL}/api/admin/coupons/delete-permanent`, {
+          const response = await fetch(`${BASE_URL}/api/admin/coupons/delete`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -952,8 +979,6 @@
         } catch (error) {
           console.error('Delete coupon error:', error);
           showToast(error.message || 'Failed to permanently delete coupon.', 'error');
-        } finally {
-          setLoading('deleteCouponBtn', false);
         }
       }
 
@@ -981,7 +1006,7 @@
               <td>${customer.phone || 'N/A'}</td>
               <td class="${customer.isBlocked ? 'text-red-600' : 'text-green-600'}">${customer.isBlocked ? 'Blocked' : 'Active'}</td>
               <td>
-                <button onclick="toggleBlockCustomer('${customer.id}', ${customer.isBlocked})" class="bg-${customer.isBlocked ? 'green' : 'red'}-500 text-white small-btn hover:bg-${customer.isBlocked ? 'green' : 'red'}-600">
+                <button onclick="toggleBlockCustomer('${customer.id}', ${customer.isBlocked})" class="btn ${customer.isBlocked ? 'btn-primary' : 'btn-danger'} btn-small">
                   ${customer.isBlocked ? 'Unblock' : 'Block'}
                 </button>
               </td>
@@ -1063,7 +1088,7 @@
               <td>${STATUS_MAP[order.status] || order.status || 'N/A'}</td>
               <td>₹${Number(order.total || 0).toFixed(2)}</td>
               <td>
-                <button onclick="viewOrderDetails('${order.id}')" class="bg-yellow-500 text-white small-btn hover:bg-yellow-600">View</button>
+                <button onclick="viewOrderDetails('${order.id}')" class="btn btn-primary btn-small">View</button>
               </td>
             </tr>`).join('') : '<tr><td colspan="6" class="text-center text-gray-600 py-4">No orders found.</td></tr>';
           state.selectedOrders = [];
@@ -1166,7 +1191,7 @@
             </ul>`;
           const statusSelect = document.getElementById('orderStatusSelect');
           statusSelect.value = data.order.status || 'PLACED';
-          document.getElementById('updateStatusBtn').onclick = () => updateOrderStatus(orderId);
+          document.getElementById('updateStatusBtn').onclick = () => updateOrderStatus(orderId, data.order.userPhone);
           const modal = document.getElementById('orderDetailsModal');
           modal.classList.remove('hidden', 'modal-slide-out');
           modal.classList.add('modal-slide-in');
@@ -1178,7 +1203,35 @@
         }
       }
 
-      async function updateOrderStatus(orderId) {
+      async function sendOrderSMS(orderId, status, phone) {
+        if (!phone) {
+          console.warn('No phone number provided for SMS notification.');
+          return;
+        }
+        try {
+          const token = localStorage.getItem('token');
+          if (!token) throw new Error('Session expired. Please log in.');
+          const response = await fetch(`${BASE_URL}/api/admin/send-sms`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ orderId, status, phone })
+          });
+          if (response.status === 401 || response.status === 403) throw new Error('Unauthorized access. Please log in.');
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || 'Failed to send SMS notification.');
+          }
+          console.log('SMS notification sent successfully.');
+        } catch (error) {
+          console.error('Send SMS error:', error);
+          showToast('Failed to send SMS notification.', 'error');
+        }
+      }
+
+      async function updateOrderStatus(orderId, phone) {
         setLoading('updateStatusBtn', true);
         const status = document.getElementById('orderStatusSelect').value;
         try {
@@ -1198,8 +1251,7 @@
             throw new Error(errorData.message || 'Failed to update order status.');
           }
           showToast('Order status updated!', 'success');
-          // Temporarily disable notification until backend is fixed
-          // await sendOrderNotification(orderId, status, userEmail, userPhone);
+          await sendOrderSMS(orderId, status, phone);
           closeModal('orderDetailsModal');
           fetchOrders();
           fetchRecentOrders();

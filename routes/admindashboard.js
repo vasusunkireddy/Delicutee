@@ -1,24 +1,43 @@
 const express = require('express');
 const router = express.Router();
-const mysql = require('mysql2/promise');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const nodemailer = require('nodemailer');
+const { body, validationResult } = require('express-validator');
 const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
-const { body, validationResult } = require('express-validator');
+const sgMail = require('@sendgrid/mail');
+const twilio = require('twilio');
+const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
 
 dotenv.config();
 
-// Nodemailer transporter
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+// Validate environment variables
+const requiredEnvVars = [
+  'SENDGRID_API_KEY',
+  'EMAIL_USER',
+  'EMAIL_PASS',
+  'TWILIO_ACCOUNT_SID',
+  'TWILIO_AUTH_TOKEN',
+  'TWILIO_PHONE_NUMBER',
+  'JWT_SECRET',
+  'CLOUDINARY_CLOUD_NAME',
+  'CLOUDINARY_API_KEY',
+  'CLOUDINARY_API_SECRET',
+  'SENDGRID_FROM_EMAIL',
+  'CLIENT_URL'
+];
+const missingEnvVars = requiredEnvVars.filter(key => !process.env[key]);
+if (missingEnvVars.length > 0) {
+  console.error('Missing environment variables:', missingEnvVars.join(', '));
+  process.exit(1);
+}
+
+// Initialize SendGrid
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+// Initialize Twilio
+const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 // Configure Cloudinary
 cloudinary.config({
@@ -51,39 +70,6 @@ const handleMulterError = (err, req, res, next) => {
   next();
 };
 
-// Database connection
-async function getDbConnection() {
-  return await mysql.createConnection({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-  });
-}
-
-// Generate OTP
-function generateOTP() {
-  return Math.floor(100000 + Math.random() * 900000).toString();
-}
-
-// Send professional email
-async function sendEmail(to, subject, html) {
-  const mailOptions = {
-    from: `Delicute <${process.env.EMAIL_USER}>`,
-    to,
-    subject,
-    html
-  };
-  try {
-    await transporter.sendMail(mailOptions);
-    return true;
-  } catch (error) {
-    console.error('Email sending error:', error);
-    return false;
-  }
-}
-
 // Check if table exists
 async function tableExists(db, tableName) {
   try {
@@ -109,11 +95,84 @@ async function columnExists(db, tableName, columnName) {
   }
 }
 
+// Check if database supports transactions
+async function supportsTransactions(db) {
+  try {
+    // Test transaction methods
+    if (typeof db.beginTransaction === 'function' && typeof db.commit === 'function' && typeof db.rollback === 'function') {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.error('Error checking transaction support:', error);
+    return false;
+  }
+}
+
+// Generate OTP
+function generateOTP() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+// Send professional email (using SendGrid with Nodemailer fallback)
+async function sendEmail(transporter, to, subject, html) {
+  const mailOptions = {
+    from: `Delicute <${process.env.EMAIL_USER}>`,
+    to,
+    subject,
+    html
+  };
+
+  try {
+    // Try SendGrid first
+    await sgMail.send({ ...mailOptions, from: `Delicute <${process.env.SENDGRID_FROM_EMAIL}>` });
+    console.log('Email sent via SendGrid');
+    return true;
+  } catch (sendGridError) {
+    console.error('SendGrid email sending error:', sendGridError);
+    if (!transporter) {
+      console.error('Nodemailer transporter is not initialized');
+      return false;
+    }
+    try {
+      // Fallback to Nodemailer
+      await transporter.sendMail(mailOptions);
+      console.log('Email sent via Nodemailer');
+      return true;
+    } catch (nodemailerError) {
+      console.error('Nodemailer fallback error:', nodemailerError);
+      return false;
+    }
+  }
+}
+
+// Send SMS via Twilio
+async function sendSMS(to, body) {
+  try {
+    // Ensure phone number includes country code
+    const formattedPhone = to.startsWith('+') ? to : `+91${to}`;
+    // Validate E.164 format (e.g., +91 followed by 10 digits)
+    if (!/^\+91\d{10}$/.test(formattedPhone)) {
+      throw new Error(`Invalid phone number format: ${formattedPhone}`);
+    }
+    await twilioClient.messages.create({
+      body,
+      from: process.env.TWILIO_PHONE_NUMBER,
+      to: formattedPhone
+    });
+    console.log(`SMS sent to ${formattedPhone}`);
+    return true;
+  } catch (error) {
+    console.error('Twilio SMS sending error:', error);
+    return false;
+  }
+}
+
 // Middleware to verify JWT
 const authenticateToken = (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
   if (!token) return res.status(401).json({ message: 'No token provided' });
-  
+
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) return res.status(403).json({ message: 'Invalid or expired token' });
     if (user.role !== 'admin') return res.status(403).json({ message: 'Admin access required' });
@@ -149,20 +208,23 @@ const validateOrderStatus = [
   body('status').isIn(['PLACED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED']).withMessage('Invalid status')
 ];
 
+const validateDelete = [
+  body('id').notEmpty().withMessage('ID is required')
+];
+
 // Error handling for validation
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ message: 'Validation errors', errors: errors.array() });
   }
   next();
 };
 
 // Restaurant status route
 router.get('/restaurant-status', async (req, res) => {
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
     const settingsTableExists = await tableExists(db, 'settings');
     if (!settingsTableExists) {
       return res.status(500).json({ message: 'Settings table not found' });
@@ -173,24 +235,21 @@ router.get('/restaurant-status', async (req, res) => {
     }
     const [settings] = await db.execute('SELECT value FROM settings WHERE `key` = ?', ['restaurant_status']);
     const restaurantStatus = settings[0]?.value || 'Closed';
-    res.status(200).json({ message: `Restaurant is ${restaurantStatus.toLowerCase()}`, status: restaurantStatus.toLowerCase() });
+    res.status(200).json({ message: `Restaurant is ${restaurantStatus.toLowerCase()}`, status: restaurantStatus });
   } catch (error) {
     console.error('Fetch restaurant status error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 // Toggle restaurant status
 router.post('/restaurant-status', authenticateToken, async (req, res) => {
   const { status } = req.body;
+  const db = req.app.get('db');
   if (!['Open', 'Closed'].includes(status)) {
     return res.status(400).json({ message: 'Invalid status' });
   }
-  let db;
   try {
-    db = await getDbConnection();
     const settingsTableExists = await tableExists(db, 'settings');
     if (!settingsTableExists) {
       return res.status(500).json({ message: 'Settings table not found' });
@@ -206,9 +265,7 @@ router.post('/restaurant-status', authenticateToken, async (req, res) => {
     res.json({ message: 'Restaurant status updated' });
   } catch (error) {
     console.error('Toggle restaurant status error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
@@ -219,17 +276,17 @@ router.post('/signup', [
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
 ], handleValidationErrors, async (req, res) => {
   const { name, email, password } = req.body;
-  let db;
+  const db = req.app.get('db');
+  const transporter = req.app.get('transporter');
   try {
-    db = await getDbConnection();
     const usersTableExists = await tableExists(db, 'users');
     if (!usersTableExists) {
-      return res.status(500).json({ message: 'Users table not found.' });
+      return res.status(500).json({ message: 'Users table not found' });
     }
 
     const [existingEmail] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
     if (existingEmail.length > 0) {
-      return res.status(400).json({ message: 'Email already registered.' });
+      return res.status(400).json({ message: 'Email already registered' });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -255,28 +312,35 @@ router.post('/signup', [
     await db.execute(query, params);
 
     const html = `
-      <div style="font-family: 'Inter', sans-serif; max-width: 600px; margin: auto; padding: 20px; background-color: #f9f9f9; border-radius: 10px;">
-        <h2 style="color: #1a202c; font-family: 'Playfair Display', serif;">Welcome to Delicute Admin Portal!</h2>
+      <div style="font-family: 'Inter', sans-serif; max-width: 600px; margin: auto; padding: 20px; background-color: #f9f9f9; border-radius: 10px; border: 1px solid #e2e8f0;">
+        <div style="text-align: center;">
+          <img src="https://i.postimg.cc/zv19J0xv/Zbhz-Fq-T-Imgur.jpg" alt="Delicute Logo" style="max-width: 150px;">
+        </div>
+        <h2 style="color: #1a202c; font-family: 'Playfair Display', serif; text-align: center;">Welcome to Delicute Admin Portal!</h2>
         <p style="color: #4a5568;">Dear ${name},</p>
-        <p style="color: #4a5568;">Your admin account has been created. Log in to manage orders, menus, and more.</p>
-        <a href="${process.env.CLIENT_URL}/admin" style="display: inline-block; background-color: #d69e2e; color: #ffffff; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin: 20px 0;">Log In Now</a>
-        <p style="color: #4a5568;">Contact us at <a href="mailto:contactdelicute@gmail.com" style="color: #d69e2e;">contactdelicute@gmail.com</a>.</p>
+        <p style="color: #4a5568;">Your admin account has been successfully created. You can now log in to manage orders, menus, and more.</p>
+        <div style="text-align: center; margin: 20px 0;">
+          <a href="${process.env.CLIENT_URL}/admin" style="display: inline-block; background-color: #d69e2e; color: #ffffff; padding: 12px 24px; border-radius: 5px; text-decoration: none; font-weight: bold;">Log In Now</a>
+        </div>
+        <p style="color: #4a5568;">If you have any questions, contact us at <a href="mailto:contactdelicute@gmail.com" style="color: #d69e2e;">contactdelicute@gmail.com</a>.</p>
         <p style="color: #4a5568; margin-top: 20px;">Best regards,<br>The Delicute Team</p>
-        <p style="color: #718096; font-size: 12px; text-align: center;">© 2025 Delicute.</p>
+        <div style="text-align: center; margin-top: 20px;">
+          <img src="https://i.postimg.cc/CMWsJZr7/Thank-You-Sticker.jpg" alt="Sticker" style="max-width: 100px;">
+        </div>
+        <p style="color: #718096; font-size: 12px; text-align: center;">© 2025 Delicute. All rights reserved.</p>
       </div>
     `;
 
-    const sent = await sendEmail(email, 'Delicute - Welcome to Admin Portal!', html);
+    const sent = await sendEmail(transporter, email, 'Delicute - Welcome to Admin Portal!', html);
     if (!sent) {
-      return res.status(500).json({ message: 'Account created, but failed to send welcome email.' });
+      console.warn('Failed to send welcome email, but account created');
+      return res.status(200).json({ message: 'Admin sign up successful, but failed to send welcome email' });
     }
 
-    res.status(200).json({ message: 'Admin sign up successful. Please log in.' });
+    res.status(200).json({ message: 'Admin sign up successful. Please log in' });
   } catch (error) {
     console.error('Signup error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
@@ -286,12 +350,11 @@ router.post('/login', [
   body('password').notEmpty().withMessage('Password is required')
 ], handleValidationErrors, async (req, res) => {
   const { email, password } = req.body;
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
     const usersTableExists = await tableExists(db, 'users');
     if (!usersTableExists) {
-      return res.status(500).json({ message: 'Users table not found.' });
+      return res.status(500).json({ message: 'Users table not found' });
     }
 
     const hasRoleColumn = await columnExists(db, 'users', 'role');
@@ -309,23 +372,21 @@ router.post('/login', [
 
     const [users] = await db.execute(query, params);
     if (users.length === 0) {
-      return res.status(400).json({ message: 'Admin not found.' });
+      return res.status(400).json({ message: 'Admin not found' });
     }
 
     const user = users[0];
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid password.' });
+      return res.status(400).json({ message: 'Invalid password' });
     }
 
     const token = jwt.sign({ id: user.id, role: user.role || 'admin' }, process.env.JWT_SECRET, { expiresIn: '1d' });
     req.session.user = { id: user.id, role: user.role || 'admin' };
-    res.status(200).json({ message: 'Admin login successful.', token, redirect: '/admindashboard' });
+    res.status(200).json({ message: 'Admin login successful', token, redirect: '/admindashboard' });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
@@ -334,12 +395,12 @@ router.post('/forgot-password', [
   body('email').isEmail().withMessage('Valid email is required')
 ], handleValidationErrors, async (req, res) => {
   const { email } = req.body;
-  let db;
+  const db = req.app.get('db');
+  const transporter = req.app.get('transporter');
   try {
-    db = await getDbConnection();
     const usersTableExists = await tableExists(db, 'users');
     if (!usersTableExists) {
-      return res.status(500).json({ message: 'Users table not found.' });
+      return res.status(500).json({ message: 'Users table not found' });
     }
 
     const hasRoleColumn = await columnExists(db, 'users', 'role');
@@ -350,12 +411,12 @@ router.post('/forgot-password', [
 
     const [users] = await db.execute(query, params);
     if (users.length === 0) {
-      return res.status(400).json({ message: 'Admin email not registered.' });
+      return res.status(400).json({ message: 'Admin email not registered' });
     }
 
     const hasOtpColumns = await columnExists(db, 'users', 'otp') && await columnExists(db, 'users', 'otp_expires');
     if (!hasOtpColumns) {
-      return res.status(500).json({ message: 'OTP functionality not supported.' });
+      return res.status(500).json({ message: 'OTP functionality not supported' });
     }
 
     const otp = generateOTP();
@@ -364,28 +425,32 @@ router.post('/forgot-password', [
     await db.execute('UPDATE users SET otp = ?, otp_expires = ? WHERE email = ?', [otp, otpExpires, email]);
 
     const html = `
-      <div style="font-family: 'Inter', sans-serif; max-width: 600px; margin: auto; padding: 20px; background-color: #f9f9f9; border-radius: 10px;">
-        <h2 style="color: #1a202c; font-family: 'Playfair Display', serif;">Delicute - Admin Password Reset Request</h2>
+      <div style="font-family: 'Inter', sans-serif; max-width: 600px; margin: auto; padding: 20px; background-color: #f9f9f9; border-radius: 10px; border: 1px solid #e2e8f0;">
+        <div style="text-align: center;">
+          <img src="https://res.cloudinary.com/do9cbfu5l/image/upload/v1730432100/delicute/logo.png" alt="Delicute Logo" style="max-width: 150px;">
+        </div>
+        <h2 style="color: #1a202c; font-family: 'Playfair Display', serif; text-align: center;">Delicute - Admin Password Reset Request</h2>
         <p style="color: #4a5568;">Dear ${users[0].name},</p>
         <p style="color: #4a5568;">Use the following OTP to reset your password:</p>
         <h3 style="color: #d69e2e; font-size: 24px; text-align: center; margin: 20px 0;">${otp}</h3>
-        <p style="color: #4a5568;">Valid for 10 minutes. Contact <a href="mailto:contactdelicute@gmail.com" style="color: #d69e2e;">contactdelicute@gmail.com</a> if you did not request this.</p>
+        <p style="color: #4a5568;">This OTP is valid for 10 minutes. If you did not request this, please contact <a href="mailto:contactdelicute@gmail.com" style="color: #d69e2e;">contactdelicute@gmail.com</a>.</p>
         <p style="color: #4a5568; margin-top: 20px;">Best regards,<br>The Delicute Team</p>
-        <p style="color: #718096; font-size: 12px; text-align: center;">© 2025 Delicute.</p>
+        <div style="text-align: center; margin-top: 20px;">
+          <img src="https://res.cloudinary.com/do9cbfu5l/image/upload/v1730432200/delicute/sticker.png" alt="Sticker" style="max-width: 100px;">
+        </div>
+        <p style="color: #718096; font-size: 12px; text-align: center;">© 2025 Delicute. All rights reserved.</p>
       </div>
     `;
 
-    const sent = await sendEmail(email, 'Delicute - Reset Your Admin Password', html);
+    const sent = await sendEmail(transporter, email, 'Delicute - Reset Your Admin Password', html);
     if (!sent) {
-      return res.status(500).json({ message: 'Failed to send OTP email.' });
+      return res.status(500).json({ message: 'Failed to send OTP email' });
     }
 
-    res.status(200).json({ message: 'OTP sent to your email.' });
+    res.status(200).json({ message: 'OTP sent to your email' });
   } catch (error) {
     console.error('Forgot password error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
@@ -402,17 +467,16 @@ router.post('/reset-password', [
   })
 ], handleValidationErrors, async (req, res) => {
   const { email, otp, newPassword, confirmPassword } = req.body;
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
     const usersTableExists = await tableExists(db, 'users');
     if (!usersTableExists) {
-      return res.status(500).json({ message: 'Users table not found.' });
+      return res.status(500).json({ message: 'Users table not found' });
     }
 
     const hasOtpColumns = await columnExists(db, 'users', 'otp') && await columnExists(db, 'users', 'otp_expires');
     if (!hasOtpColumns) {
-      return res.status(500).json({ message: 'OTP functionality not supported.' });
+      return res.status(500).json({ message: 'OTP functionality not supported' });
     }
 
     const hasRoleColumn = await columnExists(db, 'users', 'role');
@@ -423,32 +487,29 @@ router.post('/reset-password', [
 
     const [users] = await db.execute(query, params);
     if (users.length === 0) {
-      return res.status(400).json({ message: 'Invalid or expired OTP.' });
+      return res.status(400).json({ message: 'Invalid or expired OTP' });
     }
 
     if (newPassword && confirmPassword) {
       const hashedPassword = await bcrypt.hash(newPassword, 10);
       await db.execute('UPDATE users SET password = ?, otp = NULL, otp_expires = NULL WHERE email = ?', [hashedPassword, email]);
-      res.status(200).json({ message: 'Admin password reset successfully.' });
+      res.status(200).json({ message: 'Admin password reset successfully' });
     } else {
-      res.status(200).json({ message: 'OTP verified successfully.' });
+      res.status(200).json({ message: 'OTP verified successfully' });
     }
   } catch (error) {
     console.error('Reset password error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 // Admin profile route
 router.get('/profile', authenticateToken, async (req, res) => {
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
     const usersTableExists = await tableExists(db, 'users');
     if (!usersTableExists) {
-      return res.status(500).json({ message: 'Users table not found.' });
+      return res.status(500).json({ message: 'Users table not found' });
     }
 
     const hasProfileImageColumn = await columnExists(db, 'users', 'profile_image');
@@ -472,21 +533,18 @@ router.get('/profile', authenticateToken, async (req, res) => {
     res.json(rows[0]);
   } catch (error) {
     console.error('Fetch admin data error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 // Update admin profile
 router.post('/profile', authenticateToken, validateProfile, handleValidationErrors, async (req, res) => {
   const { name } = req.body;
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
     const usersTableExists = await tableExists(db, 'users');
     if (!usersTableExists) {
-      return res.status(500).json({ message: 'Users table not found.' });
+      return res.status(500).json({ message: 'Users table not found' });
     }
 
     const hasRoleColumn = await columnExists(db, 'users', 'role');
@@ -499,23 +557,20 @@ router.post('/profile', authenticateToken, validateProfile, handleValidationErro
     res.json({ message: 'Profile updated' });
   } catch (error) {
     console.error('Update profile error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 // Update admin profile image
 router.post('/profile/image', authenticateToken, upload, handleMulterError, async (req, res) => {
-  let db;
+  const db = req.app.get('db');
   try {
     if (!req.file) {
       return res.status(400).json({ message: 'No image provided' });
     }
-    db = await getDbConnection();
     const hasProfileImageColumn = await columnExists(db, 'users', 'profile_image');
     if (!hasProfileImageColumn) {
-      return res.status(400).json({ message: 'Profile image upload not supported.' });
+      return res.status(400).json({ message: 'Profile image upload not supported' });
     }
     const result = await cloudinary.uploader.upload(req.file.path, {
       folder: 'delicute/profiles',
@@ -531,20 +586,17 @@ router.post('/profile/image', authenticateToken, upload, handleMulterError, asyn
     res.json({ message: 'Profile image updated', imageUrl: result.secure_url });
   } catch (error) {
     console.error('Upload profile image error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 // Dashboard stats route
 router.get('/stats', authenticateToken, async (req, res) => {
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
     const usersTableExists = await tableExists(db, 'users');
     if (!usersTableExists) {
-      return res.status(500).json({ message: 'Users table not found.' });
+      return res.status(500).json({ message: 'Users table not found' });
     }
 
     const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
@@ -552,13 +604,13 @@ router.get('/stats', authenticateToken, async (req, res) => {
       ? 'SELECT COUNT(*) as count FROM orders WHERE deleted_at IS NULL'
       : 'SELECT COUNT(*) as count FROM orders';
     const [orders] = await db.execute(ordersQuery);
-    
+
     const hasIsActiveColumn = await columnExists(db, 'coupons', 'is_active');
     const couponsQuery = hasIsActiveColumn
       ? 'SELECT COUNT(*) as count FROM coupons WHERE is_active = 1'
       : 'SELECT COUNT(*) as count FROM coupons';
     const [coupons] = await db.execute(couponsQuery);
-    
+
     const hasRoleColumn = await columnExists(db, 'users', 'role');
     const hasIsBlockedColumn = await columnExists(db, 'users', 'is_blocked');
     let userCount;
@@ -591,17 +643,14 @@ router.get('/stats', authenticateToken, async (req, res) => {
     });
   } catch (error) {
     console.error('Fetch stats error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 // Menu management routes
 router.get('/menu', authenticateToken, async (req, res) => {
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
     const hasDeletedAtColumn = await columnExists(db, 'menu_items', 'deleted_at');
     const hasIsActiveColumn = await columnExists(db, 'menu_items', 'is_active');
     let query;
@@ -622,29 +671,21 @@ router.get('/menu', authenticateToken, async (req, res) => {
     res.json({ items: formattedItems, message: 'Menu items retrieved successfully' });
   } catch (error) {
     console.error('Fetch menu items error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 router.post('/menu/add', authenticateToken, upload, handleMulterError, validateMenuItem, handleValidationErrors, async (req, res) => {
   const { name, description, price, category } = req.body;
+  const db = req.app.get('db');
   let imageUrl = null;
-  let db;
   try {
-    db = await getDbConnection();
     if (req.file) {
-      try {
-        const result = await cloudinary.uploader.upload(req.file.path, {
-          folder: 'delicute/menu',
-          public_id: `menu_${Date.now()}`
-        });
-        imageUrl = result.secure_url;
-      } catch (uploadError) {
-        console.error('Cloudinary upload error:', uploadError);
-        return res.status(500).json({ message: 'Failed to upload image to Cloudinary.', error: uploadError.message });
-      }
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'delicute/menu',
+        public_id: `menu_${Date.now()}`
+      });
+      imageUrl = result.secure_url;
     }
     const hasActiveColumn = await columnExists(db, 'menu_items', 'is_active');
     const query = hasActiveColumn
@@ -657,16 +698,13 @@ router.post('/menu/add', authenticateToken, upload, handleMulterError, validateM
     res.json({ message: 'Menu item added' });
   } catch (error) {
     console.error('Add menu item error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 router.get('/menu/:id', authenticateToken, async (req, res) => {
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
     const hasDeletedAtColumn = await columnExists(db, 'menu_items', 'deleted_at');
     const hasIsActiveColumn = await columnExists(db, 'menu_items', 'is_active');
     let query;
@@ -690,29 +728,21 @@ router.get('/menu/:id', authenticateToken, async (req, res) => {
     res.json(formattedItem);
   } catch (error) {
     console.error('Fetch menu item error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 router.post('/menu/update', authenticateToken, upload, handleMulterError, validateMenuItem, handleValidationErrors, async (req, res) => {
   const { id, name, description, price, category } = req.body;
+  const db = req.app.get('db');
   let imageUrl = null;
-  let db;
   try {
-    db = await getDbConnection();
     if (req.file) {
-      try {
-        const result = await cloudinary.uploader.upload(req.file.path, {
-          folder: 'delicute/menu',
-          public_id: `menu_${Date.now()}`
-        });
-        imageUrl = result.secure_url;
-      } catch (uploadError) {
-        console.error('Cloudinary upload error:', uploadError);
-        return res.status(500).json({ message: 'Failed to upload image to Cloudinary.', error: uploadError.message });
-      }
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'delicute/menu',
+        public_id: `menu_${Date.now()}`
+      });
+      imageUrl = result.secure_url;
     }
     const hasDeletedAtColumn = await columnExists(db, 'menu_items', 'deleted_at');
     const hasIsActiveColumn = await columnExists(db, 'menu_items', 'is_active');
@@ -726,51 +756,62 @@ router.post('/menu/update', authenticateToken, upload, handleMulterError, valida
     } else {
       query = 'UPDATE menu_items SET name = ?, description = ?, price = ?, category = ?, image = COALESCE(?, image) WHERE id = ?';
     }
-    await db.execute(query, [name, description, price, category, imageUrl, id]);
+    const [result] = await db.execute(query, [name, description, price, category, imageUrl, id]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Menu item not found or not active' });
+    }
     res.json({ message: 'Menu item updated' });
   } catch (error) {
     console.error('Update menu item error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
-router.post('/menu/delete', authenticateToken, async (req, res) => {
+router.post('/menu/delete', authenticateToken, validateDelete, handleValidationErrors, async (req, res) => {
   const { id } = req.body;
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
-    await db.beginTransaction();
-    
-    // Delete related records from cart, favourites, and order_items
-    await db.execute('DELETE FROM cart WHERE itemId = ?', [id]);
-    await db.execute('DELETE FROM favourites WHERE itemId = ? OR item_id = ?', [id, id]);
-    await db.execute('DELETE FROM order_items WHERE itemId = ?', [id]);
-    
-    // Soft delete the menu item if deleted_at column exists
-    const hasDeletedAtColumn = await columnExists(db, 'menu_items', 'deleted_at');
-    const query = hasDeletedAtColumn
-      ? 'UPDATE menu_items SET deleted_at = NOW() WHERE id = ?'
-      : 'DELETE FROM menu_items WHERE id = ?';
-    await db.execute(query, [id]);
-    
-    await db.commit();
-    res.json({ message: 'Menu item deleted' });
+    const hasTransactionSupport = await supportsTransactions(db);
+    if (hasTransactionSupport) {
+      await db.beginTransaction();
+    }
+
+    try {
+      // Verify menu item exists
+      const [items] = await db.execute('SELECT id FROM menu_items WHERE id = ?', [id]);
+      if (items.length === 0) {
+        if (hasTransactionSupport) await db.rollback();
+        return res.status(404).json({ message: 'Menu item not found' });
+      }
+
+      // Delete related records from cart, favourites, and order_items
+      await db.execute('DELETE FROM cart WHERE itemId = ?', [id]);
+      await db.execute('DELETE FROM favourites WHERE item_id = ?', [id]);
+      await db.execute('DELETE FROM order_items WHERE itemId = ?', [id]);
+
+      // Permanently delete the menu item
+      const [result] = await db.execute('DELETE FROM menu_items WHERE id = ?', [id]);
+      if (result.affectedRows === 0) {
+        if (hasTransactionSupport) await db.rollback();
+        return res.status(404).json({ message: 'Menu item not found' });
+      }
+
+      if (hasTransactionSupport) await db.commit();
+      res.json({ message: 'Menu item permanently deleted' });
+    } catch (error) {
+      if (hasTransactionSupport) await db.rollback();
+      throw error;
+    }
   } catch (error) {
-    if (db) await db.rollback();
     console.error('Delete menu item error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 // Coupon management routes
 router.get('/coupons', authenticateToken, async (req, res) => {
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
     const hasIsActiveColumn = await columnExists(db, 'coupons', 'is_active');
     const query = hasIsActiveColumn
       ? 'SELECT id, code, description, discount, image FROM coupons WHERE is_active = 1'
@@ -779,29 +820,21 @@ router.get('/coupons', authenticateToken, async (req, res) => {
     res.json({ coupons, message: 'Coupons retrieved successfully' });
   } catch (error) {
     console.error('Fetch coupons error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 router.post('/coupons/add', authenticateToken, upload, handleMulterError, validateCoupon, handleValidationErrors, async (req, res) => {
   const { code, description, discount } = req.body;
+  const db = req.app.get('db');
   let imageUrl = null;
-  let db;
   try {
-    db = await getDbConnection();
     if (req.file) {
-      try {
-        const result = await cloudinary.uploader.upload(req.file.path, {
-          folder: 'delicute/coupons',
-          public_id: `coupon_${Date.now()}`
-        });
-        imageUrl = result.secure_url;
-      } catch (uploadError) {
-        console.error('Cloudinary upload error:', uploadError);
-        return res.status(500).json({ message: 'Failed to upload image to Cloudinary.', error: uploadError.message });
-      }
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'delicute/coupons',
+        public_id: `coupon_${Date.now()}`
+      });
+      imageUrl = result.secure_url;
     }
     const hasIsActiveColumn = await columnExists(db, 'coupons', 'is_active');
     const query = hasIsActiveColumn
@@ -812,16 +845,13 @@ router.post('/coupons/add', authenticateToken, upload, handleMulterError, valida
     res.json({ message: 'Coupon added' });
   } catch (error) {
     console.error('Add coupon error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 router.get('/coupons/:id', authenticateToken, async (req, res) => {
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
     const hasIsActiveColumn = await columnExists(db, 'coupons', 'is_active');
     const query = hasIsActiveColumn
       ? 'SELECT id, code, description, discount, image FROM coupons WHERE id = ? AND is_active = 1'
@@ -833,129 +863,123 @@ router.get('/coupons/:id', authenticateToken, async (req, res) => {
     res.json(rows[0]);
   } catch (error) {
     console.error('Fetch coupon error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 router.post('/coupons/update', authenticateToken, upload, handleMulterError, validateCoupon, handleValidationErrors, async (req, res) => {
   const { id, code, description, discount } = req.body;
+  const db = req.app.get('db');
   let imageUrl = null;
-  let db;
   try {
-    db = await getDbConnection();
     if (req.file) {
-      try {
-        const result = await cloudinary.uploader.upload(req.file.path, {
-          folder: 'delicute/coupons',
-          public_id: `coupon_${Date.now()}`
-        });
-        imageUrl = result.secure_url;
-      } catch (uploadError) {
-        console.error('Cloudinary upload error:', uploadError);
-        return res.status(500).json({ message: 'Failed to upload image to Cloudinary.', error: uploadError.message });
-      }
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: 'delicute/coupons',
+        public_id: `coupon_${Date.now()}`
+      });
+      imageUrl = result.secure_url;
     }
     const hasIsActiveColumn = await columnExists(db, 'coupons', 'is_active');
     const query = hasIsActiveColumn
       ? 'UPDATE coupons SET code = ?, description = ?, discount = ?, image = COALESCE(?, image) WHERE id = ? AND is_active = 1'
       : 'UPDATE coupons SET code = ?, description = ?, discount = ?, image = COALESCE(?, image) WHERE id = ?';
-    await db.execute(query, [code, description, discount, imageUrl, id]);
+    const [result] = await db.execute(query, [code, description, discount, imageUrl, id]);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'Coupon not found or not active' });
+    }
     res.json({ message: 'Coupon updated' });
   } catch (error) {
     console.error('Update coupon error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
-router.post('/coupons/delete', authenticateToken, async (req, res) => {
+router.post('/coupons/delete', authenticateToken, validateDelete, handleValidationErrors, async (req, res) => {
   const { id } = req.body;
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
-    await db.beginTransaction();
-    
-    // Delete related records from cart and orders
-    await db.execute('DELETE FROM cart WHERE couponId = ?', [id]);
-    await db.execute('UPDATE orders SET couponId = NULL WHERE couponId = ?', [id]);
-    
-    // Soft delete the coupon if is_active column exists
-    const hasIsActiveColumn = await columnExists(db, 'coupons', 'is_active');
-    const query = hasIsActiveColumn
-      ? 'UPDATE coupons SET is_active = 0 WHERE id = ?'
-      : 'DELETE FROM coupons WHERE id = ?';
-    const [result] = await db.execute(query, [id]);
-    
-    if (result.affectedRows === 0) {
-      await db.rollback();
-      return res.status(404).json({ message: 'Coupon not found' });
+    const hasTransactionSupport = await supportsTransactions(db);
+    if (hasTransactionSupport) {
+      await db.beginTransaction();
     }
-    
-    await db.commit();
-    res.json({ message: 'Coupon deleted' });
+
+    try {
+      // Verify coupon exists
+      const [coupons] = await db.execute('SELECT id FROM coupons WHERE id = ?', [id]);
+      if (coupons.length === 0) {
+        if (hasTransactionSupport) await db.rollback();
+        return res.status(404).json({ message: 'Coupon not found' });
+      }
+
+      // Delete related records from cart and orders
+      await db.execute('DELETE FROM cart WHERE couponId = ?', [id]);
+      await db.execute('UPDATE orders SET couponId = NULL WHERE couponId = ?', [id]);
+
+      // Permanently delete the coupon
+      const [result] = await db.execute('DELETE FROM coupons WHERE id = ?', [id]);
+      if (result.affectedRows === 0) {
+        if (hasTransactionSupport) await db.rollback();
+        return res.status(404).json({ message: 'Coupon not found' });
+      }
+
+      if (hasTransactionSupport) await db.commit();
+      res.json({ message: 'Coupon permanently deleted' });
+    } catch (error) {
+      if (hasTransactionSupport) await db.rollback();
+      throw error;
+    }
   } catch (error) {
-    if (db) await db.rollback();
     console.error('Delete coupon error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
-router.post('/coupons/delete-permanent', authenticateToken, async (req, res) => {
-  const { couponIds } = req.body;
-  if (!couponIds || !Array.isArray(couponIds) || couponIds.length === 0) {
-    return res.status(400).json({ message: 'No coupons selected' });
-  }
-  let db;
+// Send SMS notification
+router.post('/send-sms', authenticateToken, [
+  body('orderId').notEmpty().withMessage('Order ID is required'),
+  body('status').isIn(['PLACED', 'PROCESSING', 'SHIPPED', 'DELIVERED', 'CANCELLED']).withMessage('Invalid status'),
+  body('phone').matches(/^\+91\d{10}$/).withMessage('Phone number must be in E.164 format (+91 followed by 10 digits)')
+], handleValidationErrors, async (req, res) => {
+  const { orderId, status, phone } = req.body;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
-    await db.beginTransaction();
-    
-    // Delete related records from cart and orders
-    await db.execute(
-      `DELETE FROM cart WHERE couponId IN (${couponIds.map(() => '?').join(',')})`,
-      couponIds
-    );
-    await db.execute(
-      `UPDATE orders SET couponId = NULL WHERE couponId IN (${couponIds.map(() => '?').join(',')})`,
-      couponIds
-    );
-    
-    // Permanently delete coupons
-    const hasIsActiveColumn = await columnExists(db, 'coupons', 'is_active');
-    const query = hasIsActiveColumn
-      ? `DELETE FROM coupons WHERE id IN (${couponIds.map(() => '?').join(',')}) AND is_active = 0`
-      : `DELETE FROM coupons WHERE id IN (${couponIds.map(() => '?').join(',')})`;
-    const [result] = await db.execute(query, couponIds);
-    
-    if (result.affectedRows === 0) {
-      await db.rollback();
-      return res.status(404).json({ message: 'No coupons found to delete permanently' });
+    // Verify order exists
+    const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
+    const query = hasDeletedAtColumn
+      ? 'SELECT id, total FROM orders WHERE id = ? AND deleted_at IS NULL'
+      : 'SELECT id, total FROM orders WHERE id = ?';
+    const [orders] = await db.execute(query, [orderId]);
+    if (orders.length === 0) {
+      return res.status(404).json({ message: 'Order not found' });
     }
-    
-    await db.commit();
-    res.json({ message: 'Coupons permanently deleted', affectedRows: result.affectedRows });
+
+    const smsMessages = {
+      PLACED: `Delicute: Your order #${orderId} for ₹${Number(orders[0].total).toFixed(2)} has been placed!`,
+      PROCESSING: `Delicute: Your order #${orderId} is now being processed.`,
+      SHIPPED: `Delicute: Your order #${orderId} has shipped!`,
+      DELIVERED: `Delicute: Your order #${orderId} has been delivered. Enjoy!`,
+      CANCELLED: `Delicute: Your order #${orderId} has been cancelled.`
+    };
+
+    const sent = await sendSMS(phone, smsMessages[status]);
+    if (!sent) {
+      return res.status(500).json({ message: 'Failed to send SMS notification' });
+    }
+
+    res.json({ message: 'SMS notification sent successfully' });
   } catch (error) {
-    if (db) await db.rollback();
-    console.error('Delete permanently coupons error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    console.error('Send SMS error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 // User management routes
 router.get('/users', authenticateToken, async (req, res) => {
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
     const usersTableExists = await tableExists(db, 'users');
     if (!usersTableExists) {
-      return res.status(500).json({ message: 'Users table not found.' });
+      return res.status(500).json({ message: 'Users table not found' });
     }
 
     const search = req.query.search || '';
@@ -984,26 +1008,23 @@ router.get('/users', authenticateToken, async (req, res) => {
     res.json({ users: formattedUsers, message: 'Users retrieved successfully' });
   } catch (error) {
     console.error('Fetch users error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 router.post('/users/block', authenticateToken, async (req, res) => {
   const { userId, block } = req.body;
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
     const usersTableExists = await tableExists(db, 'users');
     if (!usersTableExists) {
-      return res.status(500).json({ message: 'Users table not found.' });
+      return res.status(500).json({ message: 'Users table not found' });
     }
 
     const hasRoleColumn = await columnExists(db, 'users', 'role');
     const hasIsBlockedColumn = await columnExists(db, 'users', 'is_blocked');
     if (!hasIsBlockedColumn) {
-      return res.status(500).json({ message: 'Blocking functionality not supported.' });
+      return res.status(500).json({ message: 'Blocking functionality not supported' });
     }
 
     const query = hasRoleColumn
@@ -1018,17 +1039,14 @@ router.post('/users/block', authenticateToken, async (req, res) => {
     res.json({ message: `User ${block ? 'blocked' : 'unblocked'}` });
   } catch (error) {
     console.error('Toggle block user error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 // Order management routes
 router.get('/orders', authenticateToken, async (req, res) => {
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
     const search = req.query.search || '';
     const status = req.query.status || '';
     const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
@@ -1057,16 +1075,13 @@ router.get('/orders', authenticateToken, async (req, res) => {
     res.json({ orders: formattedOrders, message: 'Orders retrieved successfully' });
   } catch (error) {
     console.error('Fetch orders error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 router.get('/orders/recent', authenticateToken, async (req, res) => {
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
     const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
     const hasCreatedAtColumn = await columnExists(db, 'orders', 'created_at');
     const sortColumn = hasCreatedAtColumn ? 'created_at' : 'id';
@@ -1092,26 +1107,23 @@ router.get('/orders/recent', authenticateToken, async (req, res) => {
     res.json({ orders: formattedOrders, message: 'Recent orders retrieved successfully' });
   } catch (error) {
     console.error('Fetch recent orders error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 router.get('/orders/:id', authenticateToken, async (req, res) => {
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
     const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
     const query = hasDeletedAtColumn
       ? `
-        SELECT o.id, o.address, CAST(o.total AS DECIMAL(10,2)) AS total, o.status, o.couponId, u.name AS userName, u.email AS userEmail
+        SELECT o.id, o.address, CAST(o.total AS DECIMAL(10,2)) AS total, o.status, o.couponId, u.name AS userName, u.email AS userEmail, u.phone AS userPhone
         FROM orders o
         LEFT JOIN users u ON o.user_id = u.id
         WHERE o.id = ? AND o.deleted_at IS NULL
       `
       : `
-        SELECT o.id, o.address, CAST(o.total AS DECIMAL(10,2)) AS total, o.status, o.couponId, u.name AS userName, u.email AS userEmail
+        SELECT o.id, o.address, CAST(o.total AS DECIMAL(10,2)) AS total, o.status, o.couponId, u.name AS userName, u.email AS userEmail, u.phone AS userPhone
         FROM orders o
         LEFT JOIN users u ON o.user_id = u.id
         WHERE o.id = ?
@@ -1151,77 +1163,172 @@ router.get('/orders/:id', authenticateToken, async (req, res) => {
     res.json({ order: formattedOrder, message: 'Order details retrieved successfully' });
   } catch (error) {
     console.error('Fetch order details error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 router.post('/orders/update', authenticateToken, validateOrderStatus, handleValidationErrors, async (req, res) => {
   const { orderId, status } = req.body;
-  let db;
+  const db = req.app.get('db');
+  const transporter = req.app.get('transporter');
   try {
-    db = await getDbConnection();
     const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
     const query = hasDeletedAtColumn
+      ? `
+        SELECT o.id, o.user_id, CAST(o.total AS DECIMAL(10,2)) AS total, o.status, u.name AS userName, u.email AS userEmail, u.phone AS userPhone
+        FROM orders o
+        LEFT JOIN users u ON o.user_id = u.id
+        WHERE o.id = ? AND o.deleted_at IS NULL
+      `
+      : `
+        SELECT o.id, o.user_id, CAST(o.total AS DECIMAL(10,2)) AS total, o.status, u.name AS userName, u.email AS userEmail, u.phone AS userPhone
+        FROM orders o
+        LEFT JOIN users u ON o.user_id = u.id
+        WHERE o.id = ?
+      `;
+    const [orders] = await db.execute(query, [orderId]);
+    if (orders.length === 0) {
+      return res.status(404).json({ message: 'Order not found or already deleted' });
+    }
+
+    const order = orders[0];
+    const updateQuery = hasDeletedAtColumn
       ? 'UPDATE orders SET status = ? WHERE id = ? AND deleted_at IS NULL'
       : 'UPDATE orders SET status = ? WHERE id = ?';
-    const [result] = await db.execute(query, [status, orderId]);
+    const [result] = await db.execute(updateQuery, [status, orderId]);
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: 'Order not found or already deleted' });
     }
+
+    // Fetch order items for email
+    const [items] = await db.execute(
+      `
+      SELECT mi.name, oi.quantity, CAST(mi.price AS DECIMAL(10,2)) AS price
+      FROM order_items oi
+      JOIN menu_items mi ON oi.itemId = mi.id
+      WHERE oi.orderId = ?
+      `,
+      [orderId]
+    );
+
+    // Ensure price is a number and handle invalid prices
+    const itemsList = items.map(item => {
+      const price = Number(item.price);
+      if (isNaN(price)) {
+        console.warn(`Invalid price for item ${item.name} in order ${orderId}: ${item.price}`);
+        return `<li>${item.name} x${item.quantity} - Price Unavailable</li>`;
+      }
+      return `<li>${item.name} x${item.quantity} - ₹${price.toFixed(2)}</li>`;
+    }).join('');
+
+    // Prepare email content
+    const statusMessages = {
+      PLACED: 'Your order has been successfully placed!',
+      PROCESSING: 'Your order is being processed.',
+      SHIPPED: 'Your order has been shipped!',
+      DELIVERED: 'Your order has been delivered. Enjoy!',
+      CANCELLED: 'Your order has been cancelled.'
+    };
+    const html = `
+      <div style="font-family: 'Inter', sans-serif; max-width: 600px; margin: auto; padding: 20px; background-color: #f9f9f9; border-radius: 10px; border: 1px solid #e2e8f0;">
+        <div style="text-align: center;">
+          <img src="https://i.postimg.cc/zv19J0xv/Zbhz-Fq-T-Imgur.jpg" alt="Delicute Logo" style="max-width: 150px;">
+        </div>
+        <h2 style="color: #1a202c; font-family: 'Playfair Display', serif; text-align: center;">Order Update: ${status}</h2>
+        <p style="color: #4a5568;">Dear ${order.userName},</p>
+        <p style="color: #4a5568;">${statusMessages[status]}</p>
+        <h3 style="color: #1a202c; margin-top: 20px;">Order Details</h3>
+        <ul style="color: #4a5568;">${itemsList}</ul>
+        <p style="color: #4a5568; font-weight: bold;">Total: ₹${Number(order.total).toFixed(2)}</p>
+        <div style="text-align: center; margin: 20px 0;">
+          <a href="${process.env.CLIENT_URL}/order/${orderId}" style="display: inline-block; background-color: #d69e2e; color: #ffffff; padding: 12px 24px; border-radius: 5px; text-decoration: none; font-weight: bold;">View Order</a>
+        </div>
+        <p style="color: #4a5568;">If you have any questions, contact us at <a href="mailto:contactdelicute@gmail.com" style="color: #d69e2e;">contactdelicute@gmail.com</a>.</p>
+        <p style="color: #4a5568; margin-top: 20px;">Best regards,<br>The Delicute Team</p>
+        <div style="text-align: center; margin-top: 20px;">
+          <img src="https://i.postimg.cc/CMWsJZr7/Thank-You-Sticker.jpg" alt="Sticker" style="max-width: 100px;">
+        </div>
+        <p style="color: #718096; font-size: 12px; text-align: center;">© 2025 Delicute. All rights reserved.</p>
+      </div>
+    `;
+
+    // Prepare SMS content
+    const smsMessages = {
+      PLACED: `Delicute: Your order #${orderId} for ₹${Number(order.total).toFixed(2)} has been placed!`,
+      PROCESSING: `Delicute: Your order #${orderId} is now being processed.`,
+      SHIPPED: `Delicute: Your order #${orderId} has shipped!`,
+      DELIVERED: `Delicute: Your order #${orderId} has been delivered. Enjoy!`,
+      CANCELLED: `Delicute: Your order #${orderId} has been cancelled.`
+    };
+
+    // Send email and SMS if user has email and/or phone
+    const notifications = [];
+    if (order.userEmail) {
+      notifications.push(sendEmail(transporter, order.userEmail, `Delicute - Order #${orderId} Status Update`, html));
+    }
+    if (order.userPhone) {
+      notifications.push(sendSMS(order.userPhone, smsMessages[status]));
+    }
+
+    const results = await Promise.all(notifications.map(p => p.catch(e => ({ error: e }))));
+    const failed = results.some(result => result && result.error);
+    if (failed) {
+      console.warn('Some notifications failed to send');
+    }
+
     res.json({ message: 'Order status updated' });
   } catch (error) {
     console.error('Update order status error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 router.post('/orders/delete', authenticateToken, async (req, res) => {
   const { orderIds } = req.body;
+  const db = req.app.get('db');
   if (!orderIds || !Array.isArray(orderIds) || orderIds.length === 0) {
     return res.status(400).json({ message: 'No orders selected' });
   }
-  let db;
   try {
-    db = await getDbConnection();
-    await db.beginTransaction();
-    
-    // Delete related order_items first
-    await db.execute(
-      `DELETE FROM order_items WHERE orderId IN (${orderIds.map(() => '?').join(',')})`,
-      orderIds
-    );
-    
-    // Soft delete orders if deleted_at column exists
-    const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
-    const query = hasDeletedAtColumn
-      ? `UPDATE orders SET deleted_at = NOW() WHERE id IN (${orderIds.map(() => '?').join(',')})`
-      : `DELETE FROM orders WHERE id IN (${orderIds.map(() => '?').join(',')})`;
-    const [result] = await db.execute(query, orderIds);
-
-    if (result.affectedRows === 0) {
-      await db.rollback();
-      return res.status(404).json({ message: 'No orders found to delete' });
+    const hasTransactionSupport = await supportsTransactions(db);
+    if (hasTransactionSupport) {
+      await db.beginTransaction();
     }
 
-    await db.commit();
-    res.json({ message: 'Orders moved to trash', affectedRows: result.affectedRows });
+    try {
+      // Delete related order_items first
+      await db.execute(
+        `DELETE FROM order_items WHERE orderId IN (${orderIds.map(() => '?').join(',')})`,
+        orderIds
+      );
+
+      // Soft delete orders if deleted_at column exists
+      const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
+      const query = hasDeletedAtColumn
+        ? `UPDATE orders SET deleted_at = NOW() WHERE id IN (${orderIds.map(() => '?').join(',')})`
+        : `DELETE FROM orders WHERE id IN (${orderIds.map(() => '?').join(',')})`;
+      const [result] = await db.execute(query, orderIds);
+
+      if (result.affectedRows === 0) {
+        if (hasTransactionSupport) await db.rollback();
+        return res.status(404).json({ message: 'No orders found to delete' });
+      }
+
+      if (hasTransactionSupport) await db.commit();
+      res.json({ message: 'Orders moved to trash', affectedRows: result.affectedRows });
+    } catch (error) {
+      if (hasTransactionSupport) await db.rollback();
+      throw error;
+    }
   } catch (error) {
-    if (db) await db.rollback();
     console.error('Delete orders error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 router.get('/orders/trash', authenticateToken, async (req, res) => {
-  let db;
+  const db = req.app.get('db');
   try {
-    db = await getDbConnection();
     const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
     if (!hasDeletedAtColumn) {
       return res.status(200).json({ orders: [], message: 'Soft delete not supported' });
@@ -1242,108 +1349,126 @@ router.get('/orders/trash', authenticateToken, async (req, res) => {
     res.status(200).json({ orders: formattedOrders, message: 'Trashed orders retrieved successfully' });
   } catch (error) {
     console.error('Fetch trash error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 router.post('/orders/restore', authenticateToken, async (req, res) => {
   const { orderIds } = req.body;
+  const db = req.app.get('db');
   if (!orderIds || !Array.isArray(orderIds) || orderIds.length === 0) {
     return res.status(400).json({ message: 'No orders selected' });
   }
-  let db;
   try {
-    db = await getDbConnection();
-    const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
-    if (!hasDeletedAtColumn) {
-      return res.status(400).json({ message: 'Soft delete not supported' });
+    const hasTransactionSupport = await supportsTransactions(db);
+    if (hasTransactionSupport) {
+      await db.beginTransaction();
     }
-    const [result] = await db.execute(
-      `UPDATE orders SET deleted_at = NULL WHERE id IN (${orderIds.map(() => '?').join(',')})`,
-      orderIds
-    );
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'No orders found to restore' });
+
+    try {
+      const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
+      if (!hasDeletedAtColumn) {
+        if (hasTransactionSupport) await db.rollback();
+        return res.status(400).json({ message: 'Soft delete not supported' });
+      }
+      const [result] = await db.execute(
+        `UPDATE orders SET deleted_at = NULL WHERE id IN (${orderIds.map(() => '?').join(',')})`,
+        orderIds
+      );
+      if (result.affectedRows === 0) {
+        if (hasTransactionSupport) await db.rollback();
+        return res.status(404).json({ message: 'No orders found to restore' });
+      }
+      if (hasTransactionSupport) await db.commit();
+      res.json({ message: 'Orders restored', affectedRows: result.affectedRows });
+    } catch (error) {
+      if (hasTransactionSupport) await db.rollback();
+      throw error;
     }
-    res.json({ message: 'Orders restored', affectedRows: result.affectedRows });
   } catch (error) {
     console.error('Restore orders error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
 router.post('/orders/delete-permanent', authenticateToken, async (req, res) => {
   const { orderIds } = req.body;
+  const db = req.app.get('db');
   if (!orderIds || !Array.isArray(orderIds) || orderIds.length === 0) {
     return res.status(400).json({ message: 'No orders selected' });
   }
-  let db;
   try {
-    db = await getDbConnection();
-    await db.beginTransaction();
-    
-    // Delete related order_items first
-    await db.execute(
-      `DELETE FROM order_items WHERE orderId IN (${orderIds.map(() => '?').join(',')})`,
-      orderIds
-    );
-    
-    // Delete orders
-    const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
-    const query = hasDeletedAtColumn
-      ? `DELETE FROM orders WHERE id IN (${orderIds.map(() => '?').join(',')}) AND deleted_at IS NOT NULL`
-      : `DELETE FROM orders WHERE id IN (${orderIds.map(() => '?').join(',')})`;
-    const [result] = await db.execute(query, orderIds);
-    
-    if (result.affectedRows === 0) {
-      await db.rollback();
-      return res.status(404).json({ message: 'No orders found to delete permanently' });
+    const hasTransactionSupport = await supportsTransactions(db);
+    if (hasTransactionSupport) {
+      await db.beginTransaction();
     }
-    
-    await db.commit();
-    res.json({ message: 'Orders permanently deleted', affectedRows: result.affectedRows });
-  } catch (error) {
-    if (db) await db.rollback();
-    console.error('Delete permanently orders error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
-  }
-});
 
-router.post('/orders/clear-trash', authenticateToken, async (req, res) => {
-  let db;
-  try {
-    db = await getDbConnection();
-    const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
-    if (!hasDeletedAtColumn) {
-      return res.status(200).json({ message: 'No trash to clear' });
-    }
-    await db.beginTransaction();
-    const [orders] = await db.execute('SELECT id FROM orders WHERE deleted_at IS NOT NULL');
-    const orderIds = orders.map(order => order.id);
-    if (orderIds.length > 0) {
+    try {
+      // Delete related order_items first
       await db.execute(
         `DELETE FROM order_items WHERE orderId IN (${orderIds.map(() => '?').join(',')})`,
         orderIds
       );
-      const [result] = await db.execute('DELETE FROM orders WHERE deleted_at IS NOT NULL');
-      await db.commit();
-      res.json({ message: 'Trash cleared', affectedRows: result.affectedRows });
-    } else {
-      await db.commit();
-      res.json({ message: 'No trash to clear', affectedRows: 0 });
+
+      // Delete orders
+      const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
+      const query = hasDeletedAtColumn
+        ? `DELETE FROM orders WHERE id IN (${orderIds.map(() => '?').join(',')}) AND deleted_at IS NOT NULL`
+        : `DELETE FROM orders WHERE id IN (${orderIds.map(() => '?').join(',')})`;
+      const [result] = await db.execute(query, orderIds);
+
+      if (result.affectedRows === 0) {
+        if (hasTransactionSupport) await db.rollback();
+        return res.status(404).json({ message: 'No orders found to delete permanently' });
+      }
+
+      if (hasTransactionSupport) await db.commit();
+      res.json({ message: 'Orders permanently deleted', affectedRows: result.affectedRows });
+    } catch (error) {
+      if (hasTransactionSupport) await db.rollback();
+      throw error;
     }
   } catch (error) {
-    if (db) await db.rollback();
+    console.error('Delete permanently orders error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+router.post('/orders/clear-trash', authenticateToken, async (req, res) => {
+  const db = req.app.get('db');
+  try {
+    const hasTransactionSupport = await supportsTransactions(db);
+    if (hasTransactionSupport) {
+      await db.beginTransaction();
+    }
+
+    try {
+      const hasDeletedAtColumn = await columnExists(db, 'orders', 'deleted_at');
+      if (!hasDeletedAtColumn) {
+        if (hasTransactionSupport) await db.commit();
+        return res.status(200).json({ message: 'No trash to clear' });
+      }
+      const [orders] = await db.execute('SELECT id FROM orders WHERE deleted_at IS NOT NULL');
+      const orderIds = orders.map(order => order.id);
+      if (orderIds.length > 0) {
+        await db.execute(
+          `DELETE FROM order_items WHERE orderId IN (${orderIds.map(() => '?').join(',')})`,
+          orderIds
+        );
+        const [result] = await db.execute('DELETE FROM orders WHERE deleted_at IS NOT NULL');
+        if (hasTransactionSupport) await db.commit();
+        res.json({ message: 'Trash cleared', affectedRows: result.affectedRows });
+      } else {
+        if (hasTransactionSupport) await db.commit();
+        res.json({ message: 'No trash to clear', affectedRows: 0 });
+      }
+    } catch (error) {
+      if (hasTransactionSupport) await db.rollback();
+      throw error;
+    }
+  } catch (error) {
     console.error('Clear trash error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  } finally {
-    if (db) await db.end();
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 
@@ -1359,7 +1484,7 @@ router.post('/logout', authenticateToken, async (req, res) => {
     });
   } catch (error) {
     console.error('Logout error:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
 

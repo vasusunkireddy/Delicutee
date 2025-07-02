@@ -240,14 +240,23 @@
     </footer>
 
     <script>
-        // API base URL (fixed for local testing)
-        const API_BASE_URL = 'http://localhost:3000/api/admin';
+        // Dynamic API base URL
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3000/api/admin'
+            : 'https://delicutee.onrender.com/api/admin';
+
+        // Input sanitization
+        function sanitizeInput(input) {
+            const div = document.createElement('div');
+            div.textContent = input;
+            return div.innerHTML.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
 
         // Toast notification
         function showToast(message, type = 'info') {
             const toast = document.getElementById('toast');
             const toastMessage = document.getElementById('toastMessage');
-            toastMessage.textContent = message;
+            toastMessage.textContent = sanitizeInput(message);
             toast.classList.remove('toast-hidden', 'bg-yellow-500', 'bg-red-500', 'bg-green-500');
             toast.classList.add('toast-visible', type === 'error' ? 'bg-red-500' : type === 'success' ? 'bg-green-500' : 'bg-yellow-500');
             setTimeout(() => {
@@ -338,6 +347,7 @@
             setTimeout(() => {
                 modal.classList.add('hidden');
                 modal.classList.remove('modal-slide-in', 'modal-slide-out');
+                resetModalInputs(modalId);
             }, 200);
         }
 
@@ -350,7 +360,7 @@
                 eye.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />`;
             } else {
                 input.type = 'password';
-                eye.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />`;
+                eye.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3. signos3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />`;
             }
         }
 
@@ -363,11 +373,12 @@
                     const response = await fetch(url, { ...options, signal: controller.signal });
                     clearTimeout(timeoutId);
                     if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
+                        const errorData = await response.json().catch(() => ({}));
+                        throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
                     }
                     return response;
                 } catch (error) {
-                    if (attempt === retries || error.name !== 'AbortError') {
+                    if (attempt === retries || error.name === 'AbortError') {
                         console.error(`Fetch failed after ${attempt} attempts:`, error);
                         throw error;
                     }
@@ -378,7 +389,7 @@
 
         // API calls
         async function adminLogin() {
-            const email = document.getElementById('adminEmail').value.trim();
+            const email = sanitizeInput(document.getElementById('adminEmail').value.trim());
             const password = document.getElementById('adminPassword').value.trim();
             console.log('Login attempt:', { email, password: password ? '[provided]' : '[missing]' });
 
@@ -406,18 +417,17 @@
                         window.location.href = '/admindashboard.html';
                     }, 1000);
                 } else {
-                    const errorMessage = data.message || (data.errors && data.errors[0]?.msg) || 'Login failed. Please try again.';
-                    showToast(errorMessage, 'error');
+                    showToast(data.message || 'Login failed. Please try again.', 'error');
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                showToast('Network error. Please check your connection and try again.', 'error');
+                showToast(error.message.includes('404') ? 'Login endpoint not found. Please check server.' : 'Network error. Please try again.', 'error');
             }
         }
 
         async function adminSignup() {
-            const name = document.getElementById('signupName').value.trim();
-            const email = document.getElementById('signupEmail').value.trim();
+            const name = sanitizeInput(document.getElementById('signupName').value.trim());
+            const email = sanitizeInput(document.getElementById('signupEmail').value.trim());
             const password = document.getElementById('signupPassword').value.trim();
             const confirmPassword = document.getElementById('signupConfirmPassword').value.trim();
             console.log('Signup attempt:', { name, email, password: password ? '[provided]' : '[missing]', confirmPassword: confirmPassword ? '[provided]' : '[missing]' });
@@ -447,26 +457,25 @@
                 const response = await fetchWithRetry(`${API_BASE_URL}/signup`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email, password })
+                    body: JSON.stringify({ name, email, password, confirmPassword })
                 });
                 const data = await response.json();
                 console.log('Signup response:', data);
                 if (response.ok) {
-                    showToast(data.message, 'success');
+                    showToast(data.message || 'Signup successful! Please login.', 'success');
                     closeModal('adminSignupModal');
                     setTimeout(() => showModal('adminLoginModal'), 1000);
                 } else {
-                    const errorMessage = data.message || (data.errors && data.errors[0]?.msg) || 'Signup failed. Please try again.';
-                    showToast(errorMessage, 'error');
+                    showToast(data.message || 'Signup failed. Please try again.', 'error');
                 }
             } catch (error) {
                 console.error('Signup error:', error);
-                showToast('Network error. Please check your connection and try again.', 'error');
+                showToast(error.message.includes('404') ? 'Signup endpoint not found. Please check server.' : 'Network error. Please try again.', 'error');
             }
         }
 
         async function sendOtp() {
-            const email = document.getElementById('forgotEmail').value.trim();
+            const email = sanitizeInput(document.getElementById('forgotEmail').value.trim());
             console.log('Send OTP attempt:', { email });
 
             if (!email) {
@@ -487,22 +496,21 @@
                 const data = await response.json();
                 console.log('Send OTP response:', data);
                 if (response.ok) {
-                    showToast(data.message, 'success');
+                    showToast(data.message || 'OTP sent to your email.', 'success');
                     document.getElementById('forgotPasswordStep1').classList.add('hidden');
                     document.getElementById('forgotPasswordStep2').classList.remove('hidden');
                 } else {
-                    const errorMessage = data.message || (data.errors && data.errors[0]?.msg) || 'Failed to send OTP. Please try again.';
-                    showToast(errorMessage, 'error');
+                    showToast(data.message || 'Failed to send OTP. Please try again.', 'error');
                 }
             } catch (error) {
                 console.error('Send OTP error:', error);
-                showToast('Network error. Please check your connection and try again.', 'error');
+                showToast(error.message.includes('404') ? 'Forgot password endpoint not found. Please check server.' : 'Network error. Please try again.', 'error');
             }
         }
 
         async function verifyOtp() {
-            const email = document.getElementById('forgotEmail').value.trim();
-            const otp = document.getElementById('otpInput').value.trim();
+            const email = sanitizeInput(document.getElementById('forgotEmail').value.trim());
+            const otp = sanitizeInput(document.getElementById('otpInput').value.trim());
             console.log('Verify OTP attempt:', { email, otp });
 
             if (!email || !otp) {
@@ -527,24 +535,23 @@
                 const data = await response.json();
                 console.log('Verify OTP response:', data);
                 if (response.ok) {
-                    showToast('OTP verified successfully.', 'success');
+                    showToast(data.message || 'OTP verified successfully.', 'success');
                     document.getElementById('newPasswordContainer').classList.remove('hidden');
                     document.getElementById('confirmPasswordContainer').classList.remove('hidden');
                     document.getElementById('resetPasswordBtn').classList.remove('hidden');
                     document.getElementById('otpInput').parentElement.classList.add('hidden');
                 } else {
-                    const errorMessage = data.message || (data.errors && data.errors[0]?.msg) || 'Invalid OTP. Please try again.';
-                    showToast(errorMessage, 'error');
+                    showToast(data.message || 'Invalid OTP. Please try again.', 'error');
                 }
             } catch (error) {
                 console.error('Verify OTP error:', error);
-                showToast('Network error. Please check your connection and try again.', 'error');
+                showToast(error.message.includes('404') ? 'Verify OTP endpoint not found. Please check server.' : 'Network error. Please try again.', 'error');
             }
         }
 
         async function resetPassword() {
-            const email = document.getElementById('forgotEmail').value.trim();
-            const otp = document.getElementById('otpInput').value.trim();
+            const email = sanitizeInput(document.getElementById('forgotEmail').value.trim());
+            const otp = sanitizeInput(document.getElementById('otpInput').value.trim());
             const newPassword = document.getElementById('newPassword').value.trim();
             const confirmPassword = document.getElementById('confirmPassword').value.trim();
             console.log('Reset password attempt:', { email, otp, newPassword: newPassword ? '[provided]' : '[missing]', confirmPassword: confirmPassword ? '[provided]' : '[missing]' });
@@ -574,21 +581,20 @@
                 const response = await fetchWithRetry(`${API_BASE_URL}/reset-password`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, otp, newPassword, confirmPassword })
+                    body: JSON.stringify({ email, otp, newPassword })
                 });
                 const data = await response.json();
                 console.log('Reset password response:', data);
                 if (response.ok) {
-                    showToast(data.message, 'success');
+                    showToast(data.message || 'Password reset successfully.', 'success');
                     closeModal('forgotPasswordModal');
                     setTimeout(() => showModal('adminLoginModal'), 1000);
                 } else {
-                    const errorMessage = data.message || (data.errors && data.errors[0]?.msg) || 'Failed to reset password. Please try again.';
-                    showToast(errorMessage, 'error');
+                    showToast(data.message || 'Failed to reset password. Please try again.', 'error');
                 }
             } catch (error) {
                 console.error('Reset password error:', error);
-                showToast('Network error. Please check your connection and try again.', 'error');
+                showToast(error.message.includes('404') ? 'Reset password endpoint not found. Please check server.' : 'Network error. Please try again.', 'error');
             }
         }
 
@@ -597,7 +603,7 @@
             const token = localStorage.getItem('token');
             if (!token) {
                 console.log('No token found, skipping restaurant status fetch');
-                document.getElementById('restaurantStatus').textContent = 'Restaurant status unavailable';
+                document.getElementById('restaurantStatus').textContent = 'Please login to view restaurant status';
                 return;
             }
             try {
@@ -612,15 +618,18 @@
                     statusElement.classList.remove('text-green-400', 'text-red-400');
                     statusElement.classList.add(data.status === 'open' ? 'text-green-400' : 'text-red-400');
                 } else {
-                    const errorMessage = data.message || (data.errors && data.errors[0]?.msg) || 'Failed to fetch status';
-                    throw new Error(errorMessage);
+                    throw new Error(data.message || 'Failed to fetch status');
                 }
             } catch (error) {
                 console.error(`Restaurant status error (attempt ${attempt}):`, error);
-                if (attempt < maxAttempts) {
+                if (error.message.includes('401')) {
+                    localStorage.removeItem('token');
+                    showToast('Session expired. Please login again.', 'error');
+                    setTimeout(() => showModal('adminLoginModal'), 1000);
+                } else if (attempt < maxAttempts) {
                     setTimeout(() => updateRestaurantStatus(attempt + 1, maxAttempts), 1000 * attempt);
                 } else {
-                    showToast('Failed to fetch restaurant status after multiple attempts.', 'error');
+                    showToast(error.message.includes('404') ? 'Restaurant status endpoint not found. Please check server.' : 'Failed to fetch restaurant status.', 'error');
                 }
             }
         }
@@ -637,9 +646,15 @@
                     .then(data => {
                         if (!data.success) {
                             localStorage.removeItem('token');
+                            showToast('Invalid session. Please login again.', 'error');
+                            setTimeout(() => showModal('adminLoginModal'), 1000);
                         }
                     })
-                    .catch(() => localStorage.removeItem('token'));
+                    .catch(error => {
+                        console.error('Token verification error:', error);
+                        localStorage.removeItem('token');
+                        showToast(error.message.includes('404') ? 'Verify token endpoint not found. Please check server.' : 'Failed to verify session.', 'error');
+                    });
             }
         };
 
