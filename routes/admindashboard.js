@@ -905,7 +905,6 @@ router.post('/coupons/delete', authenticateToken, async (req, res) => {
   }
 });
 
-// New route for permanently deleting coupons
 router.post('/coupons/delete-permanent', authenticateToken, async (req, res) => {
   const { couponIds } = req.body;
   if (!couponIds || !Array.isArray(couponIds) || couponIds.length === 0) {

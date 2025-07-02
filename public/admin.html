@@ -189,8 +189,7 @@
                     </span>
                 </div>
                 <p class="text-xs sm:text-sm text-gray-300 text-center">By signing up, you agree to our <a href="terms.html" class="text-yellow-500 hover:underline">Terms and Conditions</a>.</p>
-                <button onclick="adminSignup()" class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bgრ�
-                    bg-yellow-600 transition duration-200 text-sm sm:text-base font-semibold">Sign Up</button>
+                <button onclick="adminSignup()" class="w-full bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600 transition duration-200 text-sm sm:text-base font-semibold">Sign Up</button>
             </div>
             <button onclick="closeModal('adminSignupModal')" class="mt-4 text-gray-300 hover:text-yellow-500 w-full text-center text-sm sm:text-base">Close</button>
         </div>
@@ -241,8 +240,8 @@
     </footer>
 
     <script>
-        // API base URL
-        const API_BASE_URL = window.location.hostname.includes('localhost') ? 'http://localhost:3000/api/admin' : 'https://your-render-domain.com/api/admin';
+        // API base URL (fixed for local testing)
+        const API_BASE_URL = 'http://localhost:3000/api/admin';
 
         // Toast notification
         function showToast(message, type = 'info') {
@@ -363,6 +362,9 @@
                     const timeoutId = setTimeout(() => controller.abort(), 5000);
                     const response = await fetch(url, { ...options, signal: controller.signal });
                     clearTimeout(timeoutId);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
                     return response;
                 } catch (error) {
                     if (attempt === retries || error.name !== 'AbortError') {
@@ -517,7 +519,7 @@
             }
 
             try {
-                const response = await fetchWithRetry(`${API_BASE_URL}/reset-password`, {
+                const response = await fetchWithRetry(`${API_BASE_URL}/verify-otp`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, otp })
@@ -633,7 +635,7 @@
                 })
                     .then(response => response.json())
                     .then(data => {
-                        if (!response.ok) {
+                        if (!data.success) {
                             localStorage.removeItem('token');
                         }
                     })
