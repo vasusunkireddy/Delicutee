@@ -1,0 +1,12 @@
+{
+	"success": {
+		"login": "success.login",
+		"profile_retrieved": "success.profile_retrieved",
+		"recent_orders_retrieved": "success.recent_orders_retrieved",
+		"stats_retrieved": "success.stats_retrieved"
+	},
+	"errors": {
+		"server_error": "errors.server_error",
+		"order_not_found": "errors.order_not_found"
+	}
+}
