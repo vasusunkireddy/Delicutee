@@ -235,7 +235,7 @@
                 </div>
                 <div class="flex items-center">
                     <div class="relative">
-                        <img id="profileImage" src="https://via.placeholder.com/40?text=User" alt="Profile" class="profile-img profile-img-nav rounded-full cursor-pointer" onclick="toggleProfileDropdown()">
+                        <img id="profileImage" src="https://via.placeholder.com/40?text=User" alt="Profile" class="profile-img profile-img-nav rounded-full cursor-pointer">
                         <div id="profileDropdown" class="absolute right-0 mt-2 profile-dropdown profile-dropdown-hidden">
                             <div class="p-4 border-b bg-gray-50 rounded-t-lg">
                                 <p id="userName" class="text-gray-800 font-semibold text-sm"></p>
@@ -243,7 +243,7 @@
                             </div>
                             <div class="py-2">
                                 <a href="#home" class="flex items-center px-4 py-2 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition duration-200" onclick="showSection('home')">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2M7 21h10"></path></svg>
                                     Home
                                 </a>
                                 <a href="#menu" class="flex items-center px-4 py-2 text-gray-700 hover:bg-yellow-50 hover:text-yellow-600 transition duration-200" onclick="showSection('menu')">
@@ -486,6 +486,17 @@
         let cartDiscount = 0;
         let appliedCouponId = null;
 
+        // Check authentication status
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showToast('Please log in to continue.', 'error');
+                setTimeout(() => window.location.href = 'index.html', 1000);
+                return false;
+            }
+            return true;
+        }
+
         // Show toast notification
         function showToast(message, type = 'info') {
             const toast = document.getElementById('toast');
@@ -502,15 +513,28 @@
         // Toggle profile dropdown
         function toggleProfileDropdown() {
             const dropdown = document.getElementById('profileDropdown');
-            dropdown.classList.toggle('profile-dropdown-hidden');
-            dropdown.classList.toggle('profile-dropdown-visible');
+            const isHidden = dropdown.classList.contains('profile-dropdown-hidden');
+            dropdown.classList.toggle('profile-dropdown-hidden', !isHidden);
+            dropdown.classList.toggle('profile-dropdown-visible', isHidden);
+        }
+
+        // Close dropdown when clicking outside
+        function handleClickOutside(event) {
+            const dropdown = document.getElementById('profileDropdown');
+            const profileImage = document.getElementById('profileImage');
+            if (!dropdown.contains(event.target) && !profileImage.contains(event.target)) {
+                dropdown.classList.add('profile-dropdown-hidden');
+                dropdown.classList.remove('profile-dropdown-visible');
+            }
         }
 
         // Show section
         function showSection(sectionId) {
             document.querySelectorAll('.section').forEach(section => section.classList.add('hidden'));
             document.getElementById(sectionId).classList.remove('hidden');
-            toggleProfileDropdown();
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.add('profile-dropdown-hidden');
+            dropdown.classList.remove('profile-dropdown-visible');
         }
 
         // Close modal
@@ -525,36 +549,45 @@
 
         // Fetch user data
         async function fetchUserData() {
+            if (!checkAuth()) return;
             try {
                 const response = await fetch('/api/user', {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
                 });
                 const data = await response.json();
-                if (response.ok) {
-                    document.getElementById('userName').textContent = data.name || 'User';
-                    document.getElementById('userEmail').textContent = data.email || 'No email';
-                    document.getElementById('welcomeName').textContent = data.name || 'User';
-                    document.getElementById('profileName').value = data.name || '';
-                    document.getElementById('profileEmail').value = data.email || '';
-                    document.getElementById('profilePhone').value = data.phone || '';
-                    document.getElementById('profileImage').src = data.profileImage || 'https://via.placeholder.com/40?text=User';
-                    document.getElementById('profilePicture').src = data.profileImage || 'https://via.placeholder.com/100?text=User';
-                    if (data.googleUser) {
+                if (response.ok && data.user) {
+                    if (data.user.role === 'admin') {
+                        showToast('Unauthorized access. Logging out.', 'error');
+                        logout();
+                        return;
+                    }
+                    document.getElementById('userName').textContent = data.user.name || 'User';
+                    document.getElementById('userEmail').textContent = data.user.email || 'No email';
+                    document.getElementById('welcomeName').textContent = data.user.name || 'User';
+                    document.getElementById('profileName').value = data.user.name || '';
+                    document.getElementById('profileEmail').value = data.user.email || '';
+                    document.getElementById('profilePhone').value = data.user.phone || '';
+                    document.getElementById('profileImage').src = data.user.profileImage || 'https://via.placeholder.com/40?text=User';
+                    document.getElementById('profilePicture').src = data.user.profileImage || 'https://via.placeholder.com/100?text=User';
+                    if (data.user.googleUser) {
                         document.getElementById('profileEmail').disabled = true;
                     } else {
                         document.getElementById('profilePhone').disabled = true;
                     }
+                    localStorage.setItem('userRole', data.user.role || 'user');
                 } else {
                     showToast(data.message || 'Error fetching user data.', 'error');
-                    setTimeout(() => window.location.href = 'index.html', 1000);
+                    logout();
                 }
             } catch (error) {
                 showToast('Failed to fetch user data.', 'error');
+                logout();
             }
         }
 
         // Fetch total orders
         async function fetchTotalOrders() {
+            if (!checkAuth()) return;
             try {
                 const response = await fetch('/api/orders/count', {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -570,6 +603,7 @@
 
         // Fetch coupons
         async function fetchCoupons() {
+            if (!checkAuth()) return;
             try {
                 const response = await fetch('/api/coupons', {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -604,6 +638,7 @@
 
         // Apply coupon
         async function applyCoupon(code) {
+            if (!checkAuth()) return;
             if (!code) {
                 showToast('Please select a coupon.', 'error');
                 return;
@@ -633,6 +668,7 @@
 
         // Fetch menu items
         async function fetchMenuItems() {
+            if (!checkAuth()) return;
             try {
                 const response = await fetch('/api/menu', {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -694,6 +730,7 @@
         }
 
         async function filterMenu(menuContainerId, searchInputId, categoryFilterId) {
+            if (!checkAuth()) return;
             const search = document.getElementById(searchInputId).value.toLowerCase();
             const category = document.getElementById(categoryFilterId).value;
             try {
@@ -747,6 +784,7 @@
 
         // Add to cart
         async function addToCart(itemId) {
+            if (!checkAuth()) return;
             try {
                 const response = await fetch('/api/cart/add', {
                     method: 'POST',
@@ -770,6 +808,7 @@
 
         // Fetch cart
         async function fetchCart() {
+            if (!checkAuth()) return;
             try {
                 const response = await fetch('/api/cart', {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -811,6 +850,7 @@
 
         // Update quantity
         async function updateQuantity(itemId, quantity) {
+            if (!checkAuth()) return;
             try {
                 const response = await fetch('/api/cart/update', {
                     method: 'POST',
@@ -834,6 +874,7 @@
 
         // Remove from cart
         async function removeFromCart(itemId) {
+            if (!checkAuth()) return;
             try {
                 const response = await fetch('/api/cart/remove', {
                     method: 'POST',
@@ -857,6 +898,7 @@
 
         // Clear cart
         async function clearCart() {
+            if (!checkAuth()) return;
             try {
                 const response = await fetch('/api/cart/clear', {
                     method: 'POST',
@@ -879,6 +921,7 @@
 
         // Fetch addresses
         async function fetchAddresses() {
+            if (!checkAuth()) return;
             try {
                 const response = await fetch('/api/addresses', {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -911,6 +954,7 @@
 
         // Save address
         async function saveAddress() {
+            if (!checkAuth()) return;
             const name = document.getElementById('addressName').value;
             const phone = document.getElementById('addressPhone').value;
             const flat = document.getElementById('addressFlat').value;
@@ -942,7 +986,6 @@
                     document.getElementById('addressLandmark').value = '';
                     document.getElementById('addressName').dataset.id = '';
                     fetchAddresses();
-                    // Notify admin
                     await fetch('/api/notify-admin/address', {
                         method: 'POST',
                         headers: { 
@@ -971,6 +1014,7 @@
 
         // Delete address
         async function deleteAddress(id) {
+            if (!checkAuth()) return;
             try {
                 const response = await fetch('/api/addresses/delete', {
                     method: 'POST',
@@ -994,6 +1038,7 @@
 
         // Toggle favourite
         async function toggleFavourite(itemId) {
+            if (!checkAuth()) return;
             try {
                 const response = await fetch('/api/favourites/toggle', {
                     method: 'POST',
@@ -1018,6 +1063,7 @@
 
         // Fetch favourites
         async function fetchFavourites() {
+            if (!checkAuth()) return;
             try {
                 const response = await fetch('/api/favourites', {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -1054,6 +1100,7 @@
 
         // Upload profile image
         async function uploadProfileImage() {
+            if (!checkAuth()) return;
             const fileInput = document.getElementById('profileImageInput');
             if (!fileInput.files[0]) {
                 showToast('No file selected.', 'error');
@@ -1083,6 +1130,7 @@
 
         // Save profile
         async function saveProfile() {
+            if (!checkAuth()) return;
             const name = document.getElementById('profileName').value;
             if (!name) {
                 showToast('Name is required.', 'error');
@@ -1111,6 +1159,7 @@
 
         // Place order
         async function placeOrder() {
+            if (!checkAuth()) return;
             const addressId = document.getElementById('cartAddress').value;
             const couponCode = document.getElementById('cartCoupon').value;
             if (!addressId) {
@@ -1132,7 +1181,7 @@
                 });
                 const data = await response.json();
                 if (response.ok) {
-                    const total = Number(data.total) || 0; // Ensure total is a number
+                    const total = Number(data.total) || 0;
                     showToast(`Order placed successfully! Total: ₹${total.toFixed(2)}`, 'success');
                     cartDiscount = 0;
                     appliedCouponId = null;
@@ -1140,7 +1189,6 @@
                     fetchCart();
                     fetchTotalOrders();
                     fetchActiveOrders();
-                    // Notify admin
                     const address = addresses.find(addr => addr.id === addressId);
                     await fetch('/api/notify-admin/order', {
                         method: 'POST',
@@ -1165,6 +1213,7 @@
 
         // Fetch active orders
         async function fetchActiveOrders() {
+            if (!checkAuth()) return;
             try {
                 const response = await fetch('/api/orders/active', {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -1183,7 +1232,7 @@
                                 <p class="text-xs text-gray-600">${item.name} (₹${item.price} x ${item.quantity})</p>
                             </div>
                         `).join('');
-                        const total = Number(order.total) || 0; // Ensure total is a number
+                        const total = Number(order.total) || 0;
                         activeOrders.innerHTML += `
                             <div class="order-card" onclick="toggleOrderDetails('${order.id}')">
                                 <div class="flex justify-between items-center">
@@ -1203,7 +1252,6 @@
                     showToast('No active orders found or error fetching.', 'error');
                 }
             } catch (error) {
-                console.error('Fetch Active Orders Error:', error);
                 showToast('Failed to fetch active orders.', 'error');
             }
         }
@@ -1223,6 +1271,7 @@
 
         // Submit cancel order
         async function submitCancelOrder() {
+            if (!checkAuth()) return;
             const orderId = document.getElementById('cancelReason').dataset.orderId;
             const reason = document.getElementById('cancelReason').value;
             if (!reason) {
@@ -1240,11 +1289,20 @@
                 });
                 const data = await response.json();
                 if (response.ok) {
-                    showToast('Order cancelled!', 'success');
+                    showToast('Order cancelled successfully!', 'success');
                     closeModal('cancelOrderModal');
+                    document.getElementById('cancelReason').value = '';
+                    document.getElementById('cancelReason').dataset.orderId = '';
                     fetchActiveOrders();
                     fetchOrderHistory();
-                    fetchTotalOrders();
+                    await fetch('/api/notify-admin/cancel-order', {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: JSON.stringify({ orderId, reason })
+                    });
                 } else {
                     showToast(data.message || 'Error cancelling order.', 'error');
                 }
@@ -1255,6 +1313,7 @@
 
         // Fetch order history
         async function fetchOrderHistory() {
+            if (!checkAuth()) return;
             try {
                 const response = await fetch('/api/orders/history', {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
@@ -1262,29 +1321,31 @@
                 const data = await response.json();
                 if (response.ok && data.orders) {
                     const orderHistory = document.getElementById('orderHistory');
-                    orderHistory.innerHTML = data.orders.length === 0 ? '<p class="text-center text-gray-600">No order history available.</p>' : '';
+                    orderHistory.innerHTML = data.orders.length === 0 ? '<p class="text-center text-gray-600">No order history.</p>' : '';
                     data.orders.forEach(order => {
-                        const statusClass = order.displayStatus === 'Confirmed' ? 'bg-blue-200 text-blue-800' : 
-                                           order.displayStatus === 'Shipped' ? 'bg-yellow-200 text-yellow-800' : 
-                                           'bg-green-200 text-green-800';
+                        const statusClass = order.displayStatus === 'Confirmed' ? 'bg-blue-200 text-blue-800' :
+                                           order.displayStatus === 'Shipped' ? 'bg-yellow-200 text-yellow-800' :
+                                           order.displayStatus === 'Delivered' ? 'bg-green-200 text-green-800' :
+                                           'bg-red-200 text-red-800';
                         const itemsList = order.items.map(item => `
                             <div class="flex items-center gap-2">
                                 <img src="${item.image || 'https://via.placeholder.com/40'}" alt="${item.name}" class="h-8 w-8 object-cover rounded-lg">
                                 <p class="text-xs text-gray-600">${item.name} (₹${item.price} x ${item.quantity})</p>
                             </div>
                         `).join('');
-                        const total = Number(order.total) || 0; // Ensure total is a number
+                        const total = Number(order.total) || 0;
                         orderHistory.innerHTML += `
-                            <div class="order-card" onclick="toggleOrderDetails('${order.id}')">
+                            <div class="order-card" onclick="toggleOrderDetails('history-${order.id}')">
                                 <div class="flex justify-between items-center">
                                     <p class="font-semibold text-sm text-gray-800">Order #${order.id}</p>
                                     <span class="status-badge ${statusClass}">${order.displayStatus}</span>
                                 </div>
                                 <p class="text-xs text-gray-600">Date: ${new Date(order.createdAt).toLocaleString()}</p>
-                                <div id="order-details-${order.id}" class="order-details">
+                                <div id="order-details-history-${order.id}" class="order-details">
                                     <p class="text-xs text-gray-600">Total: ₹${total.toFixed(2)}</p>
                                     <p class="text-xs text-gray-600">Address: ${order.address}</p>
                                     <div class="mt-2">${itemsList}</div>
+                                    ${order.displayStatus === 'Cancelled' && order.cancelReason ? `<p class="text-xs text-red-600 mt-2">Reason: ${order.cancelReason}</p>` : ''}
                                 </div>
                             </div>`;
                     });
@@ -1292,20 +1353,17 @@
                     showToast('No order history found or error fetching.', 'error');
                 }
             } catch (error) {
-                console.error('Fetch Order History Error:', error);
                 showToast('Failed to fetch order history.', 'error');
             }
         }
 
         // Clear order history
         async function clearOrderHistory() {
+            if (!checkAuth()) return;
             try {
-                const response = await fetch('/api/orders/clear-history', {
+                const response = await fetch('/api/orders/history/clear', {
                     method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
                 });
                 const data = await response.json();
                 if (response.ok) {
@@ -1322,6 +1380,7 @@
         // Logout
         function logout() {
             localStorage.removeItem('token');
+            localStorage.removeItem('userRole');
             localStorage.removeItem('profileImage');
             showToast('Logged out successfully!', 'success');
             setTimeout(() => window.location.href = 'index.html', 1000);
@@ -1329,25 +1388,19 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
+            if (!checkAuth()) return;
             fetchUserData();
             fetchTotalOrders();
             fetchCoupons();
             fetchMenuItems();
-            setupMenuFilters();
             fetchCart();
             fetchAddresses();
             fetchFavourites();
             fetchActiveOrders();
             fetchOrderHistory();
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', (e) => {
-                const dropdown = document.getElementById('profileDropdown');
-                if (!dropdown.contains(e.target) && e.target.id !== 'profileImage') {
-                    dropdown.classList.add('profile-dropdown-hidden');
-                    dropdown.classList.remove('profile-dropdown-visible');
-                }
-            });
+            setupMenuFilters();
+            document.getElementById('profileImage').addEventListener('click', toggleProfileDropdown);
+            document.addEventListener('click', handleClickOutside);
         });
     </script>
 </body>

@@ -30,7 +30,7 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  connectTimeout: 10000 // Added to handle connection timeouts
+  connectTimeout: 10000
 });
 
 // Retry logic for database operations
@@ -48,7 +48,7 @@ const withRetry = async (fn, retries = 3, delay = 1000) => {
         if (attempt === retries) throw new Error(`Database connection failed after ${retries} attempts: ${error.message}`);
         await new Promise(resolve => setTimeout(resolve, delay));
       } else {
-        throw error; // Non-connection errors (e.g., SQL syntax errors) should fail immediately
+        throw error;
       }
     }
   }
@@ -59,20 +59,36 @@ const authenticateToken = async (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
   if (!token) {
     logger.warn('Unauthorized access attempt: No token provided', { path: req.path });
-    return res.status(401).json({ message: 'Unauthorized' });
+    return res.status(401).json({ message: 'Unauthorized: No token provided' });
   }
 
   try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret');
-    // Ensure user_id is available in req.user
-    if (!req.user.id) {
-      logger.error('Invalid token: Missing user_id', { path: req.path });
-      return res.status(403).json({ message: 'Invalid token: Missing user_id' });
+    // Check if token is blacklisted
+    const [blacklistRows] = await withRetry(async () => {
+      return await pool.execute('SELECT token FROM blacklisted_tokens WHERE token = ?', [token]);
+    });
+    if (blacklistRows.length) {
+      logger.warn('Unauthorized access attempt: Token blacklisted', { path: req.path });
+      return res.status(401).json({ message: 'Unauthorized: Token invalid' });
     }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret');
+    if (!decoded.id || !decoded.role) {
+      logger.error('Invalid token: Missing user_id or role', { path: req.path });
+      return res.status(403).json({ message: 'Invalid token: Missing user_id or role' });
+    }
+
+    // Prevent admin access to customer routes
+    if (decoded.role === 'admin' && req.path !== '/admin') {
+      logger.warn('Unauthorized access attempt: Admin token used for customer route', { user_id: decoded.id, path: req.path });
+      return res.status(403).json({ message: 'Unauthorized: Admin access not allowed' });
+    }
+
+    req.user = decoded;
     next();
   } catch (error) {
     logger.error('Token verification error', { error: error.message, path: req.path });
-    return res.status(403).json({ message: 'Invalid token' });
+    return res.status(403).json({ message: 'Invalid or expired token' });
   }
 };
 
@@ -134,16 +150,16 @@ router.get('/user', authenticateToken, async (req, res) => {
   try {
     const [rows] = await withRetry(async () => {
       return await pool.execute(
-        'SELECT id, name, email, phone, profileImage, googleUser FROM users WHERE id = ?',
-        [req.user.id]
+        'SELECT id, name, email, phone, profileImage, googleUser, role FROM users WHERE id = ? AND role = ?',
+        [req.user.id, 'user']
       );
     });
     if (!rows.length) {
-      logger.warn(`User not found: ${req.user.id}`, { user_id: req.user.id });
-      return res.status(404).json({ message: 'User not found' });
+      logger.warn(`User not found or not a customer: ${req.user.id}`, { user_id: req.user.id });
+      return res.status(404).json({ message: 'User not found or unauthorized role' });
     }
     logger.info(`Fetched user data for ID: ${req.user.id}`, { user_id: req.user.id });
-    res.json(rows[0]);
+    res.json({ user: rows[0] });
   } catch (error) {
     logger.error('Fetch user error', { error: error.message, user_id: req.user.id, sqlMessage: error.sqlMessage });
     res.status(500).json({ message: 'Failed to fetch user data' });
@@ -171,7 +187,7 @@ router.get('/coupons', authenticateToken, async (req, res) => {
   try {
     const [rows] = await withRetry(async () => {
       return await pool.execute(
-        'SELECT id, code, description, image FROM coupons WHERE active = 1 AND (user_id IS NULL OR user_id = ?)',
+        'SELECT id, code, description, image, discount FROM coupons WHERE active = 1 AND (user_id IS NULL OR user_id = ?)',
         [req.user.id]
       );
     });
@@ -280,7 +296,7 @@ const getCart = async (user_id) => {
   let couponId = null;
   if (rows.length && rows[0].couponId) {
     const [couponRows] = await withRetry(async () => {
-      return await pool.execute('SELECT id, discount FROM coupons WHERE id = ?', [rows[0].couponId]);
+      return await pool.execute('SELECT id, discount FROM coupons WHERE id = ? AND active = 1', [rows[0].couponId]);
     });
     if (couponRows.length) {
       const subtotal = rows.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -753,15 +769,19 @@ router.post('/profile/update', authenticateToken, async (req, res) => {
       phone: phone ? sanitizeInput(phone) : null
     };
     await withRetry(async () => {
-      await pool.execute('UPDATE users SET name = ?, phone = ? WHERE id = ?', [sanitizedInput.name, sanitizedInput.phone, req.user.id]);
+      await pool.execute('UPDATE users SET name = ?, phone = ? WHERE id = ? AND role = ?', [sanitizedInput.name, sanitizedInput.phone, req.user.id, 'user']);
     });
     logger.info(`Updated profile for user: ${req.user.id}`, { user_id: req.user.id });
     const [userRows] = await withRetry(async () => {
       return await pool.execute(
-        'SELECT id, name, email, phone, profileImage, googleUser FROM users WHERE id = ?',
-        [req.user.id]
+        'SELECT id, name, email, phone, profileImage, googleUser, role FROM users WHERE id = ? AND role = ?',
+        [req.user.id, 'user']
       );
     });
+    if (!userRows.length) {
+      logger.warn(`User not found or not a customer: ${req.user.id}`, { user_id: req.user.id });
+      return res.status(404).json({ message: 'User not found or unauthorized role' });
+    }
     res.json({ message: 'Profile updated', user: userRows[0] });
   } catch (error) {
     logger.error('Update profile error', { error: error.message, user_id: req.user.id, sqlMessage: error.sqlMessage });
@@ -775,7 +795,7 @@ router.get('/orders/active', authenticateToken, async (req, res) => {
   try {
     const [orders] = await withRetry(async () => {
       return await pool.execute(
-        `SELECT o.id, o.total, o.status, o.address, o.createdAt,
+        `SELECT o.id, o.total, o.status, o.address, o.createdAt, o.cancelReason,
                 CASE 
                   WHEN o.status = 'PLACED' THEN 'Confirmed'
                   WHEN o.status = 'SHIPPED' THEN 'Shipped'
@@ -852,11 +872,12 @@ router.get('/orders/history', authenticateToken, async (req, res) => {
   try {
     const [orders] = await withRetry(async () => {
       return await pool.execute(
-        `SELECT o.id, o.total, o.status, o.address, o.createdAt,
+        `SELECT o.id, o.total, o.status, o.address, o.createdAt, o.cancelReason,
                 CASE 
                   WHEN o.status = 'PLACED' THEN 'Confirmed'
                   WHEN o.status = 'SHIPPED' THEN 'Shipped'
                   WHEN o.status = 'DELIVERED' THEN 'Delivered'
+                  WHEN o.status = 'CANCELLED' THEN 'Cancelled'
                   ELSE o.status
                 END as displayStatus
          FROM orders o
@@ -916,14 +937,12 @@ router.post('/notify-admin/:type', authenticateToken, async (req, res) => {
         return res.status(400).json({ message: 'Order details are required' });
       }
       logger.info(`Admin notified for new order: ${orderId}`, { user_id: req.user.id, total, address });
-      // Placeholder for actual notification logic (e.g., email, SMS)
     } else if (type === 'address') {
       if (!name || !phone || !flat || !street) {
         logger.warn('Notify admin failed: Missing address details', { user_id: req.user.id, type });
         return res.status(400).json({ message: 'Address details are required' });
       }
       logger.info(`Admin notified for new address`, { user_id: req.user.id, name, phone, flat, street, landmark });
-      // Placeholder for actual notification logic (e.g., email, SMS)
     } else {
       logger.warn(`Invalid notification type: ${type}`, { user_id: req.user.id });
       return res.status(400).json({ message: 'Invalid notification type' });
@@ -937,8 +956,22 @@ router.post('/notify-admin/:type', authenticateToken, async (req, res) => {
 
 // Logout
 router.post('/logout', authenticateToken, async (req, res) => {
-  logger.info(`User logged out: ${req.user.id}`, { user_id: req.user.id });
-  res.json({ message: 'Logged out successfully' });
+  try {
+    const token = req.headers['authorization']?.split(' ')[1];
+    if (token) {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_jwt_secret');
+      const expiresAt = new Date(decoded.exp * 1000); // Convert JWT expiration to Date
+      await withRetry(async () => {
+        await pool.execute('INSERT INTO blacklisted_tokens (token, expiresAt) VALUES (?, ?)', [token, expiresAt]);
+      });
+      logger.info(`Token blacklisted for user: ${req.user.id}`, { user_id: req.user.id });
+    }
+    logger.info(`User logged out: ${req.user.id}`, { user_id: req.user.id });
+    res.json({ message: 'Logged out successfully' });
+  } catch (error) {
+    logger.error('Logout error', { error: error.message, user_id: req.user.id, sqlMessage: error.sqlMessage });
+    res.status(500).json({ message: 'Failed to logout' });
+  }
 });
 
 module.exports = router;

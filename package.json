@@ -11,6 +11,7 @@
               "@colors/colors": "^1.6.0",
               "@paypal/checkout-server-sdk": "^1.0.3",
               "@sendgrid/mail": "^8.1.5",
+              "@tailwindcss/vite": "^4.1.11",
               "bcrypt": "^6.0.0",
               "bcryptjs": "^3.0.2",
               "cloudinary": "^1.41.3",
