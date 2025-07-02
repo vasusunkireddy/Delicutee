@@ -17,7 +17,7 @@ const transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   },
-  pool: true, // Use connection pooling for performance
+  pool: true,
   maxConnections: 5,
   rateLimit: 10
 });
@@ -105,7 +105,6 @@ router.get('/admindashboard.html', authenticateToken, (req, res) => {
 router.post('/signup', validateInput(['name', 'email', 'phone', 'password']), async (req, res) => {
   const { name, email, phone, password } = req.body;
 
-  // Basic email and phone validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneRegex = /^\+?[1-9]\d{1,14}$/;
   if (!emailRegex.test(email)) {
@@ -224,7 +223,7 @@ router.post('/forgot-password', validateInput(['email']), async (req, res) => {
       }
 
       const otp = generateOTP();
-      const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+      const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
 
       await db.execute('UPDATE users SET otp = ?, otp_expires = ? WHERE email = ?', [otp, otpExpires, email]);
 
@@ -309,7 +308,7 @@ router.post('/google-login', async (req, res) => {
 
     const db = await pool.getConnection();
     try {
-      let [users] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
+      let [users] = await db.execute ('SELECT * FROM users WHERE email = ?', [email]);
 
       if (users.length === 0) {
         await db.execute(
@@ -341,16 +340,52 @@ router.post('/google-login', async (req, res) => {
 });
 
 // Restaurant status route
-router.get('/restaurant-status', (req, res) => {
+router.get('/restaurant-status', async (req, res) => {
   try {
+    // Get current time in IST
     const now = new Date();
-    const day = now.getDay();
-    const hour = now.getHours();
-    const isOpen = (day >= 1 && day <= 5 && hour >= 16 && hour < 24) || (day === 0 || day === 6 && hour >= 12 && hour < 24);
-    res.status(200).json({
-      status: isOpen ? 'open' : 'closed',
-      message: isOpen ? 'Delicute is Open Now, Enjoy Your Day!' : 'Delicute is Closed Now, Sorry for the Inconvenience'
-    });
+    const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
+    const istTime = new Date(now.getTime() + istOffset);
+
+    const day = istTime.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    const hours = istTime.getHours();
+    const minutes = istTime.getMinutes();
+    const timeInMinutes = hours * 60 + minutes;
+
+    // Operating hours in minutes
+    const weekdayOpen = 16 * 60; // 4:00 PM
+    const weekdayClose = 24 * 60; // 12:00 AM (midnight)
+    const weekendOpen = 12 * 60; // 12:00 PM
+    const weekendClose = 24 * 60; // 12:00 AM (midnight)
+
+    let isOpen = false;
+    if (day >= 1 && day <= 5) {
+      // Weekdays (Mon-Fri)
+      isOpen = timeInMinutes >= weekdayOpen && timeInMinutes < weekdayClose;
+    } else {
+      // Weekend (Sat-Sun)
+      isOpen = timeInMinutes >= weekendOpen && timeInMinutes < weekendClose;
+    }
+
+    let status = isOpen ? 'open' : 'closed';
+    let message = isOpen ? 'Delicute is Open, Enjoy Your Delicious Day!' : 'Delicute is Closed, Sorry for the Inconvenience';
+
+    // Check database for override
+    const db = await pool.getConnection();
+    try {
+      const [rows] = await db.execute('SELECT value FROM settings WHERE `key` = ?', ['restaurant_status']);
+      if (rows.length > 0 && rows[0].value) {
+        const dbStatus = rows[0].value.toLowerCase();
+        if (dbStatus === 'open' || dbStatus === 'closed') {
+          status = dbStatus;
+          message = dbStatus === 'open' ? 'Delicute is Open, Enjoy Your Delicious Day!' : 'Delicute is Closed, Sorry for the Inconvenience';
+        }
+      }
+    } finally {
+      db.release();
+    }
+
+    res.status(200).json({ status, message });
   } catch (error) {
     console.error('Restaurant status error:', error);
     res.status(500).json({ message: 'Failed to fetch restaurant status.' });

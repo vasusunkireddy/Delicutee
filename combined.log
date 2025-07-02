@@ -3152,3 +3152,658 @@
 {"level":"info","message":"Removed item from favourites: 7","timestamp":"2025-07-02T15:22:03.916Z","user_id":5}
 {"count":0,"level":"info","message":"Fetched favourites for user: 5","timestamp":"2025-07-02T15:22:03.947Z","user_id":5}
 {"count":6,"level":"info","message":"Fetched menu items for user: 5","timestamp":"2025-07-02T15:22:03.962Z","user_id":5}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T16:21:03.989Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T16:21:04.014Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:21:04.029Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T16:21:04.054Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:21:04.056Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T16:21:04.064Z","user_id":3}
+{"count":6,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T16:21:04.067Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T16:21:04.073Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T16:21:04.097Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:21:04.100Z","user_id":3}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/user","timestamp":"2025-07-02T16:21:56.188Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/count","timestamp":"2025-07-02T16:21:56.201Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/coupons","timestamp":"2025-07-02T16:21:56.203Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/menu","timestamp":"2025-07-02T16:21:56.205Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/cart","timestamp":"2025-07-02T16:21:56.209Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/addresses","timestamp":"2025-07-02T16:21:56.222Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/favourites","timestamp":"2025-07-02T16:21:56.225Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/active","timestamp":"2025-07-02T16:21:56.235Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/history","timestamp":"2025-07-02T16:21:56.241Z","user_id":2}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T16:22:03.882Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T16:22:03.894Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:22:03.896Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T16:22:03.899Z","user_id":3}
+{"count":6,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T16:22:03.901Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:22:03.902Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T16:22:03.917Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T16:22:03.923Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T16:22:03.933Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:22:03.984Z","user_id":3}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T16:29:48.623Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:29:48.629Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T16:29:48.649Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:29:48.652Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T16:29:48.660Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T16:29:48.665Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T16:29:48.707Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T16:29:48.712Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:29:48.726Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T16:29:48.729Z","user_id":3}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T16:38:41.000Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T16:38:41.012Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:38:41.017Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T16:38:41.044Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:38:41.050Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T16:38:41.054Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T16:38:41.074Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T16:38:41.078Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T16:38:41.083Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:38:41.113Z","user_id":3}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/coupons","timestamp":"2025-07-02T16:46:42.148Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/user","timestamp":"2025-07-02T16:46:42.158Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/count","timestamp":"2025-07-02T16:46:42.164Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/menu","timestamp":"2025-07-02T16:46:42.170Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/addresses","timestamp":"2025-07-02T16:46:42.175Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/favourites","timestamp":"2025-07-02T16:46:42.189Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/active","timestamp":"2025-07-02T16:46:42.193Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/history","timestamp":"2025-07-02T16:46:42.200Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/cart","timestamp":"2025-07-02T16:46:42.209Z","user_id":2}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T16:46:52.711Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T16:46:52.715Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:46:52.722Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:46:52.724Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T16:46:52.753Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T16:46:52.757Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T16:46:52.759Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T16:46:52.765Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T16:46:52.778Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:46:52.788Z","user_id":3}
+{"level":"warn","message":"Apply coupon failed: Cart is empty","timestamp":"2025-07-02T16:46:55.142Z","user_id":3}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/user","timestamp":"2025-07-02T16:48:00.070Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/menu","timestamp":"2025-07-02T16:48:00.082Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/count","timestamp":"2025-07-02T16:48:00.085Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/addresses","timestamp":"2025-07-02T16:48:00.089Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/cart","timestamp":"2025-07-02T16:48:00.094Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/coupons","timestamp":"2025-07-02T16:48:00.098Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/favourites","timestamp":"2025-07-02T16:48:00.117Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/active","timestamp":"2025-07-02T16:48:00.121Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/history","timestamp":"2025-07-02T16:48:00.123Z","user_id":2}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T16:48:09.099Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T16:48:09.121Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T16:48:09.125Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:48:09.127Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T16:48:09.133Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T16:48:09.155Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:48:09.171Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T16:48:09.176Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T16:48:09.189Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:48:09.228Z","user_id":3}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/user","timestamp":"2025-07-02T16:49:15.825Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/count","timestamp":"2025-07-02T16:49:15.854Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/coupons","timestamp":"2025-07-02T16:49:15.859Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/cart","timestamp":"2025-07-02T16:49:15.861Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/favourites","timestamp":"2025-07-02T16:49:15.875Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/menu","timestamp":"2025-07-02T16:49:15.879Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/addresses","timestamp":"2025-07-02T16:49:15.887Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/active","timestamp":"2025-07-02T16:49:15.889Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/history","timestamp":"2025-07-02T16:49:15.892Z","user_id":2}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T16:49:27.022Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:49:27.029Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T16:49:27.032Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T16:49:27.034Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:49:27.039Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T16:49:27.072Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T16:49:27.079Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T16:49:27.082Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T16:49:27.095Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:49:27.103Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched order count for user: 4","timestamp":"2025-07-02T16:55:09.554Z","user_id":4}
+{"level":"info","message":"Fetched user data for ID: 4","timestamp":"2025-07-02T16:55:09.562Z","user_id":4}
+{"count":2,"level":"info","message":"Fetched coupons for user: 4","timestamp":"2025-07-02T16:55:09.564Z","user_id":4}
+{"count":0,"level":"info","message":"Fetched menu items for user: 4","timestamp":"2025-07-02T16:55:09.573Z","user_id":4}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 4","timestamp":"2025-07-02T16:55:09.591Z","user_id":4}
+{"count":0,"level":"info","message":"Fetched addresses for user: 4","timestamp":"2025-07-02T16:55:09.594Z","user_id":4}
+{"count":0,"level":"info","message":"Fetched active orders for user: 4","timestamp":"2025-07-02T16:55:09.611Z","user_id":4}
+{"count":0,"level":"info","message":"Fetched favourites for user: 4","timestamp":"2025-07-02T16:55:09.613Z","user_id":4}
+{"count":2,"level":"info","message":"Fetched coupons for user: 4","timestamp":"2025-07-02T16:55:09.635Z","user_id":4}
+{"count":0,"level":"info","message":"Fetched order history for user: 4","timestamp":"2025-07-02T16:55:09.639Z","user_id":4}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T16:56:02.431Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T16:56:02.439Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:56:02.445Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:56:02.447Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T16:56:02.448Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T16:56:02.453Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T16:56:02.466Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T16:56:02.472Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T16:56:02.485Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:56:02.502Z","user_id":3}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/user","timestamp":"2025-07-02T16:57:40.703Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/count","timestamp":"2025-07-02T16:57:40.714Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/menu","timestamp":"2025-07-02T16:57:40.732Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/coupons","timestamp":"2025-07-02T16:57:40.741Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/cart","timestamp":"2025-07-02T16:57:40.796Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/addresses","timestamp":"2025-07-02T16:57:40.827Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/favourites","timestamp":"2025-07-02T16:57:40.832Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/active","timestamp":"2025-07-02T16:57:40.869Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/history","timestamp":"2025-07-02T16:57:40.883Z","user_id":2}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T16:57:52.702Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:57:52.708Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T16:57:52.714Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T16:57:52.719Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:57:52.722Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T16:57:52.723Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T16:57:52.732Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T16:57:52.745Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T16:57:52.749Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:57:52.785Z","user_id":3}
+{"level":"info","message":"Item added to cart: 11","timestamp":"2025-07-02T16:57:56.788Z","user_id":3}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:57:56.802Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:57:56.837Z","user_id":3}
+{"discount":17.94,"level":"info","message":"Applied coupon: ddee","timestamp":"2025-07-02T16:57:58.920Z","user_id":3}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:57:58.940Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:57:58.951Z","user_id":3}
+{"discount":17.94,"level":"info","message":"Applied coupon: ddee","timestamp":"2025-07-02T16:58:07.274Z","user_id":3}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:58:07.287Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:58:07.296Z","user_id":3}
+{"addressId":"4","level":"warn","message":"Place order failed: Invalid input","timestamp":"2025-07-02T16:58:08.915Z","user_id":3}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T16:58:14.866Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T16:58:14.871Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:58:14.873Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T16:58:14.875Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T16:58:14.882Z","user_id":3}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:58:14.885Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T16:58:14.890Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T16:58:14.896Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T16:58:14.898Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:58:14.941Z","user_id":3}
+{"addressId":"4","level":"warn","message":"Place order failed: Invalid input","timestamp":"2025-07-02T16:58:33.356Z","user_id":3}
+{"level":"info","message":"Updated cart quantity: 11, quantity: 2","timestamp":"2025-07-02T16:58:38.407Z","user_id":3}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:58:38.426Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:58:38.446Z","user_id":3}
+{"addressId":"4","level":"warn","message":"Place order failed: Invalid input","timestamp":"2025-07-02T16:58:41.362Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T16:58:45.955Z","user_id":3}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T16:58:45.962Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:58:45.963Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T16:58:45.969Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T16:58:45.973Z","user_id":3}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:58:45.978Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T16:58:45.996Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T16:58:46.001Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T16:58:46.004Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:58:46.059Z","user_id":3}
+{"level":"warn","message":"Delete address failed: Address ID missing","timestamp":"2025-07-02T16:58:52.972Z","user_id":3}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T16:59:18.337Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T16:59:18.339Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T16:59:18.346Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T16:59:18.348Z","user_id":3}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:59:18.351Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:59:18.357Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T16:59:18.371Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T16:59:18.378Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T16:59:18.385Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:59:18.412Z","user_id":3}
+{"level":"info","message":"Updated address: 4","timestamp":"2025-07-02T16:59:27.237Z","user_id":3}
+{"flat":"202","landmark":"Alliance","level":"info","message":"Admin notified for new address","name":"SUNKIREDDY VASUDEVA REDDY","phone":"9652296548","street":"Anekal chikkagade","timestamp":"2025-07-02T16:59:27.252Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T16:59:27.256Z","user_id":3}
+{"addressId":"4","level":"info","message":"Order placed: 8","timestamp":"2025-07-02T16:59:35.717Z","total":120.12,"user_id":3}
+{"level":"warn","message":"Notify admin failed: Missing order details","timestamp":"2025-07-02T16:59:35.734Z","type":"order","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:59:35.735Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T16:59:35.741Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T16:59:35.746Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:59:35.751Z","user_id":3}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T16:59:41.883Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T16:59:41.885Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:59:41.892Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T16:59:41.894Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T16:59:41.895Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T16:59:41.912Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T16:59:41.921Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T16:59:41.924Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T16:59:41.928Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T16:59:41.959Z","user_id":3}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T17:00:39.359Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T17:00:39.370Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T17:00:39.394Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'is_default' in 'field list'","sqlMessage":"Unknown column 'is_default' in 'field list'","timestamp":"2025-07-02T17:00:39.396Z"}
+{"error":"Unknown column 'is_default' in 'field list'","level":"error","message":"Fetch addresses error","sqlMessage":"Unknown column 'is_default' in 'field list'","timestamp":"2025-07-02T17:00:39.397Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T17:00:39.407Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:00:39.410Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'o.created_at' in 'field list'","sqlMessage":"Unknown column 'o.created_at' in 'field list'","timestamp":"2025-07-02T17:00:39.424Z"}
+{"error":"Unknown column 'o.created_at' in 'field list'","level":"error","message":"Fetch active orders error","sqlMessage":"Unknown column 'o.created_at' in 'field list'","timestamp":"2025-07-02T17:00:39.425Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T17:00:39.432Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'o.created_at' in 'field list'","sqlMessage":"Unknown column 'o.created_at' in 'field list'","timestamp":"2025-07-02T17:00:39.447Z"}
+{"error":"Unknown column 'o.created_at' in 'field list'","level":"error","message":"Fetch order history error","sqlMessage":"Unknown column 'o.created_at' in 'field list'","timestamp":"2025-07-02T17:00:39.448Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:00:39.466Z","user_id":3}
+{"level":"info","message":"Item added to cart: 11","timestamp":"2025-07-02T17:00:42.280Z","user_id":3}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T17:00:42.294Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:00:42.325Z","user_id":3}
+{"discount":0,"level":"info","message":"Applied coupon: ffff","timestamp":"2025-07-02T17:00:43.850Z","user_id":3}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T17:00:43.867Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:00:43.876Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'is_default' in 'field list'","sqlMessage":"Unknown column 'is_default' in 'field list'","timestamp":"2025-07-02T17:00:58.623Z"}
+{"error":"Unknown column 'is_default' in 'field list'","level":"error","message":"Add address error","sqlMessage":"Unknown column 'is_default' in 'field list'","timestamp":"2025-07-02T17:00:58.623Z","user_id":3}
+{"level":"info","message":"Added address for user: 3","timestamp":"2025-07-02T17:02:11.183Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T17:02:11.214Z","user_id":3}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T17:02:27.787Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T17:02:27.816Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:02:27.826Z","user_id":3}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T17:02:27.849Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T17:02:27.852Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T17:02:27.867Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'o.cancel_reason' in 'field list'","sqlMessage":"Unknown column 'o.cancel_reason' in 'field list'","timestamp":"2025-07-02T17:02:27.876Z"}
+{"error":"Unknown column 'o.cancel_reason' in 'field list'","level":"error","message":"Fetch active orders error","sqlMessage":"Unknown column 'o.cancel_reason' in 'field list'","timestamp":"2025-07-02T17:02:27.877Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T17:02:27.882Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'o.cancel_reason' in 'field list'","sqlMessage":"Unknown column 'o.cancel_reason' in 'field list'","timestamp":"2025-07-02T17:02:27.884Z"}
+{"error":"Unknown column 'o.cancel_reason' in 'field list'","level":"error","message":"Fetch order history error","sqlMessage":"Unknown column 'o.cancel_reason' in 'field list'","timestamp":"2025-07-02T17:02:27.885Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:02:27.901Z","user_id":3}
+{"level":"info","message":"Set default address: 4","timestamp":"2025-07-02T17:02:35.616Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T17:02:35.629Z","user_id":3}
+{"discount":17.94,"level":"info","message":"Applied coupon: ddee","timestamp":"2025-07-02T17:02:49.697Z","user_id":3}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T17:02:49.709Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:02:49.721Z","user_id":3}
+{"code":"WARN_DATA_TRUNCATED","errno":1265,"level":"error","message":"Database operation failed (attempt 1/3): Data truncated for column 'status' at row 1","sqlMessage":"Data truncated for column 'status' at row 1","timestamp":"2025-07-02T17:02:51.551Z"}
+{"addressId":"4","couponId":4,"error":"Data truncated for column 'status' at row 1","level":"error","message":"Place order error","sqlMessage":"Data truncated for column 'status' at row 1","timestamp":"2025-07-02T17:02:51.552Z","user_id":3}
+{"code":"WARN_DATA_TRUNCATED","errno":1265,"level":"error","message":"Database operation failed (attempt 1/3): Data truncated for column 'status' at row 1","sqlMessage":"Data truncated for column 'status' at row 1","timestamp":"2025-07-02T17:04:40.609Z"}
+{"addressId":"4","couponId":4,"error":"Data truncated for column 'status' at row 1","level":"error","message":"Place order error","sqlMessage":"Data truncated for column 'status' at row 1","timestamp":"2025-07-02T17:04:40.612Z","user_id":3}
+{"code":"WARN_DATA_TRUNCATED","errno":1265,"level":"error","message":"Database operation failed (attempt 1/3): Data truncated for column 'status' at row 1","sqlMessage":"Data truncated for column 'status' at row 1","timestamp":"2025-07-02T17:05:46.239Z"}
+{"addressId":"4","couponId":4,"error":"Data truncated for column 'status' at row 1","level":"error","message":"Place order error","sqlMessage":"Data truncated for column 'status' at row 1","timestamp":"2025-07-02T17:05:46.243Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'order_id' in 'IN/ALL/ANY subquery'","sqlMessage":"Unknown column 'order_id' in 'IN/ALL/ANY subquery'","timestamp":"2025-07-02T17:06:13.716Z"}
+{"error":"Unknown column 'order_id' in 'IN/ALL/ANY subquery'","level":"error","message":"Clear order history error","sqlMessage":"Unknown column 'order_id' in 'IN/ALL/ANY subquery'","timestamp":"2025-07-02T17:06:13.717Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'order_id' in 'IN/ALL/ANY subquery'","sqlMessage":"Unknown column 'order_id' in 'IN/ALL/ANY subquery'","timestamp":"2025-07-02T17:07:35.445Z"}
+{"error":"Unknown column 'order_id' in 'IN/ALL/ANY subquery'","level":"error","message":"Clear order history error","sqlMessage":"Unknown column 'order_id' in 'IN/ALL/ANY subquery'","timestamp":"2025-07-02T17:07:35.447Z","user_id":3}
+{"affectedRows":0,"level":"info","message":"Cleared order history for user: 3","timestamp":"2025-07-02T17:11:23.396Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'o.coupon_id' in 'field list'","sqlMessage":"Unknown column 'o.coupon_id' in 'field list'","timestamp":"2025-07-02T17:11:23.449Z"}
+{"error":"Unknown column 'o.coupon_id' in 'field list'","level":"error","message":"Fetch order history error","sqlMessage":"Unknown column 'o.coupon_id' in 'field list'","timestamp":"2025-07-02T17:11:23.450Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T17:11:23.462Z","user_id":3}
+{"code":"ER_NO_DEFAULT_FOR_FIELD","errno":1364,"level":"error","message":"Database operation failed (attempt 1/3): Field 'createdAt' doesn't have a default value","sqlMessage":"Field 'createdAt' doesn't have a default value","timestamp":"2025-07-02T17:11:29.066Z"}
+{"addressId":"4","couponId":4,"error":"Field 'createdAt' doesn't have a default value","level":"error","message":"Place order error","sqlMessage":"Field 'createdAt' doesn't have a default value","timestamp":"2025-07-02T17:11:29.066Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'order_id' in 'field list'","sqlMessage":"Unknown column 'order_id' in 'field list'","timestamp":"2025-07-02T17:12:21.496Z"}
+{"addressId":"4","couponId":4,"error":"Unknown column 'order_id' in 'field list'","level":"error","message":"Place order error","sqlMessage":"Unknown column 'order_id' in 'field list'","timestamp":"2025-07-02T17:12:21.502Z","user_id":3}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T17:14:27.430Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T17:14:27.463Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T17:14:27.468Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T17:14:27.472Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:14:27.475Z","user_id":3}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T17:14:27.506Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T17:14:27.513Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'o.coupon_id' in 'field list'","sqlMessage":"Unknown column 'o.coupon_id' in 'field list'","timestamp":"2025-07-02T17:14:27.520Z"}
+{"error":"Unknown column 'o.coupon_id' in 'field list'","level":"error","message":"Fetch active orders error","sqlMessage":"Unknown column 'o.coupon_id' in 'field list'","timestamp":"2025-07-02T17:14:27.521Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'o.coupon_id' in 'field list'","sqlMessage":"Unknown column 'o.coupon_id' in 'field list'","timestamp":"2025-07-02T17:14:27.524Z"}
+{"error":"Unknown column 'o.coupon_id' in 'field list'","level":"error","message":"Fetch order history error","sqlMessage":"Unknown column 'o.coupon_id' in 'field list'","timestamp":"2025-07-02T17:14:27.525Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:14:27.556Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'address_id' in 'field list'","sqlMessage":"Unknown column 'address_id' in 'field list'","timestamp":"2025-07-02T17:14:38.664Z"}
+{"addressId":"4","couponId":4,"error":"Unknown column 'address_id' in 'field list'","level":"error","message":"Place order error","sqlMessage":"Unknown column 'address_id' in 'field list'","timestamp":"2025-07-02T17:14:38.665Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'price' in 'field list'","sqlMessage":"Unknown column 'price' in 'field list'","timestamp":"2025-07-02T17:16:40.856Z"}
+{"addressId":"4","couponId":4,"error":"Unknown column 'price' in 'field list'","level":"error","message":"Place order error","sqlMessage":"Unknown column 'price' in 'field list'","timestamp":"2025-07-02T17:16:40.863Z","user_id":3}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T17:19:33.782Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T17:19:33.791Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T17:19:33.798Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:19:33.828Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T17:19:33.838Z","user_id":3}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T17:19:33.879Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T17:19:33.902Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'oi.item_id' in 'field list'","sqlMessage":"Unknown column 'oi.item_id' in 'field list'","timestamp":"2025-07-02T17:19:33.910Z"}
+{"error":"Unknown column 'oi.item_id' in 'field list'","level":"error","message":"Fetch active orders error","sqlMessage":"Unknown column 'oi.item_id' in 'field list'","timestamp":"2025-07-02T17:19:33.912Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'oi.item_id' in 'field list'","sqlMessage":"Unknown column 'oi.item_id' in 'field list'","timestamp":"2025-07-02T17:19:33.917Z"}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'oi.item_id' in 'field list'","sqlMessage":"Unknown column 'oi.item_id' in 'field list'","timestamp":"2025-07-02T17:19:33.931Z"}
+{"error":"Unknown column 'oi.item_id' in 'field list'","level":"error","message":"Fetch order history error","sqlMessage":"Unknown column 'oi.item_id' in 'field list'","timestamp":"2025-07-02T17:19:33.932Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'oi.item_id' in 'field list'","sqlMessage":"Unknown column 'oi.item_id' in 'field list'","timestamp":"2025-07-02T17:19:33.937Z"}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:19:33.974Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'price' in 'field list'","sqlMessage":"Unknown column 'price' in 'field list'","timestamp":"2025-07-02T17:19:46.072Z"}
+{"addressId":"4","couponId":4,"error":"Unknown column 'price' in 'field list'","level":"error","message":"Place order error","sqlMessage":"Unknown column 'price' in 'field list'","timestamp":"2025-07-02T17:19:46.073Z","user_id":3}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/place","timestamp":"2025-07-02T17:22:43.739Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/user","timestamp":"2025-07-02T17:22:50.412Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/coupons","timestamp":"2025-07-02T17:22:50.424Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/menu","timestamp":"2025-07-02T17:22:50.431Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/count","timestamp":"2025-07-02T17:22:50.448Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/favourites","timestamp":"2025-07-02T17:22:50.467Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/history","timestamp":"2025-07-02T17:22:50.482Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/addresses","timestamp":"2025-07-02T17:22:50.485Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/cart","timestamp":"2025-07-02T17:22:50.494Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/active","timestamp":"2025-07-02T17:22:50.498Z","user_id":2}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T17:22:59.240Z","user_id":3}
+{"count":3,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T17:22:59.243Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T17:22:59.245Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:22:59.250Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T17:22:59.269Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T17:22:59.285Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'oi.unitPrice' in 'field list'","sqlMessage":"Unknown column 'oi.unitPrice' in 'field list'","timestamp":"2025-07-02T17:22:59.306Z"}
+{"error":"Unknown column 'oi.unitPrice' in 'field list'","level":"error","message":"Fetch active orders error","sqlMessage":"Unknown column 'oi.unitPrice' in 'field list'","timestamp":"2025-07-02T17:22:59.307Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'oi.unitPrice' in 'field list'","sqlMessage":"Unknown column 'oi.unitPrice' in 'field list'","timestamp":"2025-07-02T17:22:59.308Z"}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'oi.unitPrice' in 'field list'","sqlMessage":"Unknown column 'oi.unitPrice' in 'field list'","timestamp":"2025-07-02T17:22:59.310Z"}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'oi.unitPrice' in 'field list'","sqlMessage":"Unknown column 'oi.unitPrice' in 'field list'","timestamp":"2025-07-02T17:22:59.310Z"}
+{"error":"Unknown column 'oi.unitPrice' in 'field list'","level":"error","message":"Fetch order history error","sqlMessage":"Unknown column 'oi.unitPrice' in 'field list'","timestamp":"2025-07-02T17:22:59.313Z","user_id":3}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T17:22:59.323Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'oi.unitPrice' in 'field list'","sqlMessage":"Unknown column 'oi.unitPrice' in 'field list'","timestamp":"2025-07-02T17:22:59.325Z"}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'oi.unitPrice' in 'field list'","sqlMessage":"Unknown column 'oi.unitPrice' in 'field list'","timestamp":"2025-07-02T17:22:59.327Z"}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:22:59.369Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'unitPrice' in 'field list'","sqlMessage":"Unknown column 'unitPrice' in 'field list'","timestamp":"2025-07-02T17:23:08.018Z"}
+{"addressId":"4","couponId":4,"error":"Unknown column 'unitPrice' in 'field list'","level":"error","message":"Place order error","sqlMessage":"Unknown column 'unitPrice' in 'field list'","timestamp":"2025-07-02T17:23:08.018Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'orderId' in 'field list'","sqlMessage":"Unknown column 'orderId' in 'field list'","timestamp":"2025-07-02T17:24:31.848Z"}
+{"addressId":"4","couponId":4,"error":"Unknown column 'orderId' in 'field list'","level":"error","message":"Place order error","sqlMessage":"Unknown column 'orderId' in 'field list'","timestamp":"2025-07-02T17:24:31.853Z","user_id":3}
+{"addressId":"4","couponId":4,"level":"info","message":"Order placed: 14","timestamp":"2025-07-02T17:27:21.114Z","total":60.06,"user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T17:27:21.150Z","user_id":3}
+{"count":6,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T17:27:21.160Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:27:21.192Z","user_id":3}
+{"count":6,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T17:27:21.205Z","user_id":3}
+{"level":"info","message":"Cancelled order: 14","timestamp":"2025-07-02T17:27:36.362Z","user_id":3}
+{"count":6,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T17:27:36.390Z","user_id":3}
+{"count":6,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T17:27:36.408Z","user_id":3}
+{"count":5,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T17:27:36.414Z","user_id":3}
+{"level":"info","message":"Cancelled order: 13","timestamp":"2025-07-02T17:27:51.514Z","user_id":3}
+{"count":4,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T17:27:51.550Z","user_id":3}
+{"count":6,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T17:27:51.552Z","user_id":3}
+{"count":6,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T17:27:51.557Z","user_id":3}
+{"affectedRows":2,"level":"info","message":"Cleared order history for user: 3","timestamp":"2025-07-02T17:28:08.378Z","user_id":3}
+{"count":4,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T17:28:08.395Z","user_id":3}
+{"count":4,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T17:28:08.399Z","user_id":3}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T17:28:11.257Z","user_id":3}
+{"count":4,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T17:28:11.259Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:28:11.264Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T17:28:11.266Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T17:28:11.297Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T17:28:11.314Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T17:28:11.326Z","user_id":3}
+{"count":4,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T17:28:11.340Z","user_id":3}
+{"count":4,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T17:28:11.343Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:28:11.368Z","user_id":3}
+{"affectedRows":0,"level":"info","message":"Cleared order history for user: 3","timestamp":"2025-07-02T17:28:18.322Z","user_id":3}
+{"count":4,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T17:28:18.343Z","user_id":3}
+{"count":4,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T17:28:18.351Z","user_id":3}
+{"count":4,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T17:28:22.107Z","user_id":3}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T17:28:22.108Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T17:28:22.115Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T17:28:22.116Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:28:22.117Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T17:28:22.120Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T17:28:22.141Z","user_id":3}
+{"count":4,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T17:28:22.144Z","user_id":3}
+{"count":4,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T17:28:22.156Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:28:22.159Z","user_id":3}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/user","timestamp":"2025-07-02T17:30:45.103Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/coupons","timestamp":"2025-07-02T17:30:45.115Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/count","timestamp":"2025-07-02T17:30:45.137Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/cart","timestamp":"2025-07-02T17:30:45.143Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/addresses","timestamp":"2025-07-02T17:30:45.145Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/menu","timestamp":"2025-07-02T17:30:45.148Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/favourites","timestamp":"2025-07-02T17:30:45.155Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/active","timestamp":"2025-07-02T17:30:45.157Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/history","timestamp":"2025-07-02T17:30:45.163Z","user_id":2}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T17:30:53.180Z","user_id":3}
+{"count":4,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T17:30:53.190Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T17:30:53.197Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T17:30:53.200Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:30:53.203Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T17:30:53.205Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'o.cancelReason' in 'field list'","sqlMessage":"Unknown column 'o.cancelReason' in 'field list'","timestamp":"2025-07-02T17:30:53.237Z"}
+{"error":"Unknown column 'o.cancelReason' in 'field list'","level":"error","message":"Fetch active orders error","sqlMessage":"Unknown column 'o.cancelReason' in 'field list'","timestamp":"2025-07-02T17:30:53.238Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'o.cancelReason' in 'field list'","sqlMessage":"Unknown column 'o.cancelReason' in 'field list'","timestamp":"2025-07-02T17:30:53.240Z"}
+{"error":"Unknown column 'o.cancelReason' in 'field list'","level":"error","message":"Fetch order history error","sqlMessage":"Unknown column 'o.cancelReason' in 'field list'","timestamp":"2025-07-02T17:30:53.241Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T17:30:53.243Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:30:53.279Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:31:00.251Z","user_id":3}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T17:31:00.253Z","user_id":3}
+{"count":4,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T17:31:00.255Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T17:31:00.256Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T17:31:00.257Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T17:31:00.258Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'o.cancelReason' in 'field list'","sqlMessage":"Unknown column 'o.cancelReason' in 'field list'","timestamp":"2025-07-02T17:31:00.275Z"}
+{"error":"Unknown column 'o.cancelReason' in 'field list'","level":"error","message":"Fetch active orders error","sqlMessage":"Unknown column 'o.cancelReason' in 'field list'","timestamp":"2025-07-02T17:31:00.276Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'o.cancelReason' in 'field list'","sqlMessage":"Unknown column 'o.cancelReason' in 'field list'","timestamp":"2025-07-02T17:31:00.278Z"}
+{"error":"Unknown column 'o.cancelReason' in 'field list'","level":"error","message":"Fetch order history error","sqlMessage":"Unknown column 'o.cancelReason' in 'field list'","timestamp":"2025-07-02T17:31:00.278Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T17:31:00.280Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:31:00.315Z","user_id":3}
+{"code":"ER_ROW_IS_REFERENCED_2","errno":1451,"level":"error","message":"Database operation failed (attempt 1/3): Cannot delete or update a parent row: a foreign key constraint fails (`delicute`.`orders`, CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`addressId`) REFERENCES `addresses` (`id`))","sqlMessage":"Cannot delete or update a parent row: a foreign key constraint fails (`delicute`.`orders`, CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`addressId`) REFERENCES `addresses` (`id`))","timestamp":"2025-07-02T17:31:16.642Z"}
+{"addressId":"4","error":"Cannot delete or update a parent row: a foreign key constraint fails (`delicute`.`orders`, CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`addressId`) REFERENCES `addresses` (`id`))","level":"error","message":"Delete address error","sqlMessage":"Cannot delete or update a parent row: a foreign key constraint fails (`delicute`.`orders`, CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`addressId`) REFERENCES `addresses` (`id`))","timestamp":"2025-07-02T17:31:16.642Z","user_id":3}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/cart/apply-coupon","timestamp":"2025-07-02T17:34:41.884Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/cart/add","timestamp":"2025-07-02T17:34:44.011Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/cart/add","timestamp":"2025-07-02T17:34:45.714Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/user","timestamp":"2025-07-02T17:34:59.322Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/menu","timestamp":"2025-07-02T17:34:59.331Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/coupons","timestamp":"2025-07-02T17:34:59.346Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/cart","timestamp":"2025-07-02T17:34:59.360Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/favourites","timestamp":"2025-07-02T17:34:59.377Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/active","timestamp":"2025-07-02T17:34:59.393Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/count","timestamp":"2025-07-02T17:34:59.398Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/addresses","timestamp":"2025-07-02T17:34:59.414Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/history","timestamp":"2025-07-02T17:34:59.426Z","user_id":2}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T17:35:08.716Z","user_id":3}
+{"count":4,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T17:35:08.739Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:35:08.741Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T17:35:08.743Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T17:35:08.751Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T17:35:08.773Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T17:35:08.775Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'o.cancelReason' in 'field list'","sqlMessage":"Unknown column 'o.cancelReason' in 'field list'","timestamp":"2025-07-02T17:35:08.787Z"}
+{"error":"Unknown column 'o.cancelReason' in 'field list'","level":"error","message":"Fetch active orders error","sqlMessage":"Unknown column 'o.cancelReason' in 'field list'","timestamp":"2025-07-02T17:35:08.788Z","user_id":3}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'o.cancelReason' in 'field list'","sqlMessage":"Unknown column 'o.cancelReason' in 'field list'","timestamp":"2025-07-02T17:35:08.789Z"}
+{"error":"Unknown column 'o.cancelReason' in 'field list'","level":"error","message":"Fetch order history error","sqlMessage":"Unknown column 'o.cancelReason' in 'field list'","timestamp":"2025-07-02T17:35:08.790Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:35:08.814Z","user_id":3}
+{"level":"info","message":"Item added to cart: 11","timestamp":"2025-07-02T17:35:11.921Z","user_id":3}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T17:35:11.935Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:35:11.969Z","user_id":3}
+{"discount":0,"level":"info","message":"Applied coupon: ffff","timestamp":"2025-07-02T17:35:13.361Z","user_id":3}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T17:35:13.377Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T17:35:13.386Z","user_id":3}
+{"code":"WARN_DATA_TRUNCATED","errno":1265,"level":"error","message":"Database operation failed (attempt 1/3): Data truncated for column 'status' at row 1","sqlMessage":"Data truncated for column 'status' at row 1","timestamp":"2025-07-02T17:35:21.374Z"}
+{"addressId":"4","error":"Data truncated for column 'status' at row 1","level":"error","message":"Place order error","sqlMessage":"Data truncated for column 'status' at row 1","timestamp":"2025-07-02T17:35:21.374Z","user_id":3}
+{"code":"ER_ROW_IS_REFERENCED_2","errno":1451,"level":"error","message":"Database operation failed (attempt 1/3): Cannot delete or update a parent row: a foreign key constraint fails (`delicute`.`orders`, CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`addressId`) REFERENCES `addresses` (`id`))","sqlMessage":"Cannot delete or update a parent row: a foreign key constraint fails (`delicute`.`orders`, CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`addressId`) REFERENCES `addresses` (`id`))","timestamp":"2025-07-02T17:35:35.086Z"}
+{"addressId":"4","error":"Cannot delete or update a parent row: a foreign key constraint fails (`delicute`.`orders`, CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`addressId`) REFERENCES `addresses` (`id`))","level":"error","message":"Delete address error","sqlMessage":"Cannot delete or update a parent row: a foreign key constraint fails (`delicute`.`orders`, CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`addressId`) REFERENCES `addresses` (`id`))","timestamp":"2025-07-02T17:35:35.087Z","user_id":3}
+{"level":"info","message":"Updated address: 4","timestamp":"2025-07-02T17:35:38.280Z","user_id":3}
+{"flat":"202","landmark":"Alliance","level":"info","message":"Admin notified for new address","name":"SUNKIREDDY VASUDEVA REDDY","phone":"9652296548","street":"Anekal chikkagade","timestamp":"2025-07-02T17:35:38.295Z","user_id":3}
+{"count":2,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T17:35:38.300Z","user_id":3}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/cart/add","timestamp":"2025-07-02T17:38:48.048Z","user_id":2}
+{"level":"info","message":"Fetched user data for ID: 5","timestamp":"2025-07-02T17:39:00.047Z","user_id":5}
+{"count":1,"level":"info","message":"Fetched order count for user: 5","timestamp":"2025-07-02T17:39:00.100Z","user_id":5}
+{"count":1,"level":"info","message":"Fetched menu items for user: 5","timestamp":"2025-07-02T17:39:00.115Z","user_id":5}
+{"count":2,"level":"info","message":"Fetched coupons for user: 5","timestamp":"2025-07-02T17:39:00.135Z","user_id":5}
+{"count":0,"level":"info","message":"Fetched favourites for user: 5","timestamp":"2025-07-02T17:39:00.147Z","user_id":5}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 5","timestamp":"2025-07-02T17:39:00.159Z","user_id":5}
+{"count":0,"level":"info","message":"Fetched active orders for user: 5","timestamp":"2025-07-02T17:39:00.168Z","user_id":5}
+{"count":1,"level":"info","message":"Fetched addresses for user: 5","timestamp":"2025-07-02T17:39:00.181Z","user_id":5}
+{"count":2,"level":"info","message":"Fetched coupons for user: 5","timestamp":"2025-07-02T17:39:00.203Z","user_id":5}
+{"count":1,"level":"info","message":"Fetched order history for user: 5","timestamp":"2025-07-02T17:39:00.212Z","user_id":5}
+{"level":"warn","message":"Apply coupon failed: Cart is empty","timestamp":"2025-07-02T17:39:01.672Z","user_id":5}
+{"level":"info","message":"Item added to cart: 11","timestamp":"2025-07-02T17:39:03.302Z","user_id":5}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 5","timestamp":"2025-07-02T17:39:03.315Z","user_id":5}
+{"count":2,"level":"info","message":"Fetched coupons for user: 5","timestamp":"2025-07-02T17:39:03.331Z","user_id":5}
+{"discount":0,"level":"info","message":"Applied coupon: ffff","timestamp":"2025-07-02T17:39:04.828Z","user_id":5}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 5","timestamp":"2025-07-02T17:39:04.841Z","user_id":5}
+{"count":2,"level":"info","message":"Fetched coupons for user: 5","timestamp":"2025-07-02T17:39:04.849Z","user_id":5}
+{"level":"info","message":"Deleted address: 5","timestamp":"2025-07-02T17:39:11.685Z","user_id":5}
+{"count":0,"level":"info","message":"Fetched addresses for user: 5","timestamp":"2025-07-02T17:39:11.699Z","user_id":5}
+{"level":"info","message":"Added address for user: 5","timestamp":"2025-07-02T17:39:18.581Z","user_id":5}
+{"flat":"222","landmark":"hh","level":"info","message":"Admin notified for new address","name":"SUNKIREDDY VASUDEVA REDDY","phone":"09652296548","street":"Anekal chikkagade","timestamp":"2025-07-02T17:39:18.595Z","user_id":5}
+{"count":1,"level":"info","message":"Fetched addresses for user: 5","timestamp":"2025-07-02T17:39:18.598Z","user_id":5}
+{"code":"WARN_DATA_TRUNCATED","errno":1265,"level":"error","message":"Database operation failed (attempt 1/3): Data truncated for column 'status' at row 1","sqlMessage":"Data truncated for column 'status' at row 1","timestamp":"2025-07-02T17:39:30.289Z"}
+{"addressId":"7","error":"Data truncated for column 'status' at row 1","level":"error","message":"Place order error","sqlMessage":"Data truncated for column 'status' at row 1","timestamp":"2025-07-02T17:39:30.289Z","user_id":5}
+{"count":2,"level":"info","message":"Fetched coupons for user: 5","timestamp":"2025-07-02T17:46:13.615Z","user_id":5}
+{"level":"info","message":"Fetched user data for ID: 5","timestamp":"2025-07-02T17:46:13.624Z","user_id":5}
+{"count":0,"level":"info","message":"Fetched order count for user: 5","timestamp":"2025-07-02T17:46:13.629Z","user_id":5}
+{"count":1,"level":"info","message":"Fetched menu items for user: 5","timestamp":"2025-07-02T17:46:13.636Z","user_id":5}
+{"count":1,"level":"info","message":"Fetched addresses for user: 5","timestamp":"2025-07-02T17:46:13.659Z","user_id":5}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 5","timestamp":"2025-07-02T17:46:13.677Z","user_id":5}
+{"count":0,"level":"info","message":"Fetched favourites for user: 5","timestamp":"2025-07-02T17:46:13.680Z","user_id":5}
+{"count":0,"level":"info","message":"Fetched active orders for user: 5","timestamp":"2025-07-02T17:46:13.688Z","user_id":5}
+{"count":0,"level":"info","message":"Fetched order history for user: 5","timestamp":"2025-07-02T17:46:13.691Z","user_id":5}
+{"count":2,"level":"info","message":"Fetched coupons for user: 5","timestamp":"2025-07-02T17:46:13.732Z","user_id":5}
+{"code":"WARN_DATA_TRUNCATED","errno":1265,"level":"error","message":"Database operation failed (attempt 1/3): Data truncated for column 'status' at row 1","sqlMessage":"Data truncated for column 'status' at row 1","timestamp":"2025-07-02T17:46:19.929Z"}
+{"addressId":"7","error":"Data truncated for column 'status' at row 1","level":"error","message":"Place order error","sqlMessage":"Data truncated for column 'status' at row 1","timestamp":"2025-07-02T17:46:19.929Z","user_id":5}
+{"code":"WARN_DATA_TRUNCATED","errno":1265,"level":"error","message":"Database operation failed (attempt 1/3): Data truncated for column 'status' at row 1","sqlMessage":"Data truncated for column 'status' at row 1","timestamp":"2025-07-02T17:48:05.213Z"}
+{"addressId":"7","error":"Data truncated for column 'status' at row 1","level":"error","message":"Place order error","sqlMessage":"Data truncated for column 'status' at row 1","timestamp":"2025-07-02T17:48:05.220Z","user_id":5}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:46:22.634Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/user","timestamp":"2025-07-02T18:46:22.644Z"}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:46:22.794Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/favourites","timestamp":"2025-07-02T18:46:22.795Z"}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:46:22.809Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/orders/count","timestamp":"2025-07-02T18:46:22.812Z"}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:46:22.835Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/coupons","timestamp":"2025-07-02T18:46:22.837Z"}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:46:22.845Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/menu","timestamp":"2025-07-02T18:46:22.846Z"}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:46:22.876Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/addresses","timestamp":"2025-07-02T18:46:22.877Z"}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:46:22.885Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/cart","timestamp":"2025-07-02T18:46:22.886Z"}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:46:22.944Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/orders/active","timestamp":"2025-07-02T18:46:22.945Z"}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:46:22.951Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/orders/history","timestamp":"2025-07-02T18:46:22.952Z"}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:47:17.248Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/user","timestamp":"2025-07-02T18:47:17.253Z"}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:47:17.403Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/favourites","timestamp":"2025-07-02T18:47:17.405Z"}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:47:17.411Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/orders/count","timestamp":"2025-07-02T18:47:17.413Z"}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:47:17.418Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/cart","timestamp":"2025-07-02T18:47:17.420Z"}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:47:17.427Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/coupons","timestamp":"2025-07-02T18:47:17.428Z"}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:47:17.431Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/menu","timestamp":"2025-07-02T18:47:17.432Z"}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:47:17.434Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/addresses","timestamp":"2025-07-02T18:47:17.435Z"}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:47:17.549Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/orders/active","timestamp":"2025-07-02T18:47:17.550Z"}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.blacklisted_tokens' doesn't exist","sqlMessage":"Table 'defaultdb.blacklisted_tokens' doesn't exist","timestamp":"2025-07-02T18:47:17.557Z"}
+{"error":"Table 'defaultdb.blacklisted_tokens' doesn't exist","level":"error","message":"Token verification error","path":"/orders/history","timestamp":"2025-07-02T18:47:17.558Z"}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'profileImage' in 'field list'","sqlMessage":"Unknown column 'profileImage' in 'field list'","timestamp":"2025-07-02T18:48:59.338Z"}
+{"error":"Unknown column 'profileImage' in 'field list'","level":"error","message":"Fetch user error","sqlMessage":"Unknown column 'profileImage' in 'field list'","timestamp":"2025-07-02T18:48:59.347Z","user_id":2}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.cart' doesn't exist","sqlMessage":"Table 'defaultdb.cart' doesn't exist","timestamp":"2025-07-02T18:48:59.615Z"}
+{"error":"Table 'defaultdb.cart' doesn't exist","level":"error","message":"Fetch cart error","sqlMessage":"Table 'defaultdb.cart' doesn't exist","timestamp":"2025-07-02T18:48:59.617Z","user_id":2}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.orders' doesn't exist","sqlMessage":"Table 'defaultdb.orders' doesn't exist","timestamp":"2025-07-02T18:48:59.649Z"}
+{"error":"Table 'defaultdb.orders' doesn't exist","level":"error","message":"Fetch orders count error","sqlMessage":"Table 'defaultdb.orders' doesn't exist","timestamp":"2025-07-02T18:48:59.651Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched menu items for user: 2","timestamp":"2025-07-02T18:48:59.741Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched favourites for user: 2","timestamp":"2025-07-02T18:48:59.802Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched coupons for user: 2","timestamp":"2025-07-02T18:48:59.807Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched addresses for user: 2","timestamp":"2025-07-02T18:48:59.931Z","user_id":2}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.orders' doesn't exist","sqlMessage":"Table 'defaultdb.orders' doesn't exist","timestamp":"2025-07-02T18:49:00.044Z"}
+{"error":"Table 'defaultdb.orders' doesn't exist","level":"error","message":"Fetch active orders error","sqlMessage":"Table 'defaultdb.orders' doesn't exist","timestamp":"2025-07-02T18:49:00.046Z","user_id":2}
+{"code":"ER_NO_SUCH_TABLE","errno":1146,"level":"error","message":"Database operation failed (attempt 1/3): Table 'defaultdb.orders' doesn't exist","sqlMessage":"Table 'defaultdb.orders' doesn't exist","timestamp":"2025-07-02T18:49:00.116Z"}
+{"error":"Table 'defaultdb.orders' doesn't exist","level":"error","message":"Fetch order history error","sqlMessage":"Table 'defaultdb.orders' doesn't exist","timestamp":"2025-07-02T18:49:00.117Z","user_id":2}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'profileImage' in 'field list'","sqlMessage":"Unknown column 'profileImage' in 'field list'","timestamp":"2025-07-02T18:50:34.160Z"}
+{"error":"Unknown column 'profileImage' in 'field list'","level":"error","message":"Fetch user error","sqlMessage":"Unknown column 'profileImage' in 'field list'","timestamp":"2025-07-02T18:50:34.167Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched favourites for user: 2","timestamp":"2025-07-02T18:50:34.397Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched coupons for user: 2","timestamp":"2025-07-02T18:50:34.402Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched order count for user: 2","timestamp":"2025-07-02T18:50:34.408Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched menu items for user: 2","timestamp":"2025-07-02T18:50:34.414Z","user_id":2}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 2","timestamp":"2025-07-02T18:50:34.420Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched addresses for user: 2","timestamp":"2025-07-02T18:50:34.426Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched order history for user: 2","timestamp":"2025-07-02T18:50:34.649Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched active orders for user: 2","timestamp":"2025-07-02T18:50:34.651Z","user_id":2}
+{"code":"ER_BAD_FIELD_ERROR","errno":1054,"level":"error","message":"Database operation failed (attempt 1/3): Unknown column 'googleUser' in 'field list'","sqlMessage":"Unknown column 'googleUser' in 'field list'","timestamp":"2025-07-02T18:51:23.863Z"}
+{"error":"Unknown column 'googleUser' in 'field list'","level":"error","message":"Fetch user error","sqlMessage":"Unknown column 'googleUser' in 'field list'","timestamp":"2025-07-02T18:51:23.867Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched menu items for user: 2","timestamp":"2025-07-02T18:51:24.084Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched coupons for user: 2","timestamp":"2025-07-02T18:51:24.090Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched favourites for user: 2","timestamp":"2025-07-02T18:51:24.110Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched order count for user: 2","timestamp":"2025-07-02T18:51:24.121Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched addresses for user: 2","timestamp":"2025-07-02T18:51:24.130Z","user_id":2}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 2","timestamp":"2025-07-02T18:51:24.136Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched active orders for user: 2","timestamp":"2025-07-02T18:51:24.339Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched order history for user: 2","timestamp":"2025-07-02T18:51:24.343Z","user_id":2}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T18:52:17.382Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T18:52:17.568Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T18:52:17.574Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T18:52:17.580Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T18:52:17.586Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T18:52:17.594Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T18:52:17.631Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T18:52:17.793Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T18:52:17.805Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T18:52:17.811Z","user_id":3}
+{"imagePath":"/Uploads/1751482353692-8c965582-2507-404e-9a54-3f099e68c1f2.jpeg","level":"info","message":"Updated profile image for user: 3","timestamp":"2025-07-02T18:52:33.782Z","user_id":3}
+{"level":"info","message":"Updated profile for user: 3","timestamp":"2025-07-02T18:52:35.058Z","user_id":3}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T18:52:35.326Z","user_id":3}
+{"level":"info","message":"Added address for user: 3","timestamp":"2025-07-02T18:52:53.821Z","user_id":3}
+{"flat":"222","landmark":"Alliance","level":"info","message":"Admin notified for new address","name":"SUNKIREDDY VASUDEVA REDDY","phone":"9652296548","street":"Anekal chikkagade","timestamp":"2025-07-02T18:52:54.054Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T18:52:54.105Z","user_id":3}
+{"level":"info","message":"Updated address: 1","timestamp":"2025-07-02T18:52:57.639Z","user_id":3}
+{"flat":"222","landmark":"Alliance","level":"info","message":"Admin notified for new address","name":"SUNKIREDDY VASUDEVA REDDY","phone":"9652296548","street":"Anekal chikkagade","timestamp":"2025-07-02T18:52:57.841Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T18:52:57.889Z","user_id":3}
+{"level":"info","message":"Fetched user data for ID: 3","timestamp":"2025-07-02T18:54:38.800Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched order count for user: 3","timestamp":"2025-07-02T18:54:38.956Z","user_id":3}
+{"count":1,"level":"info","message":"Fetched addresses for user: 3","timestamp":"2025-07-02T18:54:38.964Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T18:54:38.970Z","user_id":3}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 3","timestamp":"2025-07-02T18:54:38.977Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched menu items for user: 3","timestamp":"2025-07-02T18:54:38.983Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched favourites for user: 3","timestamp":"2025-07-02T18:54:39.082Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched active orders for user: 3","timestamp":"2025-07-02T18:54:39.195Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched order history for user: 3","timestamp":"2025-07-02T18:54:39.200Z","user_id":3}
+{"count":0,"level":"info","message":"Fetched coupons for user: 3","timestamp":"2025-07-02T18:54:39.273Z","user_id":3}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/count","timestamp":"2025-07-02T18:56:04.238Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/coupons","timestamp":"2025-07-02T18:56:04.247Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/user","timestamp":"2025-07-02T18:56:04.256Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/menu","timestamp":"2025-07-02T18:56:04.265Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/cart","timestamp":"2025-07-02T18:56:04.274Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/addresses","timestamp":"2025-07-02T18:56:04.281Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/favourites","timestamp":"2025-07-02T18:56:04.390Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/active","timestamp":"2025-07-02T18:56:04.401Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/history","timestamp":"2025-07-02T18:56:04.406Z","user_id":4}
+{"count":0,"level":"info","message":"Fetched order count for user: 2","timestamp":"2025-07-02T18:56:18.391Z","user_id":2}
+{"level":"info","message":"Fetched user data for ID: 2","timestamp":"2025-07-02T18:56:18.394Z","user_id":2}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 2","timestamp":"2025-07-02T18:56:18.396Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched coupons for user: 2","timestamp":"2025-07-02T18:56:18.398Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched addresses for user: 2","timestamp":"2025-07-02T18:56:18.404Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched active orders for user: 2","timestamp":"2025-07-02T18:56:18.572Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched favourites for user: 2","timestamp":"2025-07-02T18:56:18.575Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched order history for user: 2","timestamp":"2025-07-02T18:56:18.610Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched coupons for user: 2","timestamp":"2025-07-02T18:56:18.639Z","user_id":2}
+{"count":1,"level":"info","message":"Fetched menu items for user: 2","timestamp":"2025-07-02T18:56:18.664Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/user","timestamp":"2025-07-02T18:57:34.508Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/count","timestamp":"2025-07-02T18:57:34.516Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/menu","timestamp":"2025-07-02T18:57:34.522Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/cart","timestamp":"2025-07-02T18:57:34.526Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/addresses","timestamp":"2025-07-02T18:57:34.532Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/coupons","timestamp":"2025-07-02T18:57:34.538Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/favourites","timestamp":"2025-07-02T18:57:34.653Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/history","timestamp":"2025-07-02T18:57:34.659Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/active","timestamp":"2025-07-02T18:57:34.666Z","user_id":4}
+{"level":"info","message":"Fetched user data for ID: 2","timestamp":"2025-07-02T18:57:42.808Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched order count for user: 2","timestamp":"2025-07-02T18:57:42.852Z","user_id":2}
+{"count":1,"level":"info","message":"Fetched menu items for user: 2","timestamp":"2025-07-02T18:57:42.861Z","user_id":2}
+{"count":1,"level":"info","message":"Fetched coupons for user: 2","timestamp":"2025-07-02T18:57:42.867Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched addresses for user: 2","timestamp":"2025-07-02T18:57:42.878Z","user_id":2}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 2","timestamp":"2025-07-02T18:57:42.884Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched order history for user: 2","timestamp":"2025-07-02T18:57:43.042Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched favourites for user: 2","timestamp":"2025-07-02T18:57:43.069Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched active orders for user: 2","timestamp":"2025-07-02T18:57:43.080Z","user_id":2}
+{"count":1,"level":"info","message":"Fetched coupons for user: 2","timestamp":"2025-07-02T18:57:43.291Z","user_id":2}
+{"level":"info","message":"Item added to cart: 1","timestamp":"2025-07-02T18:57:45.994Z","user_id":2}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 2","timestamp":"2025-07-02T18:57:46.272Z","user_id":2}
+{"count":1,"level":"info","message":"Fetched coupons for user: 2","timestamp":"2025-07-02T18:57:46.462Z","user_id":2}
+{"discount":15.8,"level":"info","message":"Applied coupon: DELICUTE10","timestamp":"2025-07-02T18:57:47.762Z","user_id":2}
+{"itemCount":1,"level":"info","message":"Fetched cart for user: 2","timestamp":"2025-07-02T18:57:47.987Z","user_id":2}
+{"count":1,"level":"info","message":"Fetched coupons for user: 2","timestamp":"2025-07-02T18:57:48.255Z","user_id":2}
+{"level":"info","message":"Added address for user: 2","timestamp":"2025-07-02T18:58:06.619Z","user_id":2}
+{"flat":"222","landmark":"Alliance","level":"info","message":"Admin notified for new address","name":"SUNKIREDDY VASUDEVA REDDY","phone":"9652296548","street":"Anekal chikkagade","timestamp":"2025-07-02T18:58:06.809Z","user_id":2}
+{"count":1,"level":"info","message":"Fetched addresses for user: 2","timestamp":"2025-07-02T18:58:06.878Z","user_id":2}
+{"addressId":"2","level":"info","message":"Order placed: 1","timestamp":"2025-07-02T18:58:19.539Z","total":63.2,"user_id":2}
+{"level":"warn","message":"Notify admin failed: Missing order details","timestamp":"2025-07-02T18:58:19.675Z","type":"order","user_id":2}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 2","timestamp":"2025-07-02T18:58:19.720Z","user_id":2}
+{"count":1,"level":"info","message":"Fetched active orders for user: 2","timestamp":"2025-07-02T18:58:19.811Z","user_id":2}
+{"count":1,"level":"info","message":"Fetched coupons for user: 2","timestamp":"2025-07-02T18:58:19.905Z","user_id":2}
+{"count":1,"level":"info","message":"Fetched order count for user: 2","timestamp":"2025-07-02T18:58:20.002Z","user_id":2}
+{"count":1,"level":"info","message":"Fetched order count for user: 2","timestamp":"2025-07-02T18:58:26.116Z","user_id":2}
+{"count":1,"level":"info","message":"Fetched coupons for user: 2","timestamp":"2025-07-02T18:58:26.127Z","user_id":2}
+{"itemCount":0,"level":"info","message":"Fetched cart for user: 2","timestamp":"2025-07-02T18:58:26.137Z","user_id":2}
+{"count":1,"level":"info","message":"Fetched addresses for user: 2","timestamp":"2025-07-02T18:58:26.141Z","user_id":2}
+{"level":"info","message":"Fetched user data for ID: 2","timestamp":"2025-07-02T18:58:26.155Z","user_id":2}
+{"count":1,"level":"info","message":"Fetched menu items for user: 2","timestamp":"2025-07-02T18:58:26.174Z","user_id":2}
+{"count":0,"level":"info","message":"Fetched favourites for user: 2","timestamp":"2025-07-02T18:58:26.290Z","user_id":2}
+{"count":1,"level":"info","message":"Fetched coupons for user: 2","timestamp":"2025-07-02T18:58:26.407Z","user_id":2}
+{"count":1,"level":"info","message":"Fetched active orders for user: 2","timestamp":"2025-07-02T18:58:26.438Z","user_id":2}
+{"count":1,"level":"info","message":"Fetched order history for user: 2","timestamp":"2025-07-02T18:58:26.458Z","user_id":2}
+{"imagePath":"/Uploads/1751482717163-25f8909d-3560-449d-9a78-1515e3e9f1ee.jpeg","level":"info","message":"Updated profile image for user: 2","timestamp":"2025-07-02T18:58:37.257Z","user_id":2}
+{"level":"info","message":"Updated profile for user: 2","timestamp":"2025-07-02T18:58:39.292Z","user_id":2}
+{"level":"info","message":"Fetched user data for ID: 2","timestamp":"2025-07-02T18:58:39.522Z","user_id":2}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/coupons","timestamp":"2025-07-02T19:02:34.723Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/user","timestamp":"2025-07-02T19:02:34.749Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/count","timestamp":"2025-07-02T19:02:34.759Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/favourites","timestamp":"2025-07-02T19:02:34.878Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/active","timestamp":"2025-07-02T19:02:34.887Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/orders/history","timestamp":"2025-07-02T19:02:34.893Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/cart","timestamp":"2025-07-02T19:02:34.918Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/menu","timestamp":"2025-07-02T19:02:34.935Z","user_id":4}
+{"level":"warn","message":"Unauthorized access attempt: Admin token used for customer route","path":"/addresses","timestamp":"2025-07-02T19:02:34.944Z","user_id":4}

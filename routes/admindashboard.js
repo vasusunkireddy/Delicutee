@@ -887,13 +887,62 @@ router.post('/coupons/delete', authenticateToken, async (req, res) => {
     const query = hasIsActiveColumn
       ? 'UPDATE coupons SET is_active = 0 WHERE id = ?'
       : 'DELETE FROM coupons WHERE id = ?';
-    await db.execute(query, [id]);
+    const [result] = await db.execute(query, [id]);
+    
+    if (result.affectedRows === 0) {
+      await db.rollback();
+      return res.status(404).json({ message: 'Coupon not found' });
+    }
     
     await db.commit();
     res.json({ message: 'Coupon deleted' });
   } catch (error) {
     if (db) await db.rollback();
     console.error('Delete coupon error:', error);
+    res.status(500).json({ message: 'Server error.', error: error.message });
+  } finally {
+    if (db) await db.end();
+  }
+});
+
+// New route for permanently deleting coupons
+router.post('/coupons/delete-permanent', authenticateToken, async (req, res) => {
+  const { couponIds } = req.body;
+  if (!couponIds || !Array.isArray(couponIds) || couponIds.length === 0) {
+    return res.status(400).json({ message: 'No coupons selected' });
+  }
+  let db;
+  try {
+    db = await getDbConnection();
+    await db.beginTransaction();
+    
+    // Delete related records from cart and orders
+    await db.execute(
+      `DELETE FROM cart WHERE couponId IN (${couponIds.map(() => '?').join(',')})`,
+      couponIds
+    );
+    await db.execute(
+      `UPDATE orders SET couponId = NULL WHERE couponId IN (${couponIds.map(() => '?').join(',')})`,
+      couponIds
+    );
+    
+    // Permanently delete coupons
+    const hasIsActiveColumn = await columnExists(db, 'coupons', 'is_active');
+    const query = hasIsActiveColumn
+      ? `DELETE FROM coupons WHERE id IN (${couponIds.map(() => '?').join(',')}) AND is_active = 0`
+      : `DELETE FROM coupons WHERE id IN (${couponIds.map(() => '?').join(',')})`;
+    const [result] = await db.execute(query, couponIds);
+    
+    if (result.affectedRows === 0) {
+      await db.rollback();
+      return res.status(404).json({ message: 'No coupons found to delete permanently' });
+    }
+    
+    await db.commit();
+    res.json({ message: 'Coupons permanently deleted', affectedRows: result.affectedRows });
+  } catch (error) {
+    if (db) await db.rollback();
+    console.error('Delete permanently coupons error:', error);
     res.status(500).json({ message: 'Server error.', error: error.message });
   } finally {
     if (db) await db.end();
@@ -914,22 +963,26 @@ router.get('/users', authenticateToken, async (req, res) => {
     const hasRoleColumn = await columnExists(db, 'users', 'role');
     const hasIsBlockedColumn = await columnExists(db, 'users', 'is_blocked');
     let query = hasIsBlockedColumn
-      ? 'SELECT id, name, email, phone, is_blocked AS isBlocked FROM users WHERE is_blocked = 0'
+      ? 'SELECT id, name, email, phone, is_blocked AS isBlocked FROM users'
       : 'SELECT id, name, email, phone FROM users';
     let params = [];
 
     if (hasRoleColumn) {
-      query += ' AND role IN (?, ?)';
+      query += query.includes('WHERE') ? ' AND role IN (?, ?)' : ' WHERE role IN (?, ?)';
       params.push('user', 'customer');
     }
 
     if (search) {
-      query += ' AND (name LIKE ? OR email LIKE ?)';
+      query += query.includes('WHERE') ? ' AND (name LIKE ? OR email LIKE ?)' : ' WHERE (name LIKE ? OR email LIKE ?)';
       params.push(`%${search}%`, `%${search}%`);
     }
 
     const [users] = await db.execute(query, params);
-    res.json({ users, message: 'Users retrieved successfully' });
+    const formattedUsers = users.map(user => ({
+      ...user,
+      isBlocked: hasIsBlockedColumn ? Boolean(user.isBlocked) : false
+    }));
+    res.json({ users: formattedUsers, message: 'Users retrieved successfully' });
   } catch (error) {
     console.error('Fetch users error:', error);
     res.status(500).json({ message: 'Server error.', error: error.message });
@@ -959,7 +1012,10 @@ router.post('/users/block', authenticateToken, async (req, res) => {
       : 'UPDATE users SET is_blocked = ? WHERE id = ?';
     const params = hasRoleColumn ? [block ? 1 : 0, userId, 'user', 'customer'] : [block ? 1 : 0, userId];
 
-    await db.execute(query, params);
+    const [result] = await db.execute(query, params);
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'User not found or not authorized to block/unblock' });
+    }
     res.json({ message: `User ${block ? 'blocked' : 'unblocked'}` });
   } catch (error) {
     console.error('Toggle block user error:', error);
@@ -1146,12 +1202,12 @@ router.post('/orders/delete', authenticateToken, async (req, res) => {
       ? `UPDATE orders SET deleted_at = NOW() WHERE id IN (${orderIds.map(() => '?').join(',')})`
       : `DELETE FROM orders WHERE id IN (${orderIds.map(() => '?').join(',')})`;
     const [result] = await db.execute(query, orderIds);
-    
+
     if (result.affectedRows === 0) {
       await db.rollback();
       return res.status(404).json({ message: 'No orders found to delete' });
     }
-    
+
     await db.commit();
     res.json({ message: 'Orders moved to trash', affectedRows: result.affectedRows });
   } catch (error) {
